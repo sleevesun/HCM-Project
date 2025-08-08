@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>工薪预算驾驶舱</title>
+  <style>
+    :root {
+      /* Ant Design 色彩系统 */
+      --primary: #1677ff;
+      --primary-hover: #4096ff;
+      --primary-active: #0958d9;
+      --success: #52c41a;
+      --warning: #faad14;
+      --error: #ff4d4f;
+      --info: #13c2c2;
+      
+      /* 中性色 */
+      --gray-1: #ffffff;
+      --gray-2: #fafafa;
+      --gray-3: #f5f5f5;
+      --gray-4: #f0f0f0;
+      --gray-5: #d9d9d9;
+      --gray-6: #bfbfbf;
+      --gray-7: #8c8c8c;
+      --gray-8: #595959;
+      --gray-9: #434343;
+      --gray-10: #262626;
+      --gray-11: #1f1f1f;
+      --gray-12: #141414;
+      
+      /* 语义化颜色 */
+      --text-primary: rgba(0, 0, 0, 0.88);
+      --text-secondary: rgba(0, 0, 0, 0.65);
+      --text-tertiary: rgba(0, 0, 0, 0.45);
+      --text-quaternary: rgba(0, 0, 0, 0.25);
+      
+      --border-primary: #d9d9d9;
+      --border-secondary: #f0f0f0;
+      
+      --fill-primary: rgba(0, 0, 0, 0.04);
+      --fill-secondary: rgba(0, 0, 0, 0.02);
+      
+      /* 字体系统 */
+      --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+      --font-size-xs: 12px;
+      --font-size-sm: 14px;
+      --font-size-base: 14px;
+      --font-size-lg: 16px;
+      --font-size-xl: 20px;
+      --font-size-xxl: 24px;
+      
+      --line-height-xs: 1.5;
+      --line-height-sm: 1.5714;
+      --line-height-base: 1.5714;
+      --line-height-lg: 1.5;
+      
+      /* 间距系统 */
+      --space-xs: 8px;
+      --space-sm: 12px;
+      --space-base: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-xxl: 48px;
+      
+      /* 圆角 */
+      --border-radius-xs: 2px;
+      --border-radius-sm: 4px;
+      --border-radius-base: 6px;
+      --border-radius-lg: 8px;
+      
+      /* 阴影 */
+      --shadow-1: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+      --shadow-2: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+      --shadow-3: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: var(--gray-2);
+      font-family: var(--font-family);
+      color: var(--text-primary);
+      margin: 0;
+      padding: 0;
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-base);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .navbar {
+      background: var(--gray-1);
+      border-bottom: 1px solid var(--border-secondary);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-lg);
+      height: 64px;
+      box-shadow: var(--shadow-1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    
+    .navbar .logo .logo-icon {
+      height: 32px;
+      width: 32px;
+      border-radius: var(--border-radius-sm);
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    }
+    
+    .navbar .logo .logo-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+    
+    .navbar .title {
+      font-size: var(--font-size-xl);
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-left: var(--space-xs);
+    }
+    
+    .navbar .user {
+      margin-left: auto;
+      font-size: var(--font-size-base);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--border-radius-base);
+      transition: all 0.2s;
+    }
+    
+    .navbar .user:hover {
+      background: var(--fill-primary);
+      color: var(--text-primary);
+    }
+    
+    .container {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      background: transparent;
+      padding: var(--space-lg);
+      min-height: calc(100vh - 64px);
+    }
+    .page-title {
+      font-size: var(--font-size-xxl);
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      line-height: var(--line-height-lg);
+    }
+    
+    .section {
+      margin-bottom: var(--space-xl);
+    }
+    
+    .section-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-base);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      line-height: var(--line-height-lg);
+    }
+    
+    .card {
+      background: var(--gray-1);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-2);
+      border: 1px solid var(--border-secondary);
+      overflow: hidden;
+      margin-bottom: var(--space-base);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--gray-1);
+      font-size: var(--font-size-sm);
+      margin-bottom: 0;
+      border-spacing: 0;
+    }
+    
+    th, td {
+      border: 1px solid var(--border-secondary);
+      padding: var(--space-sm) var(--space-base);
+      text-align: center;
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-sm);
+      vertical-align: middle;
+      transition: background-color 0.2s;
+    }
+    
+    th {
+      background: var(--gray-3);
+      font-weight: 600;
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--border-primary);
+      position: relative;
+    }
+    
+    tbody tr {
+      transition: all 0.2s;
+    }
+    
+    tbody tr:hover {
+      background: var(--fill-primary);
+    }
+    
+    tbody tr:nth-child(even) {
+      background: var(--gray-2);
+    }
+    
+    tbody tr:nth-child(even):hover {
+      background: var(--fill-primary);
+    }
+    .op-link {
+      color: var(--primary);
+      text-decoration: none;
+      margin: 0 var(--space-xs);
+      font-size: var(--font-size-xs);
+      cursor: pointer;
+      padding: 2px var(--space-xs);
+      border-radius: var(--border-radius-sm);
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    
+    .op-link:hover {
+      background: var(--primary);
+      color: var(--gray-1);
+    }
+    
+    .op-link.danger { 
+      color: var(--error); 
+    }
+    
+    .op-link.danger:hover {
+      background: var(--error);
+      color: var(--gray-1);
+    }
+    
+.op-link.wait { 
+  color: var(--warning);  /* 当前是橙色 */
+  background: rgba(250, 173, 20, 0.1);
+  cursor: default;
+}
+
+.op-link.wait:hover {
+  background: rgba(250, 173, 20, 0.1);
+  color: var(--warning);  /* 当前是橙色 */
+}
+
+.op-link.submit { 
+  color: var(--primary);
+  background: rgba(22, 119, 255, 0.1);
+  cursor: default;
+}
+
+.op-link.submit:hover {
+  background: rgba(22, 119, 255, 0.1);
+  color: var(--primary);
+}
+    
+    .text-green { color: var(--success); font-weight: 500; }
+    .text-red { color: var(--error); font-weight: 500; }
+    .text-gray { color: var(--text-secondary); }
+    .bold { font-weight: 600; }
+    
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--primary);
+      font-size: 16px;
+      padding: var(--space-xs);
+      border-radius: var(--border-radius-sm);
+      transition: all 0.2s;
+    }
+    
+    .icon-btn:hover {
+      background: var(--fill-primary);
+    }
+    
+    .table-title-row th {
+      background: rgba(22, 119, 255, 0.05);
+      color: var(--primary);
+    }
+    
+    .table-group {
+      background: rgba(22, 119, 255, 0.02);
+      font-weight: 500;
+    }
+    
+    .checkbox {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    .icon-dashboard {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background: url('data:image/svg+xml;utf8,<svg fill="%231677ff" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M924 512c0 227.4-184.6 412-412 412S100 739.4 100 512 284.6 100 512 100s412 184.6 412 412zM512 150c-199.9 0-362 162.1-362 362s162.1 362 362 362 362-162.1 362-362-162.1-362-362-362zm0 112c138.1 0 250 111.9 250 250s-111.9 250-250 250-250-111.9-250-250 111.9-250 250-250zm0 50c-110.5 0-200 89.5-200 200s89.5 200 200 200 200-89.5 200-200-89.5-200-200-200zm-25 75h50v125h125v50H537v-175z"/></svg>') no-repeat center/contain;
+      vertical-align: middle;
+      margin-right: var(--space-xs);
+    }
+    
+    .icon-doc {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background: url('data:image/svg+xml;utf8,<svg fill="%231677ff" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7z"/></svg>') no-repeat center/contain;
+      vertical-align: middle;
+      margin-right: var(--space-xs);
+    }
+    
+    .expand-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      margin-right: var(--space-xs);
+      font-size: 12px;
+      transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+      user-select: none;
+      color: var(--text-tertiary);
+    }
+    
+    .expand-icon:hover {
+      color: var(--text-secondary);
+    }
+    
+    .expand-icon.expanded {
+      transform: rotate(90deg);
+    }
+    
+    .icon-edit {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background: url('data:image/svg+xml;utf8,<svg fill="%231677ff" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9c3.9-3.9 3.9-10.2 0-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2c-1.9 11.1 1.5 21.9 9.4 29.8 6.6 6.4 15.6 9.9 25.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-17.7-14.3-32-32-32z"/></svg>') no-repeat center/contain;
+      cursor: pointer;
+      margin: 0 var(--space-xs);
+      padding: 2px;
+      border-radius: var(--border-radius-sm);
+      transition: all 0.2s;
+      vertical-align: middle;
+    }
+    
+    .icon-edit:hover {
+      background-color: rgba(22, 119, 255, 0.1);
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%230958d9" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9c3.9-3.9 3.9-10.2 0-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2c-1.9 11.1 1.5 21.9 9.4 29.8 6.6 6.4 15.6 9.9 25.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-17.7-14.3-32-32-32z"/></svg>');
+    }
+    
+    .icon-add {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background: url('data:image/svg+xml;utf8,<svg fill="%2352c41a" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z"/><path d="M176 474h672q8 0 8 8v60q0 8-8 8H176q-8 0-8-8v-60q0-8 8-8z"/></svg>') no-repeat center/contain;
+      cursor: pointer;
+      margin: 0 var(--space-xs);
+      padding: 2px;
+      border-radius: var(--border-radius-sm);
+      transition: all 0.2s;
+      vertical-align: middle;
+    }
+    
+    .icon-add:hover {
+      background-color: rgba(82, 196, 26, 0.1);
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%23389e0d" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z"/><path d="M176 474h672q8 0 8 8v60q0 8-8 8H176q-8 0-8-8v-60q0-8 8-8z"/></svg>');
+    }
+    
+    /* 数字列右对齐样式 */
+    /* 在途调整/编制申请表格的数字列（第3-13列） */
+    .section:first-of-type table td:nth-child(n+3):nth-child(-n+13) {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    
+    /* 当前工薪执行现状及预算规划表格的数字列 */
+    .section:last-of-type table td:nth-child(n+3):nth-child(-n+13),
+    .section:last-of-type table td:nth-child(n+15):nth-child(-n+25) {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    
+    /* 在途调整/编制申请卡片样式优化 */
+    .section:first-of-type .card {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .section:first-of-type table {
+      font-size: var(--font-size-xs);
+    }
+    
+    .section:first-of-type th,
+    .section:first-of-type td {
+      padding: var(--space-xs) var(--space-sm);
+      line-height: 1.2;
+    }
+    
+    .section:first-of-type th {
+      font-size: var(--font-size-xs);
+      font-weight: 500;
+    }
+    
+    /* 可折叠卡片样式 */
+    .collapsible-card {
+      overflow: visible;
+    }
+    
+    .card-header {
+      padding: var(--space-base) var(--space-lg);
+      background: var(--gray-1);
+      border-bottom: 1px solid var(--border-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+      border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    }
+    
+    .collapsible-card .card-content.collapsed + .card-header,
+    .collapsible-card:has(.card-content.collapsed) .card-header {
+      border-radius: var(--border-radius-lg);
+      border-bottom: none;
+    }
+    
+    .card-header:hover {
+      background: var(--fill-primary);
+    }
+    
+    .card-header:active {
+      background: var(--fill-secondary);
+    }
+    
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .card-title .expand-icon {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+      transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .card-title .expand-icon.collapsed {
+      transform: rotate(-90deg);
+    }
+    
+    .card-content {
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+      overflow: hidden;
+    }
+    
+    .card-content.collapsed {
+      max-height: 0;
+      padding: 0;
+      border: none;
+    }
+    
+    /* 在途调整/编制申请表格的部门层级样式 */
+    .dept-level-1-request {
+      background: var(--gray-1);
+    }
+    
+    .dept-level-1-request td:nth-child(2) {
+      font-weight: 600;
+      font-size: var(--font-size-sm);
+      color: var(--text-primary);
+    }
+    
+    .dept-level-2-request {
+      background: var(--fill-secondary);
+    }
+    
+    .dept-level-2-request td:nth-child(2) {
+      font-weight: 400;
+      font-size: var(--font-size-xs);
+      color: var(--text-secondary);
+      padding-left: var(--space-base);
+    }
+    
+    /* 部门层级样式 */
+    .dept-level-1 {
+      background: var(--gray-1);
+    }
+    
+    .dept-level-1 td:first-child {
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-primary);
+    }
+    
+    .dept-level-2 {
+      background: var(--fill-secondary);
+    }
+    
+    .dept-level-2 td:first-child {
+      cursor: pointer;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    
+    .dept-level-3 {
+      background: var(--gray-1);
+    }
+    
+    .dept-level-3 td:first-child {
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 1200px) {
+      .container {
+        padding: var(--space-base);
+      }
+      
+      th, td {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--font-size-xs);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 var(--space-base);
+        height: 56px;
+      }
+      
+      .navbar .title {
+        font-size: var(--font-size-lg);
+      }
+      
+      .container {
+        padding: var(--space-sm);
+      }
+      
+      .page-title {
+        font-size: var(--font-size-xl);
+        margin-bottom: var(--space-base);
+      }
+      
+      .section-title {
+        font-size: var(--font-size-base);
+      }
+      
+      th, td {
+        padding: var(--space-xs);
+        font-size: var(--font-size-xs);
+      }
+      
+      .card {
+        border-radius: var(--border-radius-base);
+        overflow-x: auto;
+      }
+      
+      table {
+        min-width: 800px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .navbar {
+        padding: 0 var(--space-sm);
+      }
+      
+      .container {
+        padding: var(--space-xs);
+      }
+      
+      .page-title {
+        font-size: var(--font-size-lg);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-xs);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+          <path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"/>
+          <path d="M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.4-111.6 40.7C369.2 344 352 382.7 352 424c0 6.5 0.4 13.1 1.2 19.5l-76.4 63.7c-7.1 5.9-8.1 16.7-2.2 23.8l34.7 41.6c5.9 7.1 16.7 8.1 23.8 2.2l74.1-61.8c16.8 19.6 39.1 35.6 65.1 46.7l-25.3 87.4c-2.3 8.1 2.4 16.9 10.5 19.2l47.9 13.9c8.1 2.3 16.9-2.4 19.2-10.5l25.3-87.4c14.2-2.7 27.6-7.4 39.9-13.9l74.1 61.8c7.1 5.9 17.9 4.9 23.8-2.2l34.7-41.6c5.9-7.1 4.9-17.9-2.2-23.8l-76.4-63.7c0.8-6.4 1.2-12.9 1.2-19.5 0-41.3-17.2-80-48.4-107.3z"/>
+          <circle cx="512" cy="424" r="80"/>
+        </svg>
+      </div>
+      <span class="title">HCM</span>
+    </div>
+    <div class="user">
+      <span class="icon-doc"></span>用户
+    </div>
+  </div>
+  <div class="container">
+    <div class="page-title">
+      <span class="icon-dashboard"></span>工薪预算驾驶舱
+    </div>
+    <div class="section">
+      <div class="card collapsible-card">
+        <div class="card-header" onclick="toggleCard('request-card')">
+          <div class="card-title">
+            <span class="expand-icon" id="request-card-icon">▼</span>
+            <span>在途调整/编制申请（2）</span>
+          </div>
+        </div>
+        <div class="card-content" id="request-card-content">
+          <table>
+          <thead>
+            <tr>
+              <th rowspan="3">申请类型</th>
+              <th rowspan="3">申请部门</th>
+              <th colspan="6">HC</th>
+              <th colspan="3">月度工薪预算（万）</th>
+              <th colspan="3">年度工薪预算（万）</th>
+              <th rowspan="3">操作</th>
+            </tr>
+            <tr>
+              <th colspan="2">申请前</th>
+              <th colspan="2">申请通过后</th>
+              <th colspan="2">变化</th>
+              <th rowspan="2">申请前</th>
+              <th rowspan="2">申请通过后</th>
+              <th rowspan="2">变化</th>
+              <th rowspan="2">申请前</th>
+              <th rowspan="2">申请通过后</th>
+              <th rowspan="2">变化</th>
+            </tr>
+            <tr>
+              <th>正编</th>
+              <th>其他人员</th>
+              <th>正编</th>
+              <th>其他人员</th>
+              <th>正编</th>
+              <th>其他人员</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="dept-level-1-request">
+              <td rowspan="2">2025年预算调增</td>
+              <td>远景工作室</td>
+              <td>17</td><td>2</td><td>19</td><td>2</td><td class="text-red">+2</td><td>0</td>
+              <td>200.0</td><td>209.5</td><td class="text-red">+9.5</td>
+              <td>2400.0</td><td>2508.6</td><td class="text-red">+108.6</td>
+              <td><span class="op-link submit">待提交</span></td>
+            </tr>
+            <tr class="dept-level-2-request">
+              <td>增长部</td>
+              <td>20</td><td>2</td><td>22</td><td>2</td><td class="text-red">+2</td><td>0</td>
+              <td>64.2</td><td>69.4</td><td class="text-red">+5.2</td>
+              <td>770.4</td><td>827.4</td><td class="text-red">+57.0</td>
+              <td><a class="op-link" href="#">修改</a><a class="op-link danger" href="#">删除</a></td>
+            </tr>
+            <tr class="table-group dept-level-1-request">
+              <td rowspan="5">2026年预算编制</td>
+              <td>XX工作室</td>
+              <td>131</td><td>29</td><td>106</td><td>20</td><td class="text-green">-25</td><td class="text-green">-9</td>
+              <td>403.5</td><td>307.3</td><td class="text-green">-96.3</td>
+              <td>4842.4</td><td>4289.7</td><td class="text-green">-552.8</td>
+              <td><span class="op-link wait">待审批</span></td>
+            </tr>
+            <tr class="dept-level-2-request">
+              <td>部门2/3</td>
+              <td>35</td><td>6</td><td>30</td><td>5</td><td class="text-green">-5</td><td class="text-green">-1</td>
+              <td>216.6</td><td>166.5</td><td class="text-green">-50.1</td>
+              <td>2599.3</td><td>2313.1</td><td class="text-green">-286.3</td>
+              <td></td>
+            </tr>
+            <tr class="dept-level-2-request">
+              <td>部门12</td>
+              <td>35</td><td>6</td><td>30</td><td>5</td><td class="text-green">-5</td><td class="text-green">-1</td>
+              <td>67.1</td><td>49.9</td><td class="text-green">-17.3</td>
+              <td>805.5</td><td>753.7</td><td class="text-green">-51.8</td>
+              <td></td>
+            </tr>
+            <tr class="dept-level-2-request">
+              <td>部门14</td>
+              <td>41</td><td>17</td><td>31</td><td>10</td><td class="text-green">-10</td><td class="text-green">-7</td>
+              <td>84.5</td><td>63.9</td><td class="text-green">-20.6</td>
+              <td>1014.1</td><td>849.2</td><td class="text-green">-164.9</td>
+              <td></td>
+            </tr>
+            <tr class="dept-level-2-request">
+              <td>部门15</td>
+              <td>20</td><td>4</td><td>15</td><td>0</td><td class="text-green">-5</td><td class="text-green">-4</td>
+              <td>35.3</td><td>27.0</td><td class="text-green">-8.3</td>
+              <td>423.5</td><td>373.7</td><td class="text-green">-49.8</td>
+              <td></td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">当前工薪执行现状及预算规划</div>
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="4">部门</th>
+              <th colspan="13">2025年</th>
+              <th colspan="12">2026年</th>
+            </tr>
+            <tr>
+              <th rowspan="3">预算调整</th>
+              <th colspan="10">HC</th>
+              <th colspan="2">工薪成本（万）</th>
+              <th rowspan="3">预算编制</th>
+              <th colspan="10">HC</th>
+              <th rowspan="3">全年预算</th>
+            </tr>
+            <tr>
+              <th colspan="5">当前</th>
+              <th colspan="5">年末目标</th>
+              <th rowspan="2">累计已发生</th>
+              <th rowspan="2">全年预算</th>
+              <th colspan="5">年初计划</th>
+              <th colspan="5">年末目标</th>
+            </tr>
+            <tr>
+              <th>正编</th><th>实习</th><th>劳务派遣</th><th>人力外包</th><th>兼职</th>
+              <th>正编</th><th>实习</th><th>劳务派遣</th><th>人力外包</th><th>兼职</th>
+              <th>正编</th><th>实习</th><th>劳务派遣</th><th>人力外包</th><th>兼职</th>
+              <th>正编</th><th>实习</th><th>劳务派遣</th><th>人力外包</th><th>兼职</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-group dept-level-1" data-dept="yuanjing">
+               <td><span class="expand-icon">▶</span>远景工作室</td>
+               <td><span class="icon-edit" title="修改"></span></td>
+               <td>48</td><td>5</td><td>0</td><td>0</td><td>0</td><td>50</td><td>9</td><td>0</td><td>0</td><td>0</td>
+               <td>1200.0</td><td>2400.0</td>
+               <td><span class="icon-add" title="新建"></span></td><td>50</td><td>9</td><td>0</td><td>0</td><td>0</td><td>50</td><td>9</td><td>0</td><td>0</td><td>0</td><td>2400.0</td>
+             </tr>
+            <tr class="dept-level-2" data-parent="yuanjing" style="display: none;">
+               <td>&nbsp;&nbsp;研发部</td>
+               <td><span class="icon-edit" title="修改"></span></td>
+               <td>13</td><td>5</td><td>0</td><td>0</td><td>0</td><td>12</td><td>5</td><td>0</td><td>0</td><td>0</td>
+               <td>326.0</td><td>741.8</td>
+               <td><span class="icon-add" title="新建"></span></td><td>12</td><td>5</td><td>0</td><td>0</td><td>0</td><td>12</td><td>5</td><td>0</td><td>0</td><td>0</td><td>741.8</td>
+             </tr>
+             <tr class="dept-level-2" data-parent="yuanjing" style="display: none;">
+               <td>&nbsp;&nbsp;支撑部</td>
+               <td><span class="icon-edit" title="修改"></span></td>
+               <td>20</td><td>0</td><td>0</td><td>0</td><td>0</td><td>20</td><td>0</td><td>0</td><td>0</td><td>0</td>
+               <td>321.0</td><td>770.4</td>
+               <td><span class="icon-add" title="新建"></span></td><td>20</td><td>0</td><td>0</td><td>0</td><td>0</td><td>20</td><td>0</td><td>0</td><td>0</td><td>0</td><td>916.4</td>
+             </tr>
+             <tr class="dept-level-2" data-parent="yuanjing" style="display: none;">
+               <td>&nbsp;&nbsp;增长部</td>
+               <td><span class="icon-edit" title="修改"></span></td>
+               <td>15</td><td>3</td><td>0</td><td>0</td><td>0</td><td>18</td><td>4</td><td>0</td><td>0</td><td>0</td>
+               <td>280.0</td><td>650.0</td>
+               <td><span class="icon-add" title="新建"></span></td><td>18</td><td>4</td><td>0</td><td>0</td><td>0</td><td>18</td><td>4</td><td>0</td><td>0</td><td>0</td><td>650.0</td>
+             </tr>
+            <tr class="table-group dept-level-1" data-dept="game">
+               <td><span class="expand-icon">▶</span>游戏开发运维中心</td>
+               <td></td>
+               <td>180</td><td>19</td><td>0</td><td>25</td><td>0</td><td>198</td><td>30</td><td>0</td><td>25</td><td>0</td>
+               <td>4900.0</td><td>10100.0</td>
+               <td></td><td>198</td><td>30</td><td>0</td><td>25</td><td>0</td><td>198</td><td>30</td><td>0</td><td>25</td><td>0</td><td>10100.0</td>
+             </tr>
+            <tr class="dept-level-2" data-parent="game" data-dept="data" style="display: none;">
+               <td>&nbsp;&nbsp;<span class="expand-icon">▶</span>数据平台部</td>
+               <td><span class="icon-edit" title="修改"></span></td>
+               <td>60</td><td>12</td><td>0</td><td>0</td><td>0</td><td>66</td><td>15</td><td>0</td><td>0</td><td>0</td>
+               <td>1633.3</td><td>3366.7</td>
+               <td><span class="icon-add" title="新建"></span></td><td>66</td><td>15</td><td>0</td><td>0</td><td>0</td><td>66</td><td>15</td><td>0</td><td>0</td><td>0</td><td>3366.7</td>
+             </tr>
+            <tr class="dept-level-3" data-parent="data" style="display: none;">
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;BI平台组</td>
+               <td></td>
+               <td>20</td><td>5</td><td>0</td><td>0</td><td>0</td><td>22</td><td>5</td><td>0</td><td>0</td><td>0</td>
+               <td>544.4</td><td>1122.2</td>
+               <td></td><td>22</td><td>5</td><td>0</td><td>0</td><td>0</td><td>22</td><td>5</td><td>0</td><td>0</td><td>0</td><td>1122.2</td>
+             </tr>
+             <tr class="dept-level-3" data-parent="data" style="display: none;">
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;实时架构组</td>
+               <td></td>
+               <td>20</td><td>5</td><td>0</td><td>0</td><td>0</td><td>22</td><td>5</td><td>0</td><td>0</td><td>0</td>
+               <td>544.4</td><td>1122.2</td>
+               <td></td><td>22</td><td>5</td><td>0</td><td>0</td><td>0</td><td>22</td><td>5</td><td>0</td><td>0</td><td>0</td><td>1122.2</td>
+             </tr>
+             <tr class="dept-level-3" data-parent="data" style="display: none;">
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;数据仓库组</td>
+               <td></td>
+               <td>20</td><td>4</td><td>0</td><td>0</td><td>0</td><td>22</td><td>5</td><td>0</td><td>0</td><td>0</td>
+               <td>544.4</td><td>1122.2</td>
+               <td></td><td>22</td><td>5</td><td>0</td><td>0</td><td>0</td><td>22</td><td>5</td><td>0</td><td>0</td><td>0</td><td>1122.2</td>
+             </tr>
+            <tr class="dept-level-2" data-parent="game" data-dept="product" style="display: none;">
+               <td>&nbsp;&nbsp;<span class="expand-icon">▶</span>产品技术部</td>
+               <td><span class="icon-edit" title="修改"></span></td>
+               <td>80</td><td>8</td><td>0</td><td>0</td><td>0</td><td>85</td><td>10</td><td>0</td><td>0</td><td>0</td>
+               <td>2100.0</td><td>4200.0</td>
+               <td><span class="icon-add" title="新建"></span></td><td>85</td><td>10</td><td>0</td><td>0</td><td>0</td><td>85</td><td>10</td><td>0</td><td>0</td><td>0</td><td>4200.0</td>
+             </tr>
+            <tr class="dept-level-3" data-parent="product" style="display: none;">
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;后端开发部</td>
+               <td></td>
+               <td>25</td><td>3</td><td>0</td><td>0</td><td>0</td><td>28</td><td>3</td><td>0</td><td>0</td><td>0</td>
+               <td>650.0</td><td>1300.0</td>
+               <td></td><td>28</td><td>3</td><td>0</td><td>0</td><td>0</td><td>28</td><td>3</td><td>0</td><td>0</td><td>0</td><td>1300.0</td>
+             </tr>
+             <tr class="dept-level-3" data-parent="product" style="display: none;">
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;测试部</td>
+               <td></td>
+               <td>15</td><td>2</td><td>0</td><td>0</td><td>0</td><td>17</td><td>2</td><td>0</td><td>0</td><td>0</td>
+               <td>400.0</td><td>800.0</td>
+               <td></td><td>17</td><td>2</td><td>0</td><td>0</td><td>0</td><td>17</td><td>2</td><td>0</td><td>0</td><td>0</td><td>800.0</td>
+             </tr>
+             <tr class="dept-level-3" data-parent="product" style="display: none;">
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;设计部</td>
+               <td></td>
+               <td>20</td><td>2</td><td>0</td><td>0</td><td>0</td><td>20</td><td>3</td><td>0</td><td>0</td><td>0</td>
+               <td>520.0</td><td>1050.0</td>
+               <td></td><td>20</td><td>3</td><td>0</td><td>0</td><td>0</td><td>20</td><td>3</td><td>0</td><td>0</td><td>0</td><td>1050.0</td>
+             </tr>
+             <tr class="dept-level-3" data-parent="product" style="display: none;">
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;产品部</td>
+               <td></td>
+               <td>20</td><td>1</td><td>0</td><td>0</td><td>0</td><td>20</td><td>2</td><td>0</td><td>0</td><td>0</td>
+               <td>530.0</td><td>1050.0</td>
+               <td></td><td>20</td><td>2</td><td>0</td><td>0</td><td>0</td><td>20</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1050.0</td>
+             </tr>
+            <tr class="dept-level-2" data-parent="game" data-dept="ops" style="display: none;">
+               <td>&nbsp;&nbsp;<span class="expand-icon">▶</span>运维部</td>
+               <td><span class="icon-edit" title="修改"></span></td>
+               <td>38</td><td>3</td><td>0</td><td>25</td><td>0</td><td>47</td><td>5</td><td>0</td><td>25</td><td>0</td>
+               <td>1166.7</td><td>2533.3</td>
+               <td><span class="icon-add" title="新建"></span></td><td>47</td><td>5</td><td>0</td><td>25</td><td>0</td><td>47</td><td>5</td><td>0</td><td>25</td><td>0</td><td>2533.3</td>
+             </tr>
+            <tr class="dept-level-3" data-parent="ops" style="display: none;">
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;游戏运维部</td>
+               <td></td>
+               <td>20</td><td>2</td><td>0</td><td>15</td><td>0</td><td>25</td><td>3</td><td>0</td><td>15</td><td>0</td>
+               <td>650.0</td><td>1400.0</td>
+               <td></td><td>25</td><td>3</td><td>0</td><td>15</td><td>0</td><td>25</td><td>3</td><td>0</td><td>15</td><td>0</td><td>1400.0</td>
+             </tr>
+             <tr class="dept-level-3" data-parent="ops" style="display: none;">
+               <td>&nbsp;&nbsp;&nbsp;&nbsp;平台系统部</td>
+               <td></td>
+               <td>18</td><td>1</td><td>0</td><td>10</td><td>0</td><td>22</td><td>2</td><td>0</td><td>10</td><td>0</td>
+               <td>516.7</td><td>1133.3</td>
+               <td></td><td>22</td><td>2</td><td>0</td><td>10</td><td>0</td><td>22</td><td>2</td><td>0</td><td>10</td><td>0</td><td>1133.3</td>
+             </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script>
+    function toggleCard(cardId) {
+      const content = document.getElementById(cardId + '-content');
+      const icon = document.getElementById(cardId + '-icon');
+      
+      if (content.classList.contains('collapsed')) {
+        // 展开
+        content.classList.remove('collapsed');
+        icon.classList.remove('collapsed');
+        icon.textContent = '▼';
+      } else {
+        // 收起
+        content.classList.add('collapsed');
+        icon.classList.add('collapsed');
+        icon.textContent = '▶';
+      }
+    }
+    
+    // 部门树展开收起功能
+    document.addEventListener('DOMContentLoaded', function() {
+      // 为一级部门添加点击事件
+      const level1Depts = document.querySelectorAll('.dept-level-1');
+      level1Depts.forEach(dept => {
+        const firstCell = dept.querySelector('td:first-child');
+        const expandIcon = firstCell.querySelector('.expand-icon');
+        const deptId = dept.getAttribute('data-dept');
+        
+        firstCell.addEventListener('click', function() {
+          toggleDepartment(deptId, 2, expandIcon);
+        });
+      });
+      
+      // 为二级部门添加点击事件
+      const level2Depts = document.querySelectorAll('.dept-level-2[data-dept]');
+      level2Depts.forEach(dept => {
+        const firstCell = dept.querySelector('td:first-child');
+        const expandIcon = firstCell.querySelector('.expand-icon');
+        const deptId = dept.getAttribute('data-dept');
+        
+        if (expandIcon) {
+          firstCell.addEventListener('click', function() {
+            toggleDepartment(deptId, 3, expandIcon);
+          });
+        }
+      });
+    });
+    
+    function toggleDepartment(deptId, level, expandIcon) {
+      const childRows = document.querySelectorAll(`[data-parent="${deptId}"]`);
+      const isExpanded = expandIcon.classList.contains('expanded');
+      
+      if (isExpanded) {
+        // 收起
+        expandIcon.classList.remove('expanded');
+        childRows.forEach(row => {
+          row.style.display = 'none';
+          // 如果子部门也是展开状态，也要收起
+          const childExpandIcon = row.querySelector('.expand-icon');
+          if (childExpandIcon && childExpandIcon.classList.contains('expanded')) {
+            const childDeptId = row.getAttribute('data-dept');
+            if (childDeptId) {
+              toggleDepartment(childDeptId, level + 1, childExpandIcon);
+            }
+          }
+        });
+      } else {
+        // 展开
+        expandIcon.classList.add('expanded');
+        childRows.forEach(row => {
+          row.style.display = 'table-row';
+        });
+      }
+    }
+  </script>
+</body>
+</html>

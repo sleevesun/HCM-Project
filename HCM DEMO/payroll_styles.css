@@ -1,0 +1,382 @@
+/* 工薪预算驾驶舱样式 - 基于design_system.json */
+
+/* CSS变量定义 */
+:root {
+  /* 颜色系统 */
+  --primary-color: #1677FF;
+  --secondary-color: #3C8DBC;
+  --accent-color: #F5222D;
+  --success-color: #52C41A;
+  --warning-color: #FAAD14;
+  --error-color: #FF4D4F;
+  --bg-primary: #F5F5F5;
+  --bg-secondary: #FFFFFF;
+  --text-primary: #000000;
+  --text-secondary: #666666;
+  --text-placeholder: #999999;
+  --border-color: #E0E0E0;
+  
+  /* 字体系统 */
+  --font-family: 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  --font-size-h1: 20px;
+  --font-size-h2: 16px;
+  --font-size-body: 14px;
+  --font-size-caption: 12px;
+  --font-weight-bold: 600;
+  --font-weight-normal: 400;
+  --line-height-h1: 28px;
+  --line-height-h2: 24px;
+  --line-height-body: 22px;
+  --line-height-caption: 18px;
+  
+  /* 间距系统 */
+  --spacing-small: 4px;
+  --spacing-medium: 8px;
+  --spacing-large: 16px;
+  --spacing-xlarge: 24px;
+  
+  /* 圆角和阴影 */
+  --border-radius: 4px;
+  --border-radius-card: 6px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 全局样式重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+/* 顶部导航栏 */
+.header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: var(--spacing-large);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--box-shadow);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-medium);
+}
+
+.logo-icon {
+  font-size: var(--font-size-h1);
+}
+
+.logo-text {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+}
+
+.user-info {
+  font-size: var(--font-size-body);
+}
+
+/* 主要内容区域 */
+.main-content {
+  padding: var(--spacing-xlarge);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 页面标题 */
+.page-header {
+  margin-bottom: var(--spacing-xlarge);
+}
+
+.page-header h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-h1);
+  color: var(--text-primary);
+}
+
+/* 区块样式 */
+.application-section,
+.budget-section {
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-card);
+  padding: var(--spacing-large);
+  margin-bottom: var(--spacing-xlarge);
+  box-shadow: var(--box-shadow);
+}
+
+/* 区块标题 */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-large);
+  padding-bottom: var(--spacing-large);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-header h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-h2);
+  color: var(--text-primary);
+}
+
+/* 按钮样式 */
+.refresh-btn,
+.action-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-medium) var(--spacing-large);
+  font-size: var(--font-size-body);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.refresh-btn:hover,
+.action-btn:hover {
+  background-color: #4096FF;
+}
+
+.refresh-btn:active,
+.action-btn:active {
+  background-color: #0958D9;
+}
+
+/* 年份标签 */
+.year-tabs {
+  display: flex;
+  gap: var(--spacing-medium);
+}
+
+.year-tab {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-medium) var(--spacing-large);
+  font-size: var(--font-size-body);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.year-tab.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.year-tab:hover:not(.active) {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* 统计卡片 */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--spacing-large);
+  margin-bottom: var(--spacing-xlarge);
+}
+
+.stats-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-card);
+  padding: var(--spacing-large);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-large);
+  margin-bottom: var(--spacing-large);
+  padding-bottom: var(--spacing-medium);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-header h3 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.period {
+  font-size: var(--font-size-caption);
+  color: var(--text-secondary);
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr 80px;
+  gap: var(--spacing-large);
+  align-items: center;
+  padding: var(--spacing-medium) 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-size: var(--font-size-body);
+  color: var(--text-secondary);
+}
+
+.value {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.trend {
+  font-size: var(--font-size-caption);
+  padding: 2px var(--spacing-medium);
+  border-radius: var(--border-radius);
+  text-align: center;
+}
+
+.trend.positive {
+  background-color: #f6ffed;
+  color: var(--success-color);
+}
+
+.trend.negative {
+  background-color: #fff2f0;
+  color: var(--error-color);
+}
+
+/* 表格样式 */
+.table-container,
+.budget-table-container {
+  overflow-x: auto;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+
+.application-table,
+.budget-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--bg-secondary);
+}
+
+.application-table th,
+.application-table td,
+.budget-table th,
+.budget-table td {
+  padding: var(--spacing-large);
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: var(--font-size-body);
+}
+
+.application-table th,
+.budget-table th {
+  background-color: #fafafa;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  position: sticky;
+  top: 0;
+}
+
+.application-table td,
+.budget-table td {
+  color: var(--text-primary);
+}
+
+/* 可展开行样式 */
+.expandable {
+  cursor: pointer;
+  background-color: #fafafa;
+}
+
+.expandable:hover {
+  background-color: #f0f0f0;
+}
+
+.sub-row {
+  background-color: #f9f9f9;
+}
+
+.sub-row td:first-child {
+  padding-left: var(--spacing-xlarge);
+  color: var(--text-secondary);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .main-content {
+    padding: var(--spacing-large);
+  }
+  
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-medium);
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-medium);
+  }
+  
+  .stat-row {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-small);
+  }
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* 动画效果 */
+.stats-card,
+.application-section,
+.budget-section {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}

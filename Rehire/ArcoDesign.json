@@ -1,0 +1,158 @@
+{
+  "designSystem": "Arco Design",
+  "version": "2.58.2",
+  "designStyle": {
+    "description": "A comprehensive, enterprise-level design system that emphasizes clarity, efficiency, and consistency. It provides a rich set of components and a flexible design language suitable for complex applications."
+  },
+  "colorPalette": {
+    "primary": {
+      "description": "The primary brand color and its gradient scale, used for main actions, active states, and highlights.",
+      "arcoblue-1": "#E8F3FF",
+      "arcoblue-2": "#BEDEFF",
+      "arcoblue-3": "#94BFFF",
+      "arcoblue-4": "#6AA1FF",
+      "arcoblue-5": "#4080FF",
+      "arcoblue-6": "#165DFF",
+      "arcoblue-7": "#0E42D2",
+      "arcoblue-8": "#072CA6",
+      "arcoblue-9": "#031A79",
+      "arcoblue-10": "#010D4D"
+    },
+    "success": {
+      "description": "Used for success states, confirmations, and positive feedback.",
+      "green-1": "#E8FFEA",
+      "green-2": "#AFF0B5",
+      "green-3": "#7BE188",
+      "green-4": "#4CD25A",
+      "green-5": "#23C343",
+      "green-6": "#00B42A",
+      "green-7": "#009A29",
+      "green-8": "#008026",
+      "green-9": "#006622",
+      "green-10": "#004D1C"
+    },
+    "warning": {
+      "description": "Used for warnings, alerts, and potentially risky actions.",
+      "orange-1": "#FFF7E8",
+      "orange-2": "#FFE4BA",
+      "orange-3": "#FFCF8B",
+      "orange-4": "#FFB65D",
+      "orange-5": "#FF9A2E",
+      "orange-6": "#FF7D00",
+      "orange-7": "#D26900",
+      "orange-8": "#A65300",
+      "orange-9": "#793D00",
+      "orange-10": "#4D2800"
+    },
+    "error": {
+      "description": "Used for error states, failures, and destructive actions.",
+      "red-1": "#FFECE8",
+      "red-2": "#FFD3C9",
+      "red-3": "#FFB5A8",
+      "red-4": "#FF9285",
+      "red-5": "#FF6A66",
+      "red-6": "#F53F3F",
+      "red-7": "#CF2F2F",
+      "red-8": "#A92121",
+      "red-9": "#821616",
+      "red-10": "#5A0E0E"
+    },
+    "neutral": {
+      "description": "The grayscale palette used for text, borders, backgrounds, and dividers.",
+      "gray-1": "#F7F8FA",
+      "gray-2": "#F2F3F5",
+      "gray-3": "#E5E6EB",
+      "gray-4": "#C9CDD4",
+      "gray-5": "#A9AEB8",
+      "gray-6": "#86909C",
+      "gray-7": "#4E5969",
+      "gray-8": "#272E3B",
+      "gray-9": "#1D2129",
+      "gray-10": "#17191D",
+      "white": "#FFFFFF",
+      "black": "#000000"
+    },
+    "text": {
+      "text-1": "#1D2129",
+      "text-2": "#4E5969",
+      "text-3": "#86909C",
+      "text-4": "#C9CDD4"
+    },
+    "border": {
+      "border-1": "#F2F3F5",
+      "border-2": "#E5E6EB",
+      "border-3": "#C9CDD4",
+      "border-4": "#A9AEB8"
+    },
+    "background": {
+      "bg-1": "#FFFFFF",
+      "bg-2": "#F7F8FA",
+      "bg-3": "#F2F3F5",
+      "bg-4": "#E5E6EB",
+      "bg-5": "#C9CDD4"
+    }
+  },
+  "typography": {
+    "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+    "fontSize": {
+      "base": "14px",
+      "sm": "12px",
+      "lg": "16px",
+      "xl": "20px",
+      "xxl": "24px"
+    },
+    "fontWeight": {
+      "regular": 400,
+      "medium": 500,
+      "bold": 600
+    },
+    "lineHeight": {
+      "base": 1.5715
+    },
+    "headings": {
+      "h1": { "fontSize": "32px", "fontWeight": 500 },
+      "h2": { "fontSize": "28px", "fontWeight": 500 },
+      "h3": { "fontSize": "24px", "fontWeight": 500 },
+      "h4": { "fontSize": "20px", "fontWeight": 500 },
+      "h5": { "fontSize": "16px", "fontWeight": 500 },
+      "h6": { "fontSize": "14px", "fontWeight": 500 }
+    }
+  },
+  "spacing": {
+    "baseUnit": "4px",
+    "scale": {
+      "0": "0px",
+      "1": "4px",
+      "2": "8px",
+      "3": "12px",
+      "4": "16px",
+      "5": "20px",
+      "6": "24px",
+      "7": "28px",
+      "8": "32px",
+      "9": "36px",
+      "10": "40px"
+    }
+  },
+  "criticalAttributes": {
+    "cornerRadius": {
+      "mini": "2px",
+      "small": "4px",
+      "medium": "6px",
+      "large": "8px",
+      "round": "50%"
+    },
+    "shadows": {
+      "level-1": "0 2px 8px rgba(0, 0, 0, 0.15)",
+      "level-2": "0 4px 12px rgba(0, 0, 0, 0.15)",
+      "level-3": "0 8px 20px rgba(0, 0, 0, 0.15)"
+    },
+    "zIndex": {
+      "modal": 1000,
+      "drawer": 1000,
+      "popover": 100,
+      "tooltip": 100,
+      "message": 1010
+    }
+  }
+}

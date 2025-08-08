@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊录用审批 - 审批人界面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333333;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border-bottom: 3px solid #0052a3;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.75rem;
+        }
+
+        .approval-card {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0066cc;
+            margin: 0;
+        }
+
+        .approval-status {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #ffeaa7;
+        }
+
+        .card-body {
+            padding: 1rem 1.25rem;
+        }
+
+        .info-section {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: #fafbfc;
+            border-radius: 4px;
+            border-left: 3px solid #0066cc;
+        }
+
+        .info-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0066cc;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid #e9ecef;
+            display: inline-block;
+            line-height: 1.2;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 3px;
+            border: 1px solid #e9ecef;
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .info-value {
+            font-size: 13px;
+            color: #333333;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .info-value.highlight {
+            color: #dc3545;
+            font-weight: 600;
+            background: #f8d7da;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .performance-item {
+            background: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .performance-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .performance-year {
+            font-size: 10px;
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .performance-score {
+            font-size: 14px;
+            font-weight: 700;
+            padding: 0.25rem;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        .performance-score.excellent {
+            background: linear-gradient(135deg, #d1f2eb 0%, #a3e4d7 100%);
+            color: #0e6b56;
+            border: 1px solid #a3e4d7;
+        }
+
+        .performance-score.good {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .performance-score.average {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .performance-score.poor {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .attachment-section {
+            margin-top: 0.5rem;
+        }
+
+        .attachment-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .attachment-item:hover {
+            border-color: #0066cc;
+            box-shadow: 0 2px 4px rgba(0,102,204,0.1);
+        }
+
+        .attachment-icon {
+            font-size: 18px;
+            color: #0066cc;
+        }
+
+        .attachment-name {
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .attachment-name:hover {
+            text-decoration: underline;
+            color: #004499;
+        }
+
+        .description-box {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #495057;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        /* 审批流程样式 */
+        .approval-process {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0.75rem 0;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .process-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .process-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #dee2e6;
+            z-index: 1;
+            border-radius: 1px;
+        }
+
+        .process-step.completed::after {
+            background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+        }
+
+        .process-step.current::after {
+            background: linear-gradient(to right, #28a745 50%, #dee2e6 50%);
+        }
+
+        .step-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .step-icon.completed {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: 1px solid #20c997;
+        }
+
+        .step-icon.current {
+            background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+            color: white;
+            border: 1px solid #004499;
+            animation: pulse 2s infinite;
+        }
+
+        .step-icon.pending {
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #dee2e6;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 102, 204, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(0, 102, 204, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 102, 204, 0); }
+        }
+
+        .step-label {
+            font-size: 11px;
+            color: #333333;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .step-user {
+            font-size: 10px;
+            color: #6c757d;
+            text-align: center;
+            margin-top: 0.15rem;
+            font-weight: 500;
+        }
+
+        /* 审批意见样式 */
+        .approval-comments {
+            margin-top: 0.75rem;
+        }
+
+        .comment-input {
+            width: 100%;
+            min-height: 60px;
+            padding: 0.5rem;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            font-size: 13px;
+            line-height: 1.4;
+            resize: vertical;
+            font-family: inherit;
+            background: #fafbfc;
+            transition: all 0.2s ease;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+            background: white;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-color: #20c997;
+        }
+
+        .btn-approve:hover {
+            background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+        }
+
+        .btn-reject {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border-color: #c82333;
+        }
+
+        .btn-reject:hover {
+            background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+        }
+
+        .btn-return {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            color: white;
+            border-color: #5a6268;
+        }
+
+        .btn-return:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+
+            .header {
+                padding: 0.5rem 0.75rem;
+            }
+
+            .header h1 {
+                font-size: 16px;
+            }
+
+            .card-header {
+                padding: 0.5rem 0.75rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .card-body {
+                padding: 0.75rem;
+            }
+
+            .info-section {
+                padding: 0.5rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .section-title {
+                font-size: 13px;
+                margin-bottom: 0.25rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .info-item {
+                padding: 0.4rem;
+            }
+
+            .performance-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.4rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-top: 0.75rem;
+                padding-top: 0.75rem;
+            }
+
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 12px;
+            }
+
+            .approval-process {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.5rem;
+                margin: 0.5rem 0;
+            }
+
+            .process-step {
+                flex-direction: row;
+                align-items: center;
+                gap: 0.5rem;
+                width: 100%;
+            }
+
+            .process-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .step-icon {
+                width: 20px;
+                height: 20px;
+                font-size: 10px;
+                margin-bottom: 0;
+            }
+
+            .step-label {
+                font-size: 10px;
+                margin-bottom: 0.1rem;
+            }
+
+            .step-user {
+                font-size: 9px;
+            }
+
+            .comment-input {
+                height: 50px;
+                padding: 0.4rem;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>特殊录用审批 - 审批人界面</h1>
+    </div>
+
+    <div class="container">
+        <div class="approval-card">
+            <div class="card-header">
+                <h2>特殊录用审批申请</h2>
+                <span class="approval-status">待审批</span>
+            </div>
+            
+            <div class="card-body">
+                <!-- 基本信息 -->
+                <div class="info-section">
+                    <div class="section-title">基本信息</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">姓名</div>
+                            <div class="info-value">张三</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">证件号码</div>
+                            <div class="info-value">110101199001011234</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 离职前职务信息 -->
+                <div class="info-section">
+                    <div class="section-title">离职前职务信息</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">离职前部门</div>
+                            <div class="info-value">技术部</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">职级</div>
+                            <div class="info-value">P6</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">岗位</div>
+                            <div class="info-value">高级软件工程师</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">离职时间</div>
+                            <div class="info-value">2023-10-15</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">离职原因</div>
+                            <div class="info-value">个人发展</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">离职前直属上级</div>
+                            <div class="info-value">李经理</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">离职前HRG</div>
+                            <div class="info-value">王HR</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">不符合条件具体原因</div>
+                            <div class="info-value highlight">绩效不符合重新雇佣标准</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 离职前3年绩效 -->
+                    <div style="margin-top: 1.5rem;">
+                        <div class="info-label">离职前3年绩效</div>
+                        <div class="performance-grid">
+                            <div class="performance-item">
+                                <div class="performance-year">2021年</div>
+                                <div class="performance-score good">B</div>
+                            </div>
+                            <div class="performance-item">
+                                <div class="performance-year">2022年</div>
+                                <div class="performance-score poor">C</div>
+                            </div>
+                            <div class="performance-item">
+                                <div class="performance-year">2023年</div>
+                                <div class="performance-score poor">C</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 招聘信息 -->
+                <div class="info-section">
+                    <div class="section-title">招聘信息</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">直属部门</div>
+                            <div class="info-value">技术部</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">职位</div>
+                            <div class="info-value">高级工程师</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 附件 -->
+                <div class="info-section">
+                    <div class="section-title">附件</div>
+                    <div class="attachment-section">
+                        <div class="attachment-item">
+                            <div class="attachment-icon">📄</div>
+                            <a href="#" class="attachment-name">张三_简历.pdf</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 复职说明 -->
+                <div class="info-section">
+                    <div class="section-title">复职说明</div>
+                    <div class="info-label">HR填写的原因说明</div>
+                    <div class="description-box">
+                        该候选人虽然离职前绩效表现不佳，但在离职期间通过自我提升和学习，技能水平有了显著提高。考虑到当前项目急需相关技术人员，且该候选人对公司业务熟悉，建议给予特殊录用机会。同时建议设置试用期考核，确保其能够胜任新岗位要求。
+                    </div>
+                </div>
+
+                <!-- 审批流程预览 -->
+                <div class="info-section">
+                    <div class="section-title">审批流程</div>
+                    <div class="approval-process">
+                        <div class="process-step completed">
+                            <div class="step-icon completed">✓</div>
+                            <div class="step-label">HR发起</div>
+                            <div class="step-user">张HR</div>
+                        </div>
+                        <div class="process-step current">
+                            <div class="step-icon current">2</div>
+                            <div class="step-label">部门审批</div>
+                            <div class="step-user">李经理</div>
+                        </div>
+                        <div class="process-step pending">
+                            <div class="step-icon pending">3</div>
+                            <div class="step-label">HR审批</div>
+                            <div class="step-user">王总监</div>
+                        </div>
+                        <div class="process-step pending">
+                            <div class="step-icon pending">4</div>
+                            <div class="step-label">最终审批</div>
+                            <div class="step-user">总经理</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 审批意见 -->
+                <div class="info-section">
+                    <div class="section-title">审批意见</div>
+                    <div class="approval-comments">
+                        <textarea class="comment-input" placeholder="请输入您的审批意见..."></textarea>
+                    </div>
+                </div>
+
+                <!-- 审批操作 -->
+                <div class="action-buttons">
+                    <button class="btn btn-approve" onclick="approveApplication()">同意</button>
+                    <button class="btn btn-reject" onclick="rejectApplication()">拒绝</button>
+                    <button class="btn btn-return" onclick="returnApplication()">退回</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function approveApplication() {
+            const comment = document.querySelector('.comment-input').value.trim();
+            if (!comment) {
+                alert('请填写审批意见！');
+                return;
+            }
+            if (confirm('确认同意该特殊录用申请吗？')) {
+                alert('审批通过！申请已同意。\n审批意见：' + comment);
+                // 这里可以调用后端API提交审批结果
+            }
+        }
+
+        function rejectApplication() {
+            const comment = document.querySelector('.comment-input').value.trim();
+            if (!comment) {
+                alert('请填写审批意见！');
+                return;
+            }
+            if (confirm('确认拒绝该特殊录用申请吗？')) {
+                alert('审批已拒绝。\n审批意见：' + comment);
+                // 这里可以调用后端API提交审批结果
+            }
+        }
+
+        function returnApplication() {
+            const comment = document.querySelector('.comment-input').value.trim();
+            if (!comment) {
+                alert('请填写审批意见！');
+                return;
+            }
+            if (confirm('确认退回该特殊录用申请吗？')) {
+                alert('申请已退回。\n审批意见：' + comment);
+                // 这里可以调用后端API提交审批结果
+            }
+        }
+    </script>
+</body>
+</html>

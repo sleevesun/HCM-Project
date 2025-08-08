@@ -1,0 +1,123 @@
+{
+    "tableHeader": {
+        "columns": [
+            {
+                "title": "申请类型",
+                "key": "applicationType",
+                "type": "single" // 表示单列，无下级嵌套
+            },
+            {
+                "title": "申请部门",
+                "key": "applicationDept",
+                "type": "single"
+            },
+            {
+                "title": "HC",
+                "key": "hc",
+                "type": "group", // 表示分组列，有下级子列
+                "children": [
+                    {
+                        "title": "申请前",
+                        "key": "hcBefore",
+                        "type": "group",
+                        "children": [
+                            {
+                                "title": "正编",
+                                "key": "hcBeforeRegular",
+                                "type": "single"
+                            },
+                            {
+                                "title": "其他人员",
+                                "key": "hcBeforeOthers",
+                                "type": "single"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "申请通过后",
+                        "key": "hcAfter",
+                        "type": "group",
+                        "children": [
+                            {
+                                "title": "正编",
+                                "key": "hcAfterRegular",
+                                "type": "single"
+                            },
+                            {
+                                "title": "其他人员",
+                                "key": "hcAfterOthers",
+                                "type": "single"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "变化",
+                        "key": "hcChange",
+                        "type": "group",
+                        "children": [
+                            {
+                                "title": "正编",
+                                "key": "hcChangeRegular",
+                                "type": "single"
+                            },
+                            {
+                                "title": "其他人员",
+                                "key": "hcChangeOthers",
+                                "type": "single"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "月度工薪预算（万）",
+                "key": "monthlySalary",
+                "type": "group",
+                "children": [
+                    {
+                        "title": "申请前",
+                        "key": "monthlySalaryBefore",
+                        "type": "single"
+                    },
+                    {
+                        "title": "申请通过后",
+                        "key": "monthlySalaryAfter",
+                        "type": "single"
+                    },
+                    {
+                        "title": "变化",
+                        "key": "monthlySalaryChange",
+                        "type": "single"
+                    }
+                ]
+            },
+            {
+                "title": "年度工薪预算（万）",
+                "key": "annualSalary",
+                "type": "group",
+                "children": [
+                    {
+                        "title": "申请前",
+                        "key": "annualSalaryBefore",
+                        "type": "single"
+                    },
+                    {
+                        "title": "申请通过后",
+                        "key": "annualSalaryAfter",
+                        "type": "single"
+                    },
+                    {
+                        "title": "变化",
+                        "key": "annualSalaryChange",
+                        "type": "single"
+                    }
+                ]
+            },
+            {
+                "title": "操作",
+                "key": "operation",
+                "type": "single"
+            }
+        ]
+    }
+}

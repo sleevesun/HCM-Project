@@ -1,0 +1,83 @@
+{
+  "designStyle": "Minimalistic, clean, mobile-first, and functional.",
+  "colorPalette": {
+    "primary": {
+      "green": "#4CAF50"
+    },
+    "secondary": {
+      "gray": "#F5F5F5",
+      "dark-gray": "#757575"
+    },
+    "accent": {
+      "red": "#F44336"
+    },
+    "background": {
+      "white": "#FFFFFF",
+      "light-gray": "#F8F8F8"
+    },
+    "text": {
+      "dark": "#212121",
+      "medium": "#424242",
+      "light": "#9E9E9E"
+    },
+    "border": {
+      "light-border": "#E0E0E0"
+    }
+  },
+  "typography": {
+    "fontFamily": "System default sans-serif (e.g., PingFang SC, Noto Sans CJK SC, or similar)",
+    "weights": {
+      "regular": "400",
+      "medium": "500",
+      "bold": "700"
+    },
+    "sizes": {
+      "heading": "18px - 20px",
+      "subheading": "16px",
+      "body": "14px",
+      "small": "12px"
+    },
+    "lineSpacing": "Standard (implied 1.4x - 1.5x font-size for body text)"
+  },
+  "spacing": {
+    "padding": {
+      "small": "8px",
+      "medium": "16px",
+      "large": "24px"
+    },
+    "margin": {
+      "small": "8px",
+      "medium": "16px",
+      "large": "24px"
+    },
+    "gutterRules": "Consistent vertical spacing between sections and horizontal padding within containers, often multiples of 8px."
+  },
+  "layoutPrinciples": {
+    "gridUsage": "Single-column layout for primary content, with clear sectioning.",
+    "alignmentRules": "Left-aligned content and labels, right-aligned values/data points within a row.",
+    "breakpointBehavior": "Designed for mobile portrait orientation, implying fluid width and stacking for larger screens (though not explicitly shown)."
+  },
+  "visualHierarchy": {
+    "fontSizes": "Larger, bolder text for titles and key information, smaller for details and labels.",
+    "contrast": "High contrast for text (dark on light background) to ensure readability.",
+    "emphasisMechanisms": "Bold text for important labels, distinct background colors for sections (e.g., white cards on a light gray background), subtle use of green for positive actions/icons."
+  },
+  "components": {
+    "header": {
+      "top-bar": "Light background, dark text, centered title, clear back arrow and action icons."
+    },
+    "cards": "White background, rounded corners, subtle shadow, consistent internal padding, used to group related information.",
+    "list-items": "Clear separation between items, consistent padding, labels on left, values on right.",
+    "buttons": {
+      "floating-action-button": "Circular, solid green background, white icon, subtle shadow, positioned at bottom right.",
+      "bottom-navigation": "Icons with text labels, active item highlighted with green color."
+    },
+    "icons": "Outline style, monochromatic (gray or green for active states)."
+  },
+  "otherAttributes": {
+    "corner-radius": "Small (e.g., 8px - 12px) for cards and main content blocks.",
+    "shadowStyle": "Subtle, soft shadows for cards and floating action buttons to provide depth.",
+    "borderStyle": "Minimal borders, primarily for subtle separation of sections or list items.",
+    "status-bar": "Standard mobile status bar styling (dark icons on light background)."
+  }
+}

@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>薪酬调薪 - HR自助工作台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #f7f8fa;
+            color: #1d2129;
+            line-height: 1.5715;
+            font-size: 14px;
+            overflow-x: hidden;
+        }
+
+        /* 顶部导航栏 */
+        .top-navbar {
+            background: #ffffff;
+            color: #1d2129;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            border-bottom: 1px solid #e5e6eb;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 16px;
+            font-weight: bold;
+            color: #E53E3E;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0;
+        }
+
+        .nav-tab {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-size: 14px;
+            color: #86909c;
+            transition: all 0.2s;
+        }
+
+        .nav-tab.active {
+            background: #f2f3f5;
+            color: #165dff;
+            border-bottom: 2px solid #165dff;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover:not(.active) {
+            color: #165dff;
+            background: #f2f3f5;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .switch-btn {
+            padding: 6px 12px;
+            background: #f2f3f5;
+            color: #1d2129;
+            border: 1px solid #c9cdd4;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .switch-btn:hover {
+            border-color: #165dff;
+            color: #165dff;
+        }
+
+        /* 主容器 */
+        .main-container {
+            display: flex;
+            margin-top: 48px;
+            height: calc(100vh - 48px);
+        }
+
+        /* 左侧菜单栏 */
+        .sidebar {
+            width: 240px;
+            background: #ffffff;
+            border-right: 1px solid #e5e6eb;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu-header {
+            padding: 12px 16px;
+            background: transparent;
+            border-bottom: none;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1d2129;
+            transition: all 0.2s;
+        }
+
+        .menu-header:hover {
+            background: #f2f3f5;
+        }
+
+        .menu-header.active {
+            background: #e8f3ff;
+            color: #165dff;
+        }
+
+        .menu-icon {
+            font-size: 16px;
+        }
+
+
+
+        .submenu {
+            background: #ffffff;
+            border-top: 1px solid #f2f3f5;
+        }
+
+        .submenu-item {
+            padding: 8px 32px;
+            font-size: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f2f3f5;
+            display: flex;
+            align-items: center;
+            color: #86909c;
+            transition: all 0.2s;
+        }
+
+        .submenu-item:hover {
+            background: #f2f3f5;
+            color: #1d2129;
+        }
+
+        .submenu-item.active {
+            background: #e8f3ff;
+            color: #165dff;
+            font-weight: 500;
+        }
+
+        /* 主内容区 */
+        .content-area {
+            flex: 1;
+            background: #f7f8fa;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .content-header {
+            background: #FFFFFF;
+            color: #333333;
+            padding: 16px 24px;
+            border: 1px solid #D9D9D9;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-title {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .status-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .status-tab {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666666;
+            transition: all 0.2s;
+        }
+
+        .status-tab.active {
+            background: #FFFFFF;
+            color: #1d2129;
+            border-bottom: 2px solid #165dff;
+            font-weight: 500;
+        }
+
+        .status-tab:hover:not(.active) {
+            color: #165dff;
+            background: #f2f3f5;
+        }
+
+        .content-card {
+            background: #FFFFFF;
+            border: 1px solid #D9D9D9;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            padding: 16px 24px;
+            background: #F0F2F5;
+            border-bottom: 1px solid #D9D9D9;
+            border-radius: 4px 4px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333333;
+            line-height: 1.5;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            background: #165dff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(22, 93, 255, 0.2);
+        }
+
+        .action-btn:hover {
+            background: #4080ff;
+            box-shadow: 0 4px 8px rgba(22, 93, 255, 0.3);
+        }
+
+        .action-btn:active {
+            background: #0e42d2;
+            box-shadow: 0 1px 2px rgba(22, 93, 255, 0.4);
+        }
+
+        /* 表格样式 */
+        .table-container {
+            background: white;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            border: 1px solid #D9D9D9;
+        }
+
+        th {
+            background: #f7f8fa;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 500;
+            color: #1d2129;
+            border-right: 1px solid #e5e6eb;
+            border-bottom: 1px solid #e5e6eb;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-right: 1px solid #f2f3f5;
+            border-bottom: 1px solid #f2f3f5;
+            color: #1d2129;
+            background: white;
+        }
+
+        tr:nth-child(even) td {
+            background: #FAFAFA;
+        }
+
+        tr:hover td {
+            background: #F0F8FF;
+        }
+
+        .link {
+            color: #165dff;
+            text-decoration: none;
+            cursor: pointer;
+            margin-right: 8px;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .link:hover {
+            color: #4080ff;
+            text-decoration: underline;
+        }
+
+        .positive {
+            color: #52C41A;
+        }
+
+        .negative {
+            color: #FF4D4F;
+        }
+
+        /* 弹窗样式 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal-container {
+            position: relative;
+            width: 95%;
+            max-width: 1400px;
+            margin: 20px auto;
+            background: #f7f8fa;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            min-height: calc(100vh - 40px);
+        }
+
+        .modal-header {
+            background: #ffffff;
+            padding: 16px 24px;
+            border-bottom: 1px solid #e5e6eb;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d2129;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #86909c;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f2f3f5;
+            color: #1d2129;
+        }
+
+        .modal-content {
+            padding: 24px;
+        }
+
+        /* 弹窗内的样式 - 复制自payroll_management.html */
+        .modal-content .container {
+            max-width: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .modal-content .header {
+            background: #FFFFFF;
+            color: #1d2129;
+            padding: 16px 24px;
+            border-bottom: 1px solid #e5e6eb;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-content .page-title {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.5715;
+            color: #1d2129;
+            margin-bottom: 8px;
+        }
+
+        .modal-content .page-subtitle {
+            font-size: 12px;
+            color: #86909c;
+            margin-bottom: 16px;
+        }
+
+        .modal-content .summary-info {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .modal-content .summary-item {
+            background: #FFFFFF;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #e5e6eb;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 11px;
+            color: #1d2129;
+            margin-bottom: 8px;
+        }
+
+        .modal-content .summary-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 4px;
+            margin-left: 4px;
+        }
+
+        .modal-content .content-card {
+            background: #FFFFFF;
+            border: 1px solid #e5e6eb;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-content .section-header {
+            padding: 12px 20px;
+            border-bottom: 1px solid #e5e6eb;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1d2129;
+            background: #f7f8fa;
+            line-height: 1.5715;
+        }
+
+        .modal-content .table-container {
+            overflow-x: auto;
+            background: white;
+        }
+
+        .modal-content table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            border: 1px solid #e5e6eb;
+            table-layout: auto;
+        }
+
+        .modal-content th {
+            background: #f7f8fa;
+            padding: 8px 8px;
+            text-align: left;
+            font-weight: 500;
+            color: #1d2129;
+            border-right: 1px solid #e5e6eb;
+            border-bottom: 1px solid #e5e6eb;
+            white-space: nowrap;
+            font-size: 11px;
+        }
+
+        .modal-content td {
+            padding: 8px 8px;
+            border-right: 1px solid #f2f3f5;
+            border-bottom: 1px solid #f2f3f5;
+            color: #1d2129;
+            background: white;
+            white-space: nowrap;
+        }
+
+        .modal-content th:nth-child(1), .modal-content td:nth-child(1) { width: 40px; min-width: 40px; }
+        .modal-content th:nth-child(2), .modal-content td:nth-child(2) { width: 80px; min-width: 80px; }
+        .modal-content th:nth-child(3), .modal-content td:nth-child(3) { width: 70px; min-width: 70px; }
+        .modal-content th:nth-child(4), .modal-content td:nth-child(4) { width: 70px; min-width: 70px; }
+        .modal-content th:nth-child(5), .modal-content td:nth-child(5) { width: 80px; min-width: 80px; }
+        .modal-content th:nth-child(6), .modal-content td:nth-child(6) { width: 80px; min-width: 80px; }
+        .modal-content th:nth-child(7), .modal-content td:nth-child(7) { width: 120px; min-width: 120px; }
+        .modal-content th:nth-child(8), .modal-content td:nth-child(8) { width: 60px; min-width: 60px; }
+        .modal-content th:nth-child(9), .modal-content td:nth-child(9) { width: 60px; min-width: 60px; }
+        .modal-content th:nth-child(10), .modal-content td:nth-child(10) { width: 80px; min-width: 80px; }
+        .modal-content th:nth-child(11), .modal-content td:nth-child(11) { width: 80px; min-width: 80px; }
+        .modal-content th:nth-child(12), .modal-content td:nth-child(12) { width: 50px; min-width: 50px; }
+        .modal-content th:nth-child(13), .modal-content td:nth-child(13) { width: 100px; min-width: 100px; }
+        .modal-content th:nth-child(14), .modal-content td:nth-child(14) { width: 80px; min-width: 80px; }
+        .modal-content th:nth-child(15), .modal-content td:nth-child(15) { width: 100px; min-width: 100px; }
+
+        .modal-content .employee-id-input {
+            width: 100%;
+            max-width: 70px;
+            border: 1px solid #c9cdd4;
+            border-radius: 4px;
+            padding: 4px 6px;
+            font-size: 11px;
+            color: #1d2129;
+            background: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .modal-content .employee-id-input:focus {
+            border-color: #165dff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.1);
+        }
+
+        .modal-content tr:nth-child(even) td {
+            background: #f7f8fa;
+        }
+
+        .modal-content tr:hover td {
+            background: #e8f3ff;
+        }
+
+        .modal-content .positive {
+            color: #52C41A;
+        }
+
+        .modal-content .negative {
+            color: #FF4D4F;
+        }
+
+        .modal-content .link {
+            color: #165dff;
+            text-decoration: none;
+            cursor: pointer;
+            margin-right: 8px;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .modal-content .link:hover {
+            color: #4080ff;
+            text-decoration: underline;
+        }
+
+        .modal-content .actions {
+            padding: 16px 24px;
+            border-top: 1px solid #e5e6eb;
+            display: flex;
+            gap: 12px;
+            background: #f7f8fa;
+        }
+
+        .modal-content .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-right: 8px;
+        }
+
+        .modal-content .btn:hover {
+            border-color: #165dff;
+            color: #165dff;
+        }
+
+        .modal-content .btn:active {
+            border-color: #0e42d2;
+            color: #0e42d2;
+        }
+
+        .modal-content .btn-primary {
+            background: #165dff;
+            color: white;
+            box-shadow: 0 2px 4px rgba(22, 93, 255, 0.2);
+        }
+
+        .modal-content .btn-primary:hover {
+            background: #4080ff;
+            box-shadow: 0 4px 8px rgba(22, 93, 255, 0.3);
+        }
+
+        .modal-content .btn-secondary {
+            background: #f2f3f5;
+            color: #1d2129;
+            border: 1px solid #c9cdd4;
+        }
+
+        .modal-content .btn-secondary:hover {
+            background: #e5e6eb;
+        }
+
+        .modal-content .status-badge {
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: 500;
+            border: 1px solid transparent;
+            border-radius: 3px;
+        }
+
+        .modal-content .status-a {
+            background: #e8f3ff;
+            color: #165dff;
+            border: 1px solid #bedaff;
+        }
+
+        .modal-content .status-b {
+            background: #e8ffea;
+            color: #00b42a;
+            border: 1px solid #7bc77e;
+        }
+
+        .modal-content .status-s {
+            background: #fff7e8;
+            color: #ff7d00;
+            border: 1px solid #ffb65d;
+        }
+
+        .modal-content .date-selector {
+            padding: 6px 10px;
+            border: 1px solid #c9cdd4;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #1d2129;
+            background: #FFFFFF;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .modal-content .date-selector:focus {
+            border-color: #165dff;
+            box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
+        }
+
+        .modal-content .part-time-rule {
+            padding: 4px 8px;
+            border: 1px solid #c9cdd4;
+            border-radius: 4px;
+            background: #FFFFFF;
+            color: #1d2129;
+            font-size: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .modal-content .part-time-rule:hover {
+            border-color: #165dff;
+            color: #165dff;
+        }
+
+        .modal-content .part-time-rule:disabled {
+            background: #f7f8fa;
+            color: #c9cdd4;
+            border-color: #e5e6eb;
+            cursor: not-allowed;
+        }
+
+        .modal-content .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .modal-content .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 140px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e6eb;
+            border-radius: 6px;
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+        }
+
+        .modal-content .dropdown-content a {
+            color: #1d2129;
+            padding: 6px 10px;
+            text-decoration: none;
+            display: block;
+            font-size: 11px;
+            border-bottom: 1px solid #f2f3f5;
+            transition: background-color 0.2s;
+        }
+
+        .modal-content .dropdown-content a:hover {
+            background-color: #e8f3ff;
+            color: #165dff;
+        }
+
+        .modal-content .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* 兼岗调薪规则弹窗样式 */
+        .part-time-modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .part-time-modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 8px;
+            width: 600px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .part-time-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e6eb;
+            background-color: #f8f9fa;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .part-time-modal-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .part-time-modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .part-time-modal-close:hover {
+            color: #333;
+        }
+
+        .part-time-form-group {
+            margin-bottom: 15px;
+        }
+
+        .part-time-form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .part-time-form-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .part-time-form-input:focus {
+            outline: none;
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        .part-time-percentage-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .part-time-percentage-item {
+            flex: 1;
+        }
+
+        .part-time-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 16px 20px;
+            border-top: 1px solid #e5e6eb;
+            background-color: #f8f9fa;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .part-time-modal-btn {
+            padding: 8px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .part-time-modal-btn-primary {
+            background: #1890ff;
+            border-color: #1890ff;
+            color: white;
+        }
+
+        .part-time-modal-btn:hover {
+            border-color: #40a9ff;
+        }
+
+        .part-time-modal-btn-primary:hover {
+            background: #40a9ff;
+        }
+
+        .part-time-modal-body {
+            padding: 20px;
+        }
+
+        .part-time-employee-info {
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .employee-basic-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .employee-name, .employee-total-adjustment {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .part-time-jobs-table {
+            margin-bottom: 20px;
+        }
+
+        .jobs-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+        }
+
+        .jobs-table th,
+        .jobs-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .jobs-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .job-adjustment-input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .job-adjustment-input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+
+        .part-time-validation-info {
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .validation-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .validation-row:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .current-total {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .expected-total {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .validation-message {
+            margin-top: 8px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .validation-message.error {
+            color: #dc3545;
+        }
+
+        .validation-message.success {
+            color: #28a745;
+        }
+
+        .part-time-modal-btn-primary:disabled {
+            background-color: #ccc;
+            border-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .part-time-modal-btn-primary:disabled:hover {
+            background-color: #ccc;
+            border-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="logo-section">
+            <div class="logo">完美世界</div>
+            <div class="nav-tabs">
+                <div class="nav-tab active">HR自助工作台</div>
+                <div class="nav-tab">HR小姐姐</div>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="user-info">
+                <div class="user-avatar">👤</div>
+                <span>普 120082 120082</span>
+            </div>
+            <button class="switch-btn">切换旧版</button>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 左侧菜单栏 -->
+        <div class="sidebar">
+            <div class="menu-item">
+                <div class="menu-header">
+                    <span class="menu-icon">📁</span>
+                    员工自助
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-header">
+                    <span class="menu-icon">📁</span>
+                    流程审批
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-header active">
+                    <span class="menu-icon">📁</span>
+                    HRG自助
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item">员工档案</div>
+                    <div class="submenu-item">员工发展</div>
+                    <div class="submenu-item">入职管理</div>
+                    <div class="submenu-item">实习生管理</div>
+                    <div class="submenu-item">转正管理</div>
+                    <div class="submenu-item">调动管理</div>
+                    <div class="submenu-item">离职管理</div>
+                    <div class="submenu-item active">调薪管理</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-header">
+                    <span class="menu-icon">📁</span>
+                    招聘自助
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="content-area">
+            <div class="content-header">
+                <div class="content-title">薪酬调薪</div>
+            </div>
+
+            <!-- 状态筛选标签 -->
+            <div class="status-tabs">
+                <div class="status-tab active">待发起</div>
+                <div class="status-tab">进行中</div>
+                <div class="status-tab">已完成</div>
+                <div class="status-tab">全部</div>
+            </div>
+
+            <!-- 内容卡片 -->
+            <div class="content-card">
+                <div class="card-header">
+                    <div class="card-title">待发起流程</div>
+                    <button class="action-btn" onclick="openNewPayrollModal()">发起调薪流程</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>流程编号</th>
+                                <th>所属部门</th>
+                                <th>调薪人数</th>
+                                <th>月薪变化</th>
+                                <th>本年工资成本变化</th>
+                                <th>生效时间</th>
+                                <th>操作</th>
+                                <th>详情</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>123456</td>
+                                <td>ABC工作室</td>
+                                <td>10</td>
+                                <td class="negative">+18.3万</td>
+                                <td class="negative">+77.2万</td>
+                                <td>2025/09</td>
+                                <td>
+                                    <a href="#" class="link">流程关闭</a>
+                                    <a href="#" class="link">重新提交</a>
+                                </td>
+                                <td>
+                                    <a href="#" class="link" onclick="openPayrollModal()">查看详情</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>123457</td>
+                                <td>技术部</td>
+                                <td>15</td>
+                                <td class="negative">+25.6万</td>
+                                <td class="negative">+102.4万</td>
+                                <td>2025/10</td>
+                                <td>
+                                    <a href="#" class="link">流程关闭</a>
+                                    <a href="#" class="link">重新提交</a>
+                                </td>
+                                <td>
+                                    <a href="#" class="link" onclick="openPayrollModal()">查看详情</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>123458</td>
+                                <td>产品部</td>
+                                <td>8</td>
+                                <td class="negative">+12.8万</td>
+                                <td class="negative">+51.2万</td>
+                                <td>2025/11</td>
+                                <td>
+                                    <a href="#" class="link">流程关闭</a>
+                                    <a href="#" class="link">重新提交</a>
+                                </td>
+                                <td>
+                                    <a href="#" class="link">查看详情</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 调薪管理弹窗 -->
+    <div id="payrollModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title">调薪管理</div>
+                <button class="modal-close" onclick="closePayrollModal()">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div class="container">
+                    <div class="header">
+                        <div class="page-title">调薪管理</div>
+                        <div class="page-subtitle">流程编号：123456 &nbsp;&nbsp;&nbsp; 审批状态：待提交</div>
+                    </div>
+
+                    <div class="content-card" style="margin-bottom: 16px;">
+                        <div class="section-header">调薪汇总信息</div>
+                        <div style="padding: 24px;">
+                            <div class="summary-info">
+                                <div class="summary-item">调薪部门：
+                                    <select id="modalDepartmentSelect" class="date-selector">
+                                        <option value="dept001" selected>ABC工作室</option>
+                                        <option value="dept002">技术部</option>
+                                        <option value="dept003">产品部</option>
+                                        <option value="dept004">运营部</option>
+                                        <option value="dept005">市场部</option>
+                                    </select>
+                                </div>
+                                <div class="summary-item">调薪人数：<span id="modalEmployeeCount" class="summary-value">10人</span></div>
+                                <div class="summary-item">生效日期：
+                                    <select id="modalEffectiveDate" class="date-selector">
+                                        <option value="2024/12">2024/12</option>
+                                        <option value="2025/01">2025/01</option>
+                                        <option value="2025/02">2025/02</option>
+                                        <option value="2025/03">2025/03</option>
+                                        <option value="2025/04">2025/04</option>
+                                        <option value="2025/05">2025/05</option>
+                                        <option value="2025/06">2025/06</option>
+                                        <option value="2025/07">2025/07</option>
+                                        <option value="2025/08">2025/08</option>
+                                        <option value="2025/09" selected>2025/09</option>
+                                        <option value="2025/10">2025/10</option>
+                                        <option value="2025/11">2025/11</option>
+                                        <option value="2025/12">2025/12</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="cost-change-table">
+                                <table style="width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 12px;">
+                                    <thead>
+                                        <tr style="background: #f5f5f5; border: 1px solid #ddd;">
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">类型</th>
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">调薪前</th>
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">调薪后</th>
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">变化值</th>
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">变化幅度</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">月薪合计（万）</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">120.5</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">138.8</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+18.3</span></td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+15.2%</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">本年工资成本预计（万）</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1446.0</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1523.2</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+77.2</span></td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+5.3%</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <div class="section-header">调薪明细信息</div>
+                        <div style="padding: 8px 12px; display: flex; gap: 8px; border-bottom: 1px solid #c0c0c0; background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);">
+                            <button class="btn btn-primary" id="modalAddEmployeeBtn">添加员工</button>
+                            <button class="btn btn-secondary" id="modalDeleteSelectedBtn">删除选择</button>
+                        </div>
+                        <div class="table-container">
+                            <table id="modalPayrollTable">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2" style="width: 40px;"><input type="checkbox" id="modalSelectAll" style="cursor: pointer;"></th>
+                                        <th rowspan="2" style="text-align: center;">员工ID</th>
+                                        <th rowspan="2" style="text-align: center;">姓名</th>
+                                        <th rowspan="2" style="text-align: center;">部门</th>
+                                        <th colspan="3" style="text-align: center;">月薪</th>
+                                        <th colspan="3" style="text-align: center;">CR</th>
+                                        <th rowspan="2" style="text-align: center;">入职时间</th>
+                                        <th rowspan="2" style="text-align: center;">职级</th>
+                                        <th rowspan="2" style="text-align: center;">最近3年绩效</th>
+                                        <th rowspan="2" style="text-align: center;">调薪说明</th>
+                                        <th rowspan="2" style="text-align: center;">操作</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center;">调整前</th>
+                                        <th style="text-align: center;">调整后</th>
+                                        <th style="text-align: center;">变化</th>
+                                        <th style="text-align: center;">调整前</th>
+                                        <th style="text-align: center;">调整后</th>
+                                        <th style="text-align: center;">变化</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalPayrollTableBody">
+                                    <!-- 表格数据将通过JavaScript动态生成 -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="padding: 8px 12px; border-top: 1px solid #c0c0c0; background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);">
+                            <div style="margin-bottom: 4px; font-size: 11px; font-weight: bold; color: #000000;">调薪说明</div>
+                            <textarea id="modalSalaryAdjustmentReason" placeholder="请输入调薪原因..." style="width: 100%; min-height: 60px; padding: 4px 6px; border: 1px solid #808080; font-size: 11px; color: #000000; resize: vertical; outline: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.4; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); background: white;" onfocus="this.style.borderColor='#4a90e2'; this.style.boxShadow='inset 0 1px 2px rgba(0,0,0,0.1), 0 0 3px rgba(74,144,226,0.3)';" onblur="this.style.borderColor='#808080'; this.style.boxShadow='inset 0 1px 2px rgba(0,0,0,0.1)';"></textarea>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-secondary">保存</button>
+                            <button class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新建调薪流程弹窗 -->
+    <div id="newPayrollModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title">调薪管理</div>
+                <button class="modal-close" onclick="closeNewPayrollModal()">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div class="container">
+                    <div class="header">
+                        <div class="page-title">调薪管理</div>
+                        <div class="page-subtitle">流程编号：- &nbsp;&nbsp;&nbsp; 审批状态：待提交</div>
+                    </div>
+
+                    <div class="content-card" style="margin-bottom: 16px;">
+                        <div class="section-header">调薪汇总信息</div>
+                        <div style="padding: 24px;">
+                            <div class="summary-info">
+                                <div class="summary-item">调薪部门：
+                                    <select id="newModalDepartmentSelect" class="date-selector">
+                                        <option value="dept001" selected>ABC工作室</option>
+                                        <option value="dept002">技术部</option>
+                                        <option value="dept003">产品部</option>
+                                        <option value="dept004">运营部</option>
+                                        <option value="dept005">市场部</option>
+                                    </select>
+                                </div>
+                                <div class="summary-item">调薪人数：<span id="newModalEmployeeCount" class="summary-value">0人</span></div>
+                                <div class="summary-item">生效日期：
+                                    <select id="newModalEffectiveDate" class="date-selector">
+                                        <option value="2024/12">2024/12</option>
+                                        <option value="2025/01">2025/01</option>
+                                        <option value="2025/02">2025/02</option>
+                                        <option value="2025/03">2025/03</option>
+                                        <option value="2025/04">2025/04</option>
+                                        <option value="2025/05">2025/05</option>
+                                        <option value="2025/06">2025/06</option>
+                                        <option value="2025/07">2025/07</option>
+                                        <option value="2025/08">2025/08</option>
+                                        <option value="2025/09" selected>2025/09</option>
+                                        <option value="2025/10">2025/10</option>
+                                        <option value="2025/11">2025/11</option>
+                                        <option value="2025/12">2025/12</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="cost-change-table">
+                                <table style="width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 12px;">
+                                    <thead>
+                                        <tr style="background: #f5f5f5; border: 1px solid #ddd;">
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">类型</th>
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">调薪前</th>
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">调薪后</th>
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">变化值</th>
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">变化幅度</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">月薪合计（万）</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">120.5</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;" id="newModalMonthlyAfter">120.5</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;" id="newModalMonthlyCostChange">0</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;" id="newModalMonthlyPercent">0%</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">本年工资成本预计（万）</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1446.0</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;" id="newModalYearlyAfter">1446.0</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;" id="newModalYearlyCostChange">0</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;" id="newModalYearlyPercent">0%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <div class="section-header">调薪明细信息</div>
+                        <div style="padding: 8px 12px; display: flex; gap: 8px; border-bottom: 1px solid #c0c0c0; background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);">
+                            <button class="btn btn-primary" id="newModalAddEmployeeBtn">添加员工</button>
+                            <button class="btn btn-secondary" id="newModalDeleteSelectedBtn">删除选择</button>
+                        </div>
+                        <div class="table-container">
+                            <table id="newModalPayrollTable">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2" style="width: 40px;"><input type="checkbox" id="newModalSelectAll" style="cursor: pointer;"></th>
+                                        <th rowspan="2" style="text-align: center;">员工ID</th>
+                                        <th rowspan="2" style="text-align: center;">姓名</th>
+                                        <th rowspan="2" style="text-align: center;">部门</th>
+                                        <th colspan="3" style="text-align: center;">月薪</th>
+                                        <th colspan="3" style="text-align: center;">CR</th>
+                                        <th rowspan="2" style="text-align: center;">入职时间</th>
+                                        <th rowspan="2" style="text-align: center;">职级</th>
+                                        <th rowspan="2" style="text-align: center;">最近3年绩效</th>
+                                        <th rowspan="2" style="text-align: center;">调薪说明</th>
+                                        <th rowspan="2" style="text-align: center;">操作</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center;">调整前</th>
+                                        <th style="text-align: center;">调整后</th>
+                                        <th style="text-align: center;">变化</th>
+                                        <th style="text-align: center;">调整前</th>
+                                        <th style="text-align: center;">调整后</th>
+                                        <th style="text-align: center;">变化</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="newModalPayrollTableBody">
+                                    <!-- 空表格，无预设数据 -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="padding: 8px 12px; border-top: 1px solid #c0c0c0; background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);">
+                            <div style="margin-bottom: 4px; font-size: 11px; font-weight: bold; color: #000000;">调薪说明</div>
+                            <textarea id="newModalSalaryAdjustmentReason" placeholder="请输入调薪原因..." style="width: 100%; min-height: 60px; padding: 4px 6px; border: 1px solid #808080; font-size: 11px; color: #000000; resize: vertical; outline: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.4; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); background: white;" onfocus="this.style.borderColor='#4a90e2'; this.style.boxShadow='inset 0 1px 2px rgba(0,0,0,0.1), 0 0 3px rgba(74,144,226,0.3)';" onblur="this.style.borderColor='#808080'; this.style.boxShadow='inset 0 1px 2px rgba(0,0,0,0.1)';"></textarea>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-secondary">保存</button>
+                            <button class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 调薪说明弹窗 -->
+    <div id="salaryReasonModal" class="part-time-modal">
+        <div class="part-time-modal-content">
+            <div class="part-time-modal-header">
+                <div class="part-time-modal-title">填写调薪说明</div>
+                <button class="part-time-modal-close" onclick="closeSalaryReasonModal()">&times;</button>
+            </div>
+            <div class="part-time-modal-body">
+                <div class="part-time-employee-info">
+                    <div class="employee-basic-info">
+                        <span class="employee-name">员工姓名：<strong id="salaryReasonEmployeeName">李四</strong></span>
+                    </div>
+                </div>
+                <div class="salary-reason-form">
+                    <div style="margin-bottom: 8px; font-size: 12px; font-weight: bold; color: #333;">调薪说明</div>
+                    <textarea id="salaryReasonTextarea" placeholder="请输入调薪说明..." style="width: 100%; min-height: 120px; padding: 8px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 12px; color: #333; resize: vertical; outline: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.4; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); background: white;" onfocus="this.style.borderColor='#4a90e2'; this.style.boxShadow='inset 0 1px 2px rgba(0,0,0,0.1), 0 0 3px rgba(74,144,226,0.3)';" onblur="this.style.borderColor='#d9d9d9'; this.style.boxShadow='inset 0 1px 2px rgba(0,0,0,0.1)';"></textarea>
+                </div>
+            </div>
+            <div class="part-time-modal-footer">
+                <button class="part-time-modal-btn" onclick="closeSalaryReasonModal()">取消</button>
+                <button class="part-time-modal-btn part-time-modal-btn-primary" id="confirmSalaryReasonBtn" onclick="confirmSalaryReason()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 不同状态的表头配置
+        const tableHeaders = {
+            '待发起': [
+                '流程编号', '所属部门', '调薪人数', '月薪变化', 
+                '本年工资成本变化', '生效时间', '操作', '详情'
+            ],
+            '进行中': [
+                '流程编号', '所属部门', '调薪人数', '月薪变化', 
+                '本年工资成本变化', '生效时间', '提交时间', '当前审批人', '详情'
+            ],
+            '已完成': [
+                '流程编号', '所属部门', '调薪人数', '月薪变化', 
+                '本年工资成本变化', '生效时间', '提交时间', '详情'
+            ],
+            '全部': [
+                '流程编号', '所属部门', '调薪人数', '月薪变化', 
+                '本年工资成本变化', '生效时间', '提交时间', '审批单状态', '详情'
+            ]
+        };
+
+        // 不同状态的表格数据
+        const tableData = {
+            '待发起': [
+                ['123456', 'ABC工作室', '10', '+18.3万', '+77.2万', '2025/09', 
+                 '<a href="#" class="link">流程关闭</a><a href="#" class="link">重新提交</a>', 
+                 '<a href="#" class="link">查看详情</a>'],
+                ['123457', '技术部', '15', '+25.6万', '+102.4万', '2025/10', 
+                 '<a href="#" class="link">流程关闭</a><a href="#" class="link">重新提交</a>', 
+                 '<a href="#" class="link">查看详情</a>'],
+                ['123458', '产品部', '8', '+12.8万', '+51.2万', '2025/11', 
+                 '<a href="#" class="link">流程关闭</a><a href="#" class="link">重新提交</a>', 
+                 '<a href="#" class="link">查看详情</a>']
+            ],
+            '进行中': [
+                ['123459', 'ABC工作室', '12', '+22.1万', '+88.4万', '2025/09', '2024/12/15', '张经理', 
+                 '<a href="#" class="link">查看详情</a>'],
+                ['123460', '技术部', '18', '+31.2万', '+124.8万', '2025/10', '2024/12/14', '李总监', 
+                 '<a href="#" class="link">查看详情</a>'],
+                ['123461', '产品部', '6', '+9.8万', '+39.2万', '2025/11', '2024/12/13', '王主管', 
+                 '<a href="#" class="link">查看详情</a>']
+            ],
+            '已完成': [
+                ['123462', 'ABC工作室', '8', '+15.6万', '+62.4万', '2024/08', '2024/07/20', 
+                 '<a href="#" class="link">查看详情</a>'],
+                ['123463', '技术部', '20', '+38.5万', '+154.0万', '2024/09', '2024/08/15', 
+                 '<a href="#" class="link">查看详情</a>'],
+                ['123464', '产品部', '5', '+7.2万', '+28.8万', '2024/10', '2024/09/10', 
+                 '<a href="#" class="link">查看详情</a>']
+            ],
+            '全部': [
+                ['123456', 'ABC工作室', '10', '+18.3万', '+77.2万', '2025/09', '2024/12/16', '待发起', 
+                 '<a href="#" class="link">查看详情</a>'],
+                ['123459', 'ABC工作室', '12', '+22.1万', '+88.4万', '2025/09', '2024/12/15', '审批中', 
+                 '<a href="#" class="link">查看详情</a>'],
+                ['123462', 'ABC工作室', '8', '+15.6万', '+62.4万', '2024/08', '2024/07/20', '已完成', 
+                 '<a href="#" class="link">查看详情</a>']
+            ]
+        };
+
+        // 更新表格内容
+        function updateTable(status) {
+            const thead = document.querySelector('thead tr');
+            const tbody = document.querySelector('tbody');
+            const actionBtn = document.querySelector('.action-btn');
+            
+            // 更新表头
+            thead.innerHTML = '';
+            tableHeaders[status].forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                thead.appendChild(th);
+            });
+            
+            // 更新表格数据
+            tbody.innerHTML = '';
+            tableData[status].forEach(rowData => {
+                const tr = document.createElement('tr');
+                rowData.forEach((cellData, index) => {
+                    const td = document.createElement('td');
+                    if (index === 3 || index === 4) { // 成本变化列
+                        td.classList.add('negative');
+                    }
+                    td.innerHTML = cellData;
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            
+            // 控制按钮显示
+            if (status === '待发起') {
+                actionBtn.style.display = 'block';
+            } else {
+                actionBtn.style.display = 'none';
+            }
+            
+            // 重新绑定表格行点击事件
+            bindTableRowEvents();
+        }
+
+        // 绑定表格行点击事件
+        function bindTableRowEvents() {
+            document.querySelectorAll('tbody tr').forEach(row => {
+                row.addEventListener('click', function() {
+                    document.querySelectorAll('tbody tr').forEach(r => r.style.backgroundColor = '');
+                    this.style.backgroundColor = '#e0e8ff';
+                });
+            });
+        }
+
+        // 状态标签切换
+        document.querySelectorAll('.status-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.status-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const status = this.textContent;
+                updateTable(status);
+            });
+        });
+
+        // 菜单项点击
+        document.querySelectorAll('.menu-header').forEach(header => {
+            header.addEventListener('click', function() {
+                document.querySelectorAll('.menu-header').forEach(h => h.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 导航标签切换
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            bindTableRowEvents();
+            initializePayrollModal();
+            initializeNewPayrollModal();
+        });
+
+        // 弹窗控制函数
+        function openPayrollModal() {
+            document.getElementById('payrollModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            initializeModalData();
+        }
+
+        function closePayrollModal() {
+            document.getElementById('payrollModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 新建调薪流程弹窗控制函数
+        function openNewPayrollModal() {
+            document.getElementById('newPayrollModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            // 不初始化任何数据，保持空状态
+        }
+
+        function closeNewPayrollModal() {
+            document.getElementById('newPayrollModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 点击弹窗背景关闭弹窗
+        document.getElementById('payrollModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePayrollModal();
+            }
+        });
+
+        // 点击新弹窗背景关闭弹窗
+        document.getElementById('newPayrollModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeNewPayrollModal();
+            }
+        });
+
+        // 初始化弹窗数据
+        function initializeModalData() {
+            const tbody = document.getElementById('modalPayrollTableBody');
+            tbody.innerHTML = '';
+            
+            // 初始员工数据
+            const initialEmployees = [
+                ['2002', '李四', 'A项目部\\美术部', '14300', '15730', '+1430 (+10.0%)', '0.80', '0.88', '+0.08', '2021/8/26', '11', '<span class="status-badge status-s">S</span>/<span class="status-badge status-a">A</span>/<span class="status-badge status-b">B</span>', true],
+                ['3982', '胡七', 'A项目部\\研发部', '20000', '22000', '+2000 (+10.0%)', '0.71', '0.78', '+0.07', '2018/12/4', '11', '<span class="status-badge status-a">A</span>/<span class="status-badge status-s">S</span>/<span class="status-badge status-a">A</span>', false],
+                ['2732', '张三', 'A项目部\\策划部', '13800', '15190', '+1390 (+10.1%)', '0.87', '0.91', '+0.04', '2020/10/9', '15', '<span class="status-badge status-a">A</span>/<span class="status-badge status-b">B</span>/<span class="status-badge status-a">A</span>', true],
+                ['7308', '王五', 'A项目部\\美术部', '27800', '30580', '+2780 (+10.0%)', '0.72', '0.78', '+0.07', '2023/1/24', '10', '无/<span class="status-badge status-a">A</span>/<span class="status-badge status-s">S</span>', false],
+                ['3171', '李佳佳', 'A项目部\\研发部', '13200', '14520', '+1320 (+10.0%)', '0.77', '0.84', '+0.08', '2018/6/13', '11', '<span class="status-badge status-b">B</span>/<span class="status-badge status-b">B</span>/<span class="status-badge status-b">B</span>', false],
+                ['9682', '高伟', 'A项目部\\策划部', '11300', '12430', '+1130 (+10.0%)', '0.82', '0.90', '+0.08', '2022/4/2', '11', '<span class="status-badge status-a">A</span>/<span class="status-badge status-b">B</span>/<span class="status-badge status-a">A</span>', true],
+                ['4198', '陈小明', 'A项目部\\美术部', '18800', '20680', '+1880 (+10.0%)', '0.78', '0.86', '+0.08', '2019/12/18', '15', '<span class="status-badge status-s">S</span>/<span class="status-badge status-a">A</span>/<span class="status-badge status-b">B</span>', false],
+                ['2013', '王志强', 'A项目部\\研发部', '25800', '28380', '+2580 (+10.0%)', '0.84', '0.93', '+0.09', '2019/3/10', '15', '<span class="status-badge status-b">B</span>/<span class="status-badge status-s">S</span>/<span class="status-badge status-a">A</span>', false],
+                ['6339', '刘小红', 'A项目部\\策划部', '13900', '15290', '+1390 (+10.0%)', '0.86', '0.94', '+0.08', '2020/6/15', '11', '<span class="status-badge status-a">A</span>/<span class="status-badge status-s">S</span>/<span class="status-badge status-s">S</span>', true],
+                ['7541', '赵天天', 'A项目部\\美术部', '23900', '26290', '+2390 (+10.0%)', '0.76', '0.83', '+0.07', '2016/3/10', '13', '<span class="status-badge status-s">S</span>/<span class="status-badge status-a">A</span>/<span class="status-badge status-a">A</span>', false]
+            ];
+            
+            initialEmployees.forEach(employee => {
+                addEmployeeRow(employee);
+            });
+            
+            updateModalStatistics();
+        }
+
+        // 添加员工行
+        function addEmployeeRow(employeeData = null) {
+            const tbody = document.getElementById('modalPayrollTableBody');
+            const newRow = document.createElement('tr');
+            
+            if (employeeData) {
+                // 添加现有员工数据
+                const [id, name, dept, oldSalary, newSalary, salaryChange, oldCR, newCR, crChange, joinDate, level, performance, hasPartTime] = employeeData;
+                newRow.innerHTML = `
+                    <td><input type="checkbox" class="modal-row-checkbox" style="cursor: pointer;"></td>
+                    <td>${id}</td>
+                    <td>${name}</td>
+                    <td>${dept}</td>
+                    <td>${oldSalary}</td>
+                    <td>${newSalary}</td>
+                    <td class="negative">${salaryChange}</td>
+                    <td>${oldCR}</td>
+                    <td>${newCR}</td>
+                    <td class="negative">${crChange}</td>
+                    <td>${joinDate}</td>
+                    <td>${level}</td>
+                    <td>${performance}</td>
+                    <td>
+                        <button class="part-time-rule" onclick="openSalaryReasonModal(this)">调薪说明</button>
+                    </td>
+                    <td><a href="#" class="link">查看员工档案</a></td>
+                `;
+            } else {
+                // 添加空行用于输入新员工
+                newRow.innerHTML = `
+                    <td><input type="checkbox" class="modal-row-checkbox" style="cursor: pointer;"></td>
+                    <td><input type="text" placeholder="请输入员工ID" class="employee-id-input" onchange="loadModalEmployeeData(this)"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><button class="part-time-rule" onclick="openSalaryReasonModal(this)">调薪说明</button></td>
+                    <td><a href="#" class="link">查看员工档案</a></td>
+                `;
+            }
+            
+            tbody.appendChild(newRow);
+            
+            // 为新添加的复选框添加事件监听
+            const newCheckbox = newRow.querySelector('.modal-row-checkbox');
+            newCheckbox.addEventListener('change', updateModalSelectAllStatus);
+        }
+
+        // 模拟员工数据加载
+        function loadModalEmployeeData(input) {
+            const employeeId = input.value.trim();
+            if (!employeeId) return;
+            
+            const row = input.closest('tr');
+            const cells = row.querySelectorAll('td');
+            
+            // 模拟根据员工ID加载数据
+            const mockData = {
+                name: '新员工',
+                dept: 'A项目部\\美术部',
+                currentSalary: '8000',
+                newSalary: '8800',
+                currentCR: '0.65',
+                newCR: '0.72',
+                salaryChange: '+800 (+10.0%)',
+                crChange: '+0.07',
+                joinDate: '2023-06-01',
+                level: '11',
+                performance: '无/<span class="status-badge status-b">B</span>/<span class="status-badge status-a">A</span>',
+                isPartTime: false
+            };
+            
+            // 填充数据到表格
+            cells[2].textContent = mockData.name;
+            cells[3].textContent = mockData.dept;
+            cells[4].textContent = mockData.currentSalary;
+            cells[5].textContent = mockData.newSalary;
+            cells[6].innerHTML = `<span class="negative">${mockData.salaryChange}</span>`;
+            cells[7].textContent = mockData.currentCR;
+            cells[8].textContent = mockData.newCR;
+            cells[9].innerHTML = `<span class="negative">${mockData.crChange}</span>`;
+            cells[10].textContent = mockData.joinDate;
+            cells[11].textContent = mockData.level;
+            cells[12].innerHTML = mockData.performance;
+            
+            // 更新调薪说明按钮
+            const salaryReasonButton = cells[13].querySelector('.part-time-rule');
+            salaryReasonButton.disabled = false;
+            salaryReasonButton.onclick = function() { openSalaryReasonModal(this); };
+            
+            updateModalStatistics();
+        }
+
+        // 更新弹窗统计数据
+        function updateModalStatistics() {
+            const rows = document.querySelectorAll('#modalPayrollTableBody tr');
+            let employeeCount = 0;
+            let monthlyCostChange = 0;
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                // 检查是否有有效的员工数据（第二列不为空且不是输入框）
+                const idCell = cells[1];
+                if (idCell && idCell.textContent.trim() && !idCell.querySelector('input')) {
+                    employeeCount++;
+                    // 获取月薪变化数据（在第7列）
+                    const salaryChangeCell = cells[6];
+                    if (salaryChangeCell && salaryChangeCell.textContent.trim()) {
+                        const changeText = salaryChangeCell.textContent.replace(/[^\d.-]/g, '');
+                        const changeValue = parseFloat(changeText) || 0;
+                        monthlyCostChange += changeValue;
+                    }
+                }
+            });
+            
+            const yearlyCostChange = monthlyCostChange * 12;
+            
+            // 更新显示
+            document.getElementById('modalEmployeeCount').textContent = employeeCount + '人';
+            document.getElementById('modalMonthlyCostChange').textContent = (monthlyCostChange >= 0 ? '+' : '') + (monthlyCostChange / 10000).toFixed(1) + '万';
+            document.getElementById('modalYearlyCostChange').textContent = (yearlyCostChange >= 0 ? '+' : '') + (yearlyCostChange / 10000).toFixed(1) + '万';
+        }
+
+        // 弹窗全选复选框功能
+        function updateModalSelectAllStatus() {
+            const allCheckboxes = document.querySelectorAll('.modal-row-checkbox');
+            const checkedCheckboxes = document.querySelectorAll('.modal-row-checkbox:checked');
+            const selectAllCheckbox = document.getElementById('modalSelectAll');
+            
+            if (checkedCheckboxes.length === allCheckboxes.length) {
+                selectAllCheckbox.checked = true;
+                selectAllCheckbox.indeterminate = false;
+            } else if (checkedCheckboxes.length === 0) {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = false;
+            } else {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = true;
+            }
+        }
+
+        // 调薪说明弹窗功能
+        function openSalaryReasonModal(button) {
+            const modal = document.getElementById('salaryReasonModal');
+            modal.style.display = 'block';
+            
+            // 获取当前行的员工信息
+            const row = button.closest('tr');
+            const cells = row.cells;
+            const employeeName = cells[2].textContent;
+            
+            // 更新弹窗中的员工信息
+            document.getElementById('salaryReasonEmployeeName').textContent = employeeName;
+            
+            // 清空文本域
+            document.getElementById('salaryReasonTextarea').value = '';
+            
+            // 保存当前按钮引用
+            modal.currentButton = button;
+            
+        }
+
+        function closeSalaryReasonModal() {
+            document.getElementById('salaryReasonModal').style.display = 'none';
+        }
+
+        function confirmSalaryReason() {
+            const reasonText = document.getElementById('salaryReasonTextarea').value.trim();
+            
+            // 更新按钮文本显示调薪说明状态
+            const modal = document.getElementById('salaryReasonModal');
+            if (modal.currentButton) {
+                if (reasonText) {
+                    modal.currentButton.textContent = '已填写说明';
+                    modal.currentButton.style.backgroundColor = '#52c41a';
+                    modal.currentButton.style.color = 'white';
+                } else {
+                    modal.currentButton.textContent = '调薪说明';
+                    modal.currentButton.style.backgroundColor = '';
+                    modal.currentButton.style.color = '';
+                }
+            }
+            
+            closeSalaryReasonModal();
+        }
+
+        // 初始化弹窗功能
+        function initializePayrollModal() {
+            // 全选复选框功能
+            document.getElementById('modalSelectAll').addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.modal-row-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+
+            // 添加员工功能
+            document.getElementById('modalAddEmployeeBtn').addEventListener('click', function() {
+                addEmployeeRow();
+                updateModalStatistics();
+            });
+
+            // 删除选择功能
+            document.getElementById('modalDeleteSelectedBtn').addEventListener('click', function() {
+                const checkedBoxes = document.querySelectorAll('.modal-row-checkbox:checked');
+                checkedBoxes.forEach(checkbox => {
+                    checkbox.closest('tr').remove();
+                });
+                updateModalSelectAllStatus();
+                updateModalStatistics();
+            });
+
+            // 生效日期选择器功能
+            document.getElementById('modalEffectiveDate').addEventListener('change', function() {
+                console.log('生效日期已更改为:', this.value);
+            });
+        }
+        
+        // 初始化新建调薪流程弹窗功能
+        function initializeNewPayrollModal() {
+            // 全选复选框功能
+            document.getElementById('newModalSelectAll').addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('#newModalPayrollTableBody .modal-row-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+
+            // 添加员工功能
+            document.getElementById('newModalAddEmployeeBtn').addEventListener('click', function() {
+                addNewEmployeeRow();
+            });
+
+            // 删除选择功能
+            document.getElementById('newModalDeleteSelectedBtn').addEventListener('click', function() {
+                const checkedBoxes = document.querySelectorAll('#newModalPayrollTableBody .modal-row-checkbox:checked');
+                checkedBoxes.forEach(checkbox => {
+                    checkbox.closest('tr').remove();
+                });
+                updateNewModalStatistics();
+            });
+
+            // 生效日期选择器功能
+            document.getElementById('newModalEffectiveDate').addEventListener('change', function() {
+                console.log('新弹窗生效日期已更改为:', this.value);
+            });
+        }
+        // 为新弹窗添加员工行
+        function addNewEmployeeRow() {
+            const tbody = document.getElementById('newModalPayrollTableBody');
+            const newRow = document.createElement('tr');
+            
+            // 添加空行用于输入新员工
+            newRow.innerHTML = `
+                <td><input type="checkbox" class="modal-row-checkbox" style="cursor: pointer;"></td>
+                <td><input type="text" placeholder="请输入员工ID" class="employee-id-input" onchange="loadNewModalEmployeeData(this)"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><button class="part-time-rule" onclick="openSalaryReasonModal(this)">调薪说明</button></td>
+                <td><a href="#" class="link">查看员工档案</a></td>
+            `;
+            
+            tbody.appendChild(newRow);
+            
+            // 为新添加的复选框添加事件监听
+            const newCheckbox = newRow.querySelector('.modal-row-checkbox');
+            newCheckbox.addEventListener('change', updateNewModalSelectAllStatus);
+            
+            // 更新统计数据
+            updateNewModalStatistics();
+        }
+        
+        // 模拟新弹窗员工数据加载
+        function loadNewModalEmployeeData(input) {
+            const employeeId = input.value.trim();
+            if (!employeeId) return;
+            
+            const row = input.closest('tr');
+            const cells = row.querySelectorAll('td');
+            
+            // 模拟根据员工ID加载数据
+            const mockData = {
+                name: '新员工',
+                dept: 'A项目部\\美术部',
+                currentSalary: '8000',
+                currentCR: '0.65',
+                joinDate: '2023-06-01',
+                level: '11',
+                performance: '无/<span class="status-badge status-b">B</span>/<span class="status-badge status-a">A</span>',
+                isPartTime: false
+            };
+            
+            // 填充数据到表格
+            cells[2].textContent = mockData.name;
+            cells[3].textContent = mockData.dept;
+            cells[4].textContent = mockData.currentSalary;
+            // 调薪后月薪设为可编辑输入框
+            cells[5].innerHTML = '<input type="number" class="salary-input" placeholder="请输入调薪后月薪" onchange="calculateSalaryChange(this)" style="width: 80px; border: 1px solid #d9d9d9; padding: 2px 4px;">';
+            cells[6].innerHTML = '0 (0%)';
+            cells[7].textContent = mockData.currentCR;
+            // CR调薪后自动计算，不需要用户输入
+            cells[8].innerHTML = '<span class="auto-calculated-cr">-</span>';
+            cells[9].innerHTML = '0';
+            cells[10].textContent = mockData.joinDate;
+            cells[11].textContent = mockData.level;
+            cells[12].innerHTML = mockData.performance;
+            
+            // 更新调薪说明按钮
+            const salaryReasonButton = cells[13].querySelector('.part-time-rule');
+            salaryReasonButton.disabled = false;
+            
+            updateNewModalStatistics();
+        }
+        
+        // 更新新弹窗统计数据
+        function updateNewModalStatistics() {
+            const rows = document.querySelectorAll('#newModalPayrollTableBody tr');
+            let employeeCount = 0;
+            let totalSalaryChange = 0;
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                // 检查是否有有效的员工数据（姓名不为空）
+                const nameCell = cells[2];
+                if (nameCell && nameCell.textContent.trim()) {
+                    employeeCount++;
+                    
+                    // 计算薪资变化总额
+                    const currentSalary = parseFloat(cells[4].textContent) || 0;
+                    const salaryInput = cells[5].querySelector('input');
+                    const newSalary = salaryInput ? parseFloat(salaryInput.value) || 0 : 0;
+                    if (newSalary > 0) {
+                        totalSalaryChange += (newSalary - currentSalary);
+                    }
+                }
+            });
+            
+            // 更新显示
+            document.getElementById('newModalEmployeeCount').textContent = employeeCount + '人';
+            
+            // 获取生效月份
+            const effectiveDate = document.getElementById('newModalEffectiveDate').value;
+            let effectiveMonth = 12; // 默认12月
+            if (effectiveDate) {
+                effectiveMonth = new Date(effectiveDate).getMonth() + 1; // getMonth()返回0-11，需要+1
+            }
+            
+            // 计算年度影响月数：12月－生效月份+1
+            const yearlyMonths = 12 - effectiveMonth + 1;
+            
+            // 更新成本变化（以万为单位）
+            const monthlyCostChange = (totalSalaryChange / 10000).toFixed(1);
+            const yearlyCostChange = (totalSalaryChange * yearlyMonths / 10000).toFixed(1);
+            
+            // 计算调薪后的成本
+            const monthlyBefore = 120.5;
+            const yearlyBefore = 1446.0;
+            const monthlyAfter = (monthlyBefore + parseFloat(monthlyCostChange)).toFixed(1);
+            const yearlyAfter = (yearlyBefore + parseFloat(yearlyCostChange)).toFixed(1);
+            
+            // 计算变化百分比
+            const monthlyPercent = monthlyBefore > 0 ? ((parseFloat(monthlyCostChange) / monthlyBefore) * 100).toFixed(1) : 0;
+            const yearlyPercent = yearlyBefore > 0 ? ((parseFloat(yearlyCostChange) / yearlyBefore) * 100).toFixed(1) : 0;
+            
+            // 设置颜色：正数红色，负数绿色
+            const monthlyColor = totalSalaryChange > 0 ? 'red' : (totalSalaryChange < 0 ? 'green' : 'black');
+            const yearlyColor = totalSalaryChange > 0 ? 'red' : (totalSalaryChange < 0 ? 'green' : 'black');
+            
+            // 更新显示
+            document.getElementById('newModalMonthlyAfter').textContent = monthlyAfter;
+            document.getElementById('newModalMonthlyCostChange').innerHTML = `<span style="color: ${monthlyColor}">${totalSalaryChange >= 0 ? '+' : ''}${monthlyCostChange}</span>`;
+            document.getElementById('newModalMonthlyPercent').innerHTML = `<span style="color: ${monthlyColor}">${totalSalaryChange >= 0 ? '+' : ''}${monthlyPercent}%</span>`;
+            
+            document.getElementById('newModalYearlyAfter').textContent = yearlyAfter;
+            document.getElementById('newModalYearlyCostChange').innerHTML = `<span style="color: ${yearlyColor}">${totalSalaryChange >= 0 ? '+' : ''}${yearlyCostChange}</span>`;
+            document.getElementById('newModalYearlyPercent').innerHTML = `<span style="color: ${yearlyColor}">${totalSalaryChange >= 0 ? '+' : ''}${yearlyPercent}%</span>`;
+        }
+        
+        // 新弹窗全选复选框功能
+        function updateNewModalSelectAllStatus() {
+            const allCheckboxes = document.querySelectorAll('#newModalPayrollTableBody .modal-row-checkbox');
+            const checkedCheckboxes = document.querySelectorAll('#newModalPayrollTableBody .modal-row-checkbox:checked');
+            const selectAllCheckbox = document.getElementById('newModalSelectAll');
+            
+            if (checkedCheckboxes.length === allCheckboxes.length && allCheckboxes.length > 0) {
+                selectAllCheckbox.checked = true;
+                selectAllCheckbox.indeterminate = false;
+            } else if (checkedCheckboxes.length === 0) {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = false;
+            } else {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = true;
+            }
+        }
+        
+        // 计算薪资变化
+        function calculateSalaryChange(input) {
+            const row = input.closest('tr');
+            const cells = row.querySelectorAll('td');
+            
+            const currentSalary = parseFloat(cells[4].textContent) || 0;
+            const newSalary = parseFloat(input.value) || 0;
+            
+            if (newSalary > 0) {
+                const change = newSalary - currentSalary;
+                const changePercent = currentSalary > 0 ? ((change / currentSalary) * 100).toFixed(1) : 0;
+                
+                // 根据变化值设置颜色：正数红色，负数绿色
+                const color = change > 0 ? 'red' : (change < 0 ? 'green' : 'black');
+                cells[6].innerHTML = `<span style="color: ${color}">${change >= 0 ? '+' : ''}${change} (${change >= 0 ? '+' : ''}${changePercent}%)</span>`;
+                
+                // 自动计算调薪后CR（按8000对应0.65的比例）
+                const currentCR = parseFloat(cells[7].textContent) || 0;
+                const newCR = (newSalary * 0.65 / 8000).toFixed(2);
+                const crChange = (newCR - currentCR).toFixed(2);
+                
+                // 更新CR调薪后值
+                cells[8].innerHTML = `<span class="auto-calculated-cr">${newCR}</span>`;
+                
+                // 更新CR变化显示，正数红色，负数绿色
+                const crColor = crChange > 0 ? 'red' : (crChange < 0 ? 'green' : 'black');
+                cells[9].innerHTML = `<span style="color: ${crColor}">${crChange >= 0 ? '+' : ''}${crChange}</span>`;
+            } else {
+                cells[6].innerHTML = '0 (0%)';
+                cells[8].innerHTML = '<span class="auto-calculated-cr">-</span>';
+                cells[9].innerHTML = '0';
+            }
+            
+            // 更新统计数据
+            updateNewModalStatistics();
+        }
+        
+
+    </script>
+</body>
+</html>

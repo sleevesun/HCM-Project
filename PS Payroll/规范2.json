@@ -1,0 +1,99 @@
+{
+  "designStyle": "Corporate, functional, data-centric, clean, and structured.",
+  "colorPalette": {
+    "primary": {
+      "blue": "#409EFF"
+    },
+    "secondary": {
+      "gray": "#606266",
+      "light-gray": "#DCDFE6"
+    },
+    "accent": {
+      "red": "#F56C6C"
+    },
+    "background": {
+      "white": "#FFFFFF",
+      "light-background": "#F5F7FA"
+    },
+    "text": {
+      "dark-gray": "#303133",
+      "regular-gray": "#606266",
+      "light-gray": "#909399"
+    },
+    "border": {
+      "light-border": "#EBEEF5"
+    }
+  },
+  "typography": {
+    "fontFamily": "System default sans-serif (likely a common Chinese font or a generic sans-serif)",
+    "weights": {
+      "regular": "400",
+      "medium": "500",
+      "bold": "700"
+    },
+    "sizes": {
+      "heading": "16px - 20px",
+      "subheading": "14px - 16px",
+      "body": "14px",
+      "small": "12px"
+    },
+    "lineSpacing": "Standard (implied 1.5x font-size for body text, tighter for headings)"
+  },
+  "spacing": {
+    "padding": {
+      "small": "8px - 10px",
+      "medium": "16px - 20px",
+      "large": "24px - 30px"
+    },
+    "margin": {
+      "small": "8px - 10px",
+      "medium": "16px - 20px",
+      "large": "24px - 30px"
+    },
+    "gutterRules": "Consistent horizontal and vertical spacing, often multiples of 8px or 10px."
+  },
+  "layoutPrinciples": {
+    "gridUsage": "Columnar layout for main content areas, often 2-column or 3-column within sections.",
+    "alignmentRules": "Left-aligned text and labels, right-aligned values in tables. Form fields are typically left-aligned.",
+    "breakpointBehavior": "Implied responsive design for different screen sizes, with elements stacking or reflowing on smaller viewports (inferred from common enterprise application design)."
+  },
+  "visualHierarchy": {
+    "fontSizes": "Larger font sizes for main titles and section headings, smaller for body text and labels.",
+    "contrast": "High contrast for text against backgrounds (dark text on light backgrounds).",
+    "emphasisMechanisms": "Bold text for important labels or statuses, blue color for primary actions and links, red for warnings/rejections."
+  },
+  "components": {
+    "buttons": {
+      "primary": "Solid blue background, white text, rounded corners, subtle hover effect.",
+      "secondary": "White background, blue border, blue text, rounded corners.",
+      "text-link": "Blue text, no background or border."
+    },
+    "tabs": {
+      "active": "Underlined with blue, bold text.",
+      "inactive": "Gray text, no underline."
+    },
+    "cards": "White background, subtle border, rounded corners, consistent internal padding.",
+    "inputs": {
+      "text-fields": "White background, light gray border, rounded corners, consistent height.",
+      "dropdowns": "Similar to text fields with a chevron icon.",
+      "checkboxes/radio-buttons": "Standard system-level styling."
+    },
+    "tables": {
+      "header": "Light background, dark text, bold.",
+      "rows": "Alternating subtle background colors or clear row separation, consistent padding.",
+      "actions": "Blue text links."
+    },
+    "navigation": {
+      "sidebar": "Solid background (white), active item highlighted with a red vertical bar and bold text.",
+      "top-bar": "Subtle border bottom, consistent padding, clear action buttons."
+    },
+    "modal": "White background, rounded corners, drop shadow, close icon in top right."
+  },
+  "otherAttributes": {
+    "iconStyle": "Line icons, monochromatic (gray or blue).",
+    "corner-radius": "Small to medium (e.g., 4px - 8px) on buttons, input fields, cards, and modals.",
+    "shadowStyle": "Subtle drop shadows, primarily used for modals or elevated components to indicate hierarchy.",
+    "borderStyle": "Thin, light gray borders for separation and definition of elements.",
+    "interactionStates": "Clear visual feedback for hover, active, and disabled states (e.g., color changes, opacity changes)."
+  }
+}

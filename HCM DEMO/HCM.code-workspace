@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../HR 系统/HCP 3.0/原型文件0624"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "HCM",
+		"liveServer.settings.port": 5501
+	}
+}

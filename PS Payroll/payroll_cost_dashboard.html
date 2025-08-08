@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工薪成本报表系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background-color: #F0F2F5;
+            color: #333333;
+            line-height: 1.5;
+        }
+
+        /* 顶部导航栏 */
+        .top-navbar {
+            height: 80px;
+            background-color: #0A2463;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background-color: #3370FF;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #666666;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            background-color: #888888;
+        }
+
+        .notification-icon, .help-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #666666;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        .notification-icon:hover, .help-icon:hover {
+            background-color: #888888;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #FF4D4F;
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 左侧侧边栏 */
+        .sidebar {
+            width: 220px;
+            background-color: #0A2463;
+            position: fixed;
+            top: 80px;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            padding: 16px 0;
+        }
+
+        .menu-item {
+            padding: 12px 24px;
+            color: white;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #E0E0E0;
+        }
+
+        .menu-item.active {
+            background-color: #E6F2FF;
+            color: #333333;
+            border-left-color: #0A2463;
+        }
+
+        .menu-item.active:hover {
+            background-color: #E6F2FF;
+            color: #333333;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            margin-left: 220px;
+            margin-top: 80px;
+            padding: 30px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* 筛选栏 */
+        .filter-bar {
+            height: 60px;
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #D9D9D9;
+            border-radius: 4px;
+            background-color: #FFFFFF;
+            color: #333333;
+            font-size: 14px;
+            min-width: 120px;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            border-color: #3370FF;
+            box-shadow: 0 0 0 2px rgba(51, 112, 255, 0.2);
+            outline: none;
+        }
+
+        .threshold-btn {
+            background-color: #3370FF;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .threshold-btn:hover {
+            background-color: #5B8EFF;
+        }
+
+        /* 页面内容区域 */
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        /* 核心指标卡片区 */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            width: 300px;
+            height: 150px;
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            border: 1px solid #E0E0E0;
+            padding: 24px;
+            transition: box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .metric-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-title {
+            font-size: 16px;
+            color: #666666;
+            margin-bottom: 12px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 8px;
+        }
+
+        .metric-previous {
+            font-size: 18px;
+            color: #999999;
+            margin-bottom: 8px;
+        }
+
+        .metric-change {
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .metric-change.positive {
+            color: #43A047;
+        }
+
+        .metric-change.negative {
+            color: #E53935;
+        }
+
+        .metric-change.neutral {
+            color: #757575;
+        }
+
+        .change-icon {
+            font-size: 16px;
+        }
+
+        /* 明细数据表格区 */
+        .data-table-card {
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .table-header {
+            background-color: #F5F7FA;
+            padding: 16px 24px;
+            border-bottom: 1px solid #D9D9D9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .export-btn {
+            background-color: #FFFFFF;
+            color: #3370FF;
+            border: 1px solid #D9D9D9;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            border-color: #3370FF;
+            background-color: #F0F2FF;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background-color: #F5F7FA;
+            color: #333333;
+            font-weight: bold;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #D9D9D9;
+            font-size: 14px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .data-table th:hover {
+            background-color: #E8F4FD;
+        }
+
+        .data-table th::after {
+            content: '⇅';
+            position: absolute;
+            right: 8px;
+            color: #999999;
+            font-size: 12px;
+        }
+
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #F0F0F0;
+            font-size: 14px;
+            color: #333333;
+            height: 40px;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #F9F9F9;
+        }
+
+        .data-table tr:hover {
+            background-color: #F5F5F5;
+        }
+
+        .expand-btn {
+            background: none;
+            border: none;
+            color: #3370FF;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .expand-btn:hover {
+            background-color: #F0F2F5;
+        }
+
+        .amount-positive {
+            color: #43A047;
+            font-weight: bold;
+        }
+
+        .amount-negative {
+            color: #E53935;
+            font-weight: bold;
+        }
+
+        .amount-neutral {
+            color: #757575;
+        }
+
+        /* 调薪专项卡片 */
+        .salary-adjustment-card {
+            width: 800px;
+            height: 150px;
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .salary-card-header {
+            background-color: #FF7D00;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .salary-card-content {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .salary-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .salary-amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .salary-count {
+            font-size: 20px;
+            color: #666666;
+        }
+
+        .salary-chart {
+            width: 200px;
+            height: 80px;
+            background-color: #F5F5F5;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999999;
+        }
+
+        /* 部门层级数据卡片 */
+        .department-cards {
+            margin-bottom: 24px;
+        }
+
+        .department-card {
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 12px;
+            padding: 16px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .department-card:hover {
+            background-color: #F5F5F5;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .department-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .department-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .expand-icon {
+            font-size: 14px;
+            color: #666666;
+            cursor: pointer;
+        }
+
+        .department-data {
+            display: flex;
+            gap: 40px;
+            margin-top: 8px;
+        }
+
+        .data-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .data-label {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .data-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .data-change {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* 差异汇总卡片 */
+        .alert-card {
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            height: 120px;
+            overflow: hidden;
+        }
+
+        .alert-header {
+            background-color: #E53935;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .alert-content {
+            padding: 16px 24px;
+        }
+
+        .alert-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .alert-department {
+            font-size: 14px;
+            color: #333333;
+        }
+
+        .alert-change {
+            font-size: 14px;
+            font-weight: bold;
+            color: #E53935;
+        }
+
+        .detail-btn {
+            background-color: #3370FF;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 2px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* 奖金类型标签页 */
+        .bonus-tabs {
+            display: flex;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .bonus-tab {
+            width: 150px;
+            height: 40px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666666;
+            transition: all 0.3s ease;
+        }
+
+        .bonus-tab.active {
+            color: #333333;
+            font-weight: bold;
+            border-bottom-color: #E53935;
+        }
+
+        .bonus-tab:hover {
+            color: #333333;
+        }
+
+        /* 奖金数据卡片 */
+        .bonus-data-card {
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+            height: 300px;
+            display: flex;
+            gap: 24px;
+        }
+
+        .bonus-amount-section, .bonus-people-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bonus-chart-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bonus-chart {
+            height: 200px;
+            background-color: #F5F5F5;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999999;
+        }
+
+        /* 五险一金总览卡片 */
+        .insurance-overview {
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+            height: 100px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .insurance-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .insurance-label {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .insurance-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background-color: #E0E0E0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #43A047;
+            transition: width 0.3s ease;
+        }
+
+        /* 分险种明细卡片 */
+        .insurance-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .insurance-card {
+            width: 300px;
+            height: 200px;
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .insurance-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .insurance-mini-chart {
+            height: 60px;
+            background-color: #F5F5F5;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999999;
+            font-size: 12px;
+        }
+
+        /* 其他费用卡片 */
+        .expense-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .expense-card {
+            width: 400px;
+            height: 200px;
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .expense-header {
+            padding: 12px 20px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .expense-header.severance {
+            background-color: #E53935;
+        }
+
+        .expense-header.overtime {
+            background-color: #1976D2;
+        }
+
+        .expense-header.signing {
+            background-color: #43A047;
+        }
+
+        .expense-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .expense-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .expense-people {
+            font-size: 20px;
+            color: #666666;
+        }
+
+        .expense-reason {
+            font-size: 14px;
+            color: #999999;
+            margin-top: 8px;
+        }
+
+        /* 人数统计布局 */
+        .staff-layout {
+            display: flex;
+            gap: 24px;
+        }
+
+        .staff-left, .staff-right {
+            flex: 1;
+        }
+
+        .staff-divider {
+            width: 1px;
+            background-color: #E0E0E0;
+        }
+
+        .staff-overview {
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .staff-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .staff-previous {
+            font-size: 16px;
+            color: #999999;
+            margin-top: 4px;
+        }
+
+        .staff-adjustment {
+            color: #FF7D00;
+            font-weight: bold;
+        }
+
+        .staff-table {
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .expense-people-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .expense-people-card {
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .insurance-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .expense-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                height: auto;
+                padding: 16px;
+                gap: 12px;
+            }
+
+            .filter-item {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .staff-layout {
+                flex-direction: column;
+            }
+            
+            .insurance-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 数据详情浮层 */
+        .data-detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .data-detail-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666666;
+        }
+
+        .close-btn:hover {
+            color: #333333;
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3370FF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="logo">LOGO</div>
+        <div class="nav-right">
+            <div class="notification-icon">
+                <div class="notification-badge">3</div>
+            </div>
+            <div class="help-icon"></div>
+            <div class="user-avatar"></div>
+        </div>
+    </div>
+
+    <!-- 左侧侧边栏 -->
+    <div class="sidebar">
+        <div class="menu-item active" data-page="overview">工薪成本总览</div>
+        <div class="menu-item" data-page="salary">应发工资明细</div>
+        <div class="menu-item" data-page="bonus">奖金明细</div>
+        <div class="menu-item" data-page="insurance">五险一金司付明细</div>
+        <div class="menu-item" data-page="expense">其他费用明细</div>
+        <div class="menu-item" data-page="staff">人数统计</div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <!-- 筛选栏 -->
+        <div class="filter-bar">
+            <div class="filter-item">
+                <span class="filter-label">部门层级：</span>
+                <select class="filter-select" id="departmentSelect">
+                    <option value="all">公司整体</option>
+                    <option value="tech">技术部</option>
+                    <option value="market">市场部</option>
+                    <option value="hr">人事部</option>
+                    <option value="finance">财务部</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <span class="filter-label">时间范围：</span>
+                <select class="filter-select" id="timeRangeSelect">
+                    <option value="month">本月 vs 上月</option>
+                    <option value="quarter">本季度 vs 上季度</option>
+                    <option value="year">本年 vs 去年</option>
+                </select>
+            </div>
+            <button class="threshold-btn" onclick="openThresholdSettings()">自定义阈值设置</button>
+        </div>
+
+        <!-- 工薪成本总览页面 -->
+        <div class="page-content active" id="overview-page">
+            <!-- 核心指标卡片区 -->
+            <div class="metrics-grid">
+                <div class="metric-card" onclick="showDataDetail('工薪成本总额', '¥2,458,600', '包含应发工资、各类奖金、五险一金司付部分等所有工薪相关费用的总和')">
+                    <div class="metric-title">工薪成本总额</div>
+                    <div class="metric-value">¥2,458,600</div>
+                    <div class="metric-previous">上月：¥2,356,800</div>
+                    <div class="metric-change positive">
+                        <span class="change-icon">↑</span>
+                        <span>+4.32%</span>
+                    </div>
+                </div>
+                <div class="metric-card" onclick="showDataDetail('在职总人数', '1,247', '包含正式员工和实习生的总人数统计')">
+                    <div class="metric-title">在职总人数</div>
+                    <div class="metric-value">1,247</div>
+                    <div class="metric-previous">上月：1,235</div>
+                    <div class="metric-change positive">
+                        <span class="change-icon">↑</span>
+                        <span>+0.97%</span>
+                    </div>
+                </div>
+                <div class="metric-card" onclick="showDataDetail('成本环比变化率', '+4.32%', '本月工薪成本总额相比上月的变化百分比')">
+                    <div class="metric-title">成本环比变化率</div>
+                    <div class="metric-value">+4.32%</div>
+                    <div class="metric-previous">上月：+2.15%</div>
+                    <div class="metric-change positive">
+                        <span class="change-icon">↑</span>
+                        <span>+2.17%</span>
+                    </div>
+                </div>
+                <div class="metric-card" onclick="showDataDetail('人数环比变化率', '+0.97%', '本月在职总人数相比上月的变化百分比')">
+                    <div class="metric-title">人数环比变化率</div>
+                    <div class="metric-value">+0.97%</div>
+                    <div class="metric-previous">上月：+1.23%</div>
+                    <div class="metric-change negative">
+                        <span class="change-icon">↓</span>
+                        <span>-0.26%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 明细数据表格区 -->
+            <div class="data-table-card">
+                <div class="table-header">
+                    <div class="table-title">工薪成本明细数据</div>
+                    <button class="export-btn" onclick="exportData()">导出</button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">项目名称</th>
+                            <th onclick="sortTable(1)">本月金额</th>
+                            <th onclick="sortTable(2)">上月金额</th>
+                            <th onclick="sortTable(3)">变化金额</th>
+                            <th onclick="sortTable(4)">变化率</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="overviewTableBody">
+                        <tr>
+                            <td>应发工资</td>
+                            <td onclick="showDataDetail('应发工资', '¥1,856,400', '包含基本工资、岗位工资、绩效工资等')">¥1,856,400</td>
+                            <td>¥1,789,200</td>
+                            <td class="amount-positive">+¥67,200</td>
+                            <td class="amount-positive">+3.76%</td>
+                            <td><button class="expand-btn" onclick="expandRow(this, 'salary')">展开</button></td>
+                        </tr>
+                        <tr>
+                            <td>工作特殊奖励</td>
+                            <td onclick="showDataDetail('工作特殊奖励', '¥324,800', '包含项目奖金、绩效奖金等特殊奖励')">¥324,800</td>
+                            <td>¥298,600</td>
+                            <td class="amount-positive">+¥26,200</td>
+                            <td class="amount-positive">+8.77%</td>
+                            <td><button class="expand-btn" onclick="expandRow(this, 'bonus')">展开</button></td>
+                        </tr>
+                        <tr>
+                            <td>内推奖励</td>
+                            <td onclick="showDataDetail('内推奖励', '¥45,600', '员工内推成功获得的奖励金额')">¥45,600</td>
+                            <td>¥52,800</td>
+                            <td class="amount-negative">-¥7,200</td>
+                            <td class="amount-negative">-13.64%</td>
+                            <td><button class="expand-btn" onclick="expandRow(this, 'referral')">展开</button></td>
+                        </tr>
+                        <tr>
+                            <td>专利奖</td>
+                            <td onclick="showDataDetail('专利奖', '¥18,900', '员工申请专利成功获得的奖励')">¥18,900</td>
+                            <td>¥15,600</td>
+                            <td class="amount-positive">+¥3,300</td>
+                            <td class="amount-positive">+21.15%</td>
+                            <td><button class="expand-btn" onclick="expandRow(this, 'patent')">展开</button></td>
+                        </tr>
+                        <tr>
+                            <td>五险一金（司付）</td>
+                            <td onclick="showDataDetail('五险一金（司付）', '¥156,800', '公司承担的社保和公积金费用')">¥156,800</td>
+                            <td>¥148,900</td>
+                            <td class="amount-positive">+¥7,900</td>
+                            <td class="amount-positive">+5.31%</td>
+                            <td><button class="expand-btn" onclick="expandRow(this, 'insurance')">展开</button></td>
+                        </tr>
+                        <tr>
+                            <td>离职补偿金</td>
+                            <td onclick="showDataDetail('离职补偿金', '¥32,400', '员工离职时支付的补偿金')">¥32,400</td>
+                            <td>¥28,700</td>
+                            <td class="amount-positive">+¥3,700</td>
+                            <td class="amount-positive">+12.89%</td>
+                            <td><button class="expand-btn" onclick="expandRow(this, 'severance')">展开</button></td>
+                        </tr>
+                        <tr>
+                            <td>加班费</td>
+                            <td onclick="showDataDetail('加班费', '¥18,600', '员工加班获得的加班费用')">¥18,600</td>
+                            <td>¥19,200</td>
+                            <td class="amount-negative">-¥600</td>
+                            <td class="amount-negative">-3.13%</td>
+                            <td><button class="expand-btn" onclick="expandRow(this, 'overtime')">展开</button></td>
+                        </tr>
+                        <tr>
+                            <td>签字费</td>
+                            <td onclick="showDataDetail('签字费', '¥5,100', '特殊项目或合同的签字费用')">¥5,100</td>
+                            <td>¥3,800</td>
+                            <td class="amount-positive">+¥1,300</td>
+                            <td class="amount-positive">+34.21%</td>
+                            <td><button class="expand-btn" onclick="expandRow(this, 'signing')">展开</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 应发工资明细页面 -->
+        <div class="page-content" id="salary-page">
+            <!-- 调薪专项卡片 -->
+            <div class="salary-adjustment-card">
+                <div class="salary-card-header">本月调薪情况</div>
+                <div class="salary-card-content">
+                    <div class="salary-info">
+                        <div class="salary-amount">¥156,800</div>
+                        <div class="salary-count">调薪人数：89人</div>
+                    </div>
+                    <div class="salary-chart">各部门调薪人数占比图</div>
+                </div>
+            </div>
+
+            <!-- 部门层级数据卡片区 -->
+            <div class="department-cards">
+                <div class="department-card" onclick="toggleDepartment(this)">
+                    <div class="department-header">
+                        <div class="department-name">
+                            <span class="expand-icon">+</span>
+                            <span>技术部</span>
+                        </div>
+                    </div>
+                    <div class="department-data">
+                        <div class="data-item">
+                            <div class="data-label">本月应发工资</div>
+                            <div class="data-value">¥856,400</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">上月应发工资</div>
+                            <div class="data-value">¥789,200</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">变化率</div>
+                            <div class="data-change positive">+8.5%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="department-card" onclick="toggleDepartment(this)">
+                    <div class="department-header">
+                        <div class="department-name">
+                            <span class="expand-icon">+</span>
+                            <span>市场部</span>
+                        </div>
+                    </div>
+                    <div class="department-data">
+                        <div class="data-item">
+                            <div class="data-label">本月应发工资</div>
+                            <div class="data-value">¥456,200</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">上月应发工资</div>
+                            <div class="data-value">¥445,800</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">变化率</div>
+                            <div class="data-change positive">+2.3%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="department-card" onclick="toggleDepartment(this)">
+                    <div class="department-header">
+                        <div class="department-name">
+                            <span class="expand-icon">+</span>
+                            <span>人事部</span>
+                        </div>
+                    </div>
+                    <div class="department-data">
+                        <div class="data-item">
+                            <div class="data-label">本月应发工资</div>
+                            <div class="data-value">¥298,600</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">上月应发工资</div>
+                            <div class="data-value">¥285,400</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">变化率</div>
+                            <div class="data-change positive">+4.6%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 差异汇总卡片 -->
+            <div class="alert-card">
+                <div class="alert-header">高差异部门提醒</div>
+                <div class="alert-content">
+                    <div class="alert-item">
+                        <span class="alert-department">技术部</span>
+                        <span class="alert-change">+8.5%</span>
+                        <button class="detail-btn" onclick="showDepartmentDetail('技术部')">查看详情</button>
+                    </div>
+                    <div class="alert-item">
+                        <span class="alert-department">研发中心</span>
+                        <span class="alert-change">+12.3%</span>
+                        <button class="detail-btn" onclick="showDepartmentDetail('研发中心')">查看详情</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 奖金明细页面 -->
+        <div class="page-content" id="bonus-page">
+            <!-- 奖金类型标签页 -->
+            <div class="bonus-tabs">
+                <button class="bonus-tab active" onclick="switchBonusTab(this, 'special')">工作特殊奖励</button>
+                <button class="bonus-tab" onclick="switchBonusTab(this, 'referral')">内推奖励</button>
+                <button class="bonus-tab" onclick="switchBonusTab(this, 'patent')">专利奖</button>
+            </div>
+
+            <!-- 奖金数据卡片 -->
+            <div class="bonus-data-card">
+                <div class="bonus-amount-section">
+                    <h4>金额数据</h4>
+                    <div class="data-item">
+                        <div class="data-label">本月总额</div>
+                        <div class="data-value">¥324,800</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">上月总额</div>
+                        <div class="data-value">¥298,600</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">变化金额</div>
+                        <div class="data-change positive">+¥26,200</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">变化率</div>
+                        <div class="data-change positive">+8.77%</div>
+                    </div>
+                </div>
+                
+                <div class="bonus-people-section">
+                    <h4>人数数据</h4>
+                    <div class="data-item">
+                        <div class="data-label">本月发放人数</div>
+                        <div class="data-value">156人</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">上月发放人数</div>
+                        <div class="data-value">142人</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">变化人数</div>
+                        <div class="data-change positive">+14人</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">变化率</div>
+                        <div class="data-change positive">+9.86%</div>
+                    </div>
+                </div>
+                
+                <div class="bonus-chart-section">
+                    <h4>近6个月趋势</h4>
+                    <div class="bonus-chart">奖金金额变化趋势图</div>
+                    <select class="filter-select">
+                        <option>全公司</option>
+                        <option>技术部</option>
+                        <option>市场部</option>
+                        <option>人事部</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 五险一金司付明细页面 -->
+        <div class="page-content" id="insurance-page">
+            <!-- 五险一金总览卡片 -->
+            <div class="insurance-overview">
+                <div class="insurance-item">
+                    <div class="insurance-label">社保总额</div>
+                    <div class="insurance-value">¥128,600</div>
+                </div>
+                <div class="insurance-item">
+                    <div class="insurance-label">公积金总额</div>
+                    <div class="insurance-value">¥28,200</div>
+                </div>
+                <div class="insurance-item">
+                    <div class="insurance-label">合计</div>
+                    <div class="insurance-value">¥156,800</div>
+                </div>
+                <div class="insurance-item">
+                    <div class="insurance-label">全年预算进度</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%"></div>
+                    </div>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">65%</div>
+                </div>
+            </div>
+
+            <!-- 分险种明细卡片 -->
+            <div class="insurance-cards">
+                <div class="insurance-card">
+                    <div class="insurance-name">养老保险</div>
+                    <div class="data-item">
+                        <div class="data-label">本月金额</div>
+                        <div class="data-value">¥56,400</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">上月金额</div>
+                        <div class="data-value">¥54,200</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">变化率</div>
+                        <div class="data-change positive">+4.06%</div>
+                    </div>
+                    <div class="insurance-mini-chart">近3个月变化</div>
+                </div>
+                
+                <div class="insurance-card">
+                    <div class="insurance-name">医疗保险</div>
+                    <div class="data-item">
+                        <div class="data-label">本月金额</div>
+                        <div class="data-value">¥32,800</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">上月金额</div>
+                        <div class="data-value">¥31,600</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">变化率</div>
+                        <div class="data-change positive">+3.80%</div>
+                    </div>
+                    <div class="insurance-mini-chart">近3个月变化</div>
+                </div>
+                
+                <div class="insurance-card">
+                    <div class="insurance-name">失业保险</div>
+                    <div class="data-item">
+                        <div class="data-label">本月金额</div>
+                        <div class="data-value">¥8,600</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">上月金额</div>
+                        <div class="data-value">¥8,200</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">变化率</div>
+                        <div class="data-change positive">+4.88%</div>
+                    </div>
+                    <div class="insurance-mini-chart">近3个月变化</div>
+                </div>
+                
+                <div class="insurance-card">
+                    <div class="insurance-name">工伤保险</div>
+                    <div class="data-item">
+                        <div class="data-label">本月金额</div>
+                        <div class="data-value">¥4,200</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">上月金额</div>
+                        <div class="data-value">¥4,100</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">变化率</div>
+                        <div class="data-change positive">+2.44%</div>
+                    </div>
+                    <div class="insurance-mini-chart">近3个月变化</div>
+                </div>
+                
+                <div class="insurance-card">
+                    <div class="insurance-name">生育保险</div>
+                    <div class="data-item">
+                        <div class="data-label">本月金额</div>
+                        <div class="data-value">¥2,600</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">上月金额</div>
+                        <div class="data-value">¥2,500</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">变化率</div>
+                        <div class="data-change positive">+4.00%</div>
+                    </div>
+                    <div class="insurance-mini-chart">近3个月变化</div>
+                </div>
+                
+                <div class="insurance-card">
+                    <div class="insurance-name">住房公积金</div>
+                    <div class="data-item">
+                        <div class="data-label">本月金额</div>
+                        <div class="data-value">¥28,200</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">上月金额</div>
+                        <div class="data-value">¥27,300</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">变化率</div>
+                        <div class="data-change positive">+3.30%</div>
+                    </div>
+                    <div class="insurance-mini-chart">近3个月变化</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 其他费用明细页面 -->
+        <div class="page-content" id="expense-page">
+            <!-- 费用类型卡片 -->
+            <div class="expense-cards">
+                <div class="expense-card">
+                    <div class="expense-header severance">离职补偿金</div>
+                    <div class="expense-content">
+                        <div class="expense-amount">¥32,400</div>
+                        <div class="expense-people">发放人数：8人</div>
+                        <div class="data-item">
+                            <div class="data-label">环比变化率</div>
+                            <div class="data-change positive">+12.89%</div>
+                        </div>
+                        <div class="expense-reason">较上月变化主要原因：离职人数增加</div>
+                    </div>
+                </div>
+                
+                <div class="expense-card">
+                    <div class="expense-header overtime">加班费</div>
+                    <div class="expense-content">
+                        <div class="expense-amount">¥18,600</div>
+                        <div class="expense-people">发放人数：156人</div>
+                        <div class="data-item">
+                            <div class="data-label">环比变化率</div>
+                            <div class="data-change negative">-3.13%</div>
+                        </div>
+                        <div class="expense-reason">较上月变化主要原因：项目周期调整</div>
+                    </div>
+                </div>
+                
+                <div class="expense-card">
+                    <div class="expense-header signing">签字费</div>
+                    <div class="expense-content">
+                        <div class="expense-amount">¥5,100</div>
+                        <div class="expense-people">发放人数：3人</div>
+                        <div class="data-item">
+                            <div class="data-label">环比变化率</div>
+                            <div class="data-change positive">+34.21%</div>
+                        </div>
+                        <div class="expense-reason">较上月变化主要原因：重要合同签署</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 部门分布表格 -->
+            <div class="data-table-card">
+                <div class="table-header">
+                    <div class="table-title">各费用部门分布详情</div>
+                    <button class="export-btn" onclick="exportExpenseData()">导出</button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>部门名称</th>
+                            <th>离职补偿金</th>
+                            <th>加班费</th>
+                            <th>签字费</th>
+                            <th>合计</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background-color: #FFF8E1;">
+                            <td>技术部</td>
+                            <td>¥15,600</td>
+                            <td>¥12,800</td>
+                            <td>¥2,100</td>
+                            <td>¥30,500</td>
+                        </tr>
+                        <tr style="background-color: #FFF8E1;">
+                            <td>市场部</td>
+                            <td>¥8,900</td>
+                            <td>¥3,200</td>
+                            <td>¥1,800</td>
+                            <td>¥13,900</td>
+                        </tr>
+                        <tr style="background-color: #FFF8E1;">
+                            <td>人事部</td>
+                            <td>¥4,200</td>
+                            <td>¥1,600</td>
+                            <td>¥1,200</td>
+                            <td>¥7,000</td>
+                        </tr>
+                        <tr>
+                            <td>财务部</td>
+                            <td>¥2,400</td>
+                            <td>¥800</td>
+                            <td>¥0</td>
+                            <td>¥3,200</td>
+                        </tr>
+                        <tr>
+                            <td>行政部</td>
+                            <td>¥1,300</td>
+                            <td>¥200</td>
+                            <td>¥0</td>
+                            <td>¥1,500</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 人数统计页面 -->
+        <div class="page-content" id="staff-page">
+            <div class="staff-layout">
+                <!-- 在职人数卡片区 -->
+                <div class="staff-left">
+                    <div class="staff-overview">
+                        <h4>正式员工</h4>
+                        <div class="staff-number">1,098</div>
+                        <div class="staff-previous">上月：1,085 (+1.2%)</div>
+                        <div class="staff-adjustment">调薪人数：89人</div>
+                    </div>
+                    
+                    <div class="staff-overview">
+                         <h4>实习生</h4>
+                         <div class="staff-number">149</div>
+                         <div class="staff-previous">上月：150 (-0.7%)</div>
+                         <div class="staff-adjustment">转正人数：5人</div>
+                     </div>
+                     
+                     <div class="staff-overview">
+                         <h4>总计</h4>
+                         <div class="staff-number">1,247</div>
+                         <div class="staff-previous">上月：1,235 (+0.97%)</div>
+                         <div class="staff-adjustment">净增人数：12人</div>
+                     </div>
+                 </div>
+                 
+                 <div class="staff-divider"></div>
+                 
+                 <!-- 其他费用人数统计区 -->
+                 <div class="staff-right">
+                     <div class="expense-people-cards">
+                         <div class="expense-people-card">
+                             <div>
+                                 <h4>离职补偿金发放人数</h4>
+                                 <div class="staff-number">8人</div>
+                                 <div class="staff-previous">上月：6人 (+33.3%)</div>
+                             </div>
+                             <div class="expense-amount">¥32,400</div>
+                         </div>
+                         
+                         <div class="expense-people-card">
+                             <div>
+                                 <h4>加班费发放人数</h4>
+                                 <div class="staff-number">156人</div>
+                                 <div class="staff-previous">上月：162人 (-3.7%)</div>
+                             </div>
+                             <div class="expense-amount">¥18,600</div>
+                         </div>
+                         
+                         <div class="expense-people-card">
+                             <div>
+                                 <h4>签字费发放人数</h4>
+                                 <div class="staff-number">3人</div>
+                                 <div class="staff-previous">上月：2人 (+50%)</div>
+                             </div>
+                             <div class="expense-amount">¥5,100</div>
+                         </div>
+                         
+                         <div class="expense-people-card">
+                             <div>
+                                 <h4>内推奖励发放人数</h4>
+                                 <div class="staff-number">24人</div>
+                                 <div class="staff-previous">上月：32人 (-25%)</div>
+                             </div>
+                             <div class="expense-amount">¥45,600</div>
+                         </div>
+                         
+                         <div class="expense-people-card">
+                             <div>
+                                 <h4>专利奖发放人数</h4>
+                                 <div class="staff-number">9人</div>
+                                 <div class="staff-previous">上月：6人 (+50%)</div>
+                             </div>
+                             <div class="expense-amount">¥18,900</div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+     <!-- 数据详情浮层 -->
+     <div class="data-detail-modal" id="dataDetailModal">
+         <div class="data-detail-content">
+             <div class="modal-header">
+                 <div class="modal-title" id="modalTitle">数据详情</div>
+                 <button class="close-btn" onclick="closeDataDetail()">&times;</button>
+             </div>
+             <div id="modalContent">
+                 <!-- 动态内容 -->
+             </div>
+         </div>
+     </div>
+
+     <script>
+         // 页面切换功能
+         document.querySelectorAll('.menu-item').forEach(item => {
+             item.addEventListener('click', function() {
+                 // 移除所有活动状态
+                 document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                 document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+                 
+                 // 设置当前活动状态
+                 this.classList.add('active');
+                 const targetPage = this.getAttribute('data-page');
+                 document.getElementById(targetPage + '-page').classList.add('active');
+             });
+         });
+
+         // 数据详情浮层功能
+         function showDataDetail(title, value, description) {
+             document.getElementById('modalTitle').textContent = title;
+             document.getElementById('modalContent').innerHTML = `
+                 <div style="margin-bottom: 16px;">
+                     <strong>当前值：</strong> ${value}
+                 </div>
+                 <div style="margin-bottom: 16px;">
+                     <strong>说明：</strong> ${description}
+                 </div>
+                 <div style="margin-bottom: 16px;">
+                     <strong>数据来源：</strong> 人力资源管理系统
+                 </div>
+                 <div>
+                     <strong>更新时间：</strong> ${new Date().toLocaleString()}
+                 </div>
+             `;
+             document.getElementById('dataDetailModal').style.display = 'flex';
+         }
+
+         function closeDataDetail() {
+             document.getElementById('dataDetailModal').style.display = 'none';
+         }
+
+         // 点击浮层外部关闭
+         document.getElementById('dataDetailModal').addEventListener('click', function(e) {
+             if (e.target === this) {
+                 closeDataDetail();
+             }
+         });
+
+         // 展开/收起功能
+         function expandRow(btn, type) {
+             if (btn.textContent === '展开') {
+                 btn.textContent = '收起';
+                 // 这里可以添加展开详细数据的逻辑
+                 console.log('展开', type, '的详细数据');
+             } else {
+                 btn.textContent = '展开';
+                 console.log('收起', type, '的详细数据');
+             }
+         }
+
+         // 表格排序功能
+         function sortTable(columnIndex) {
+             const table = document.querySelector('.data-table');
+             const tbody = table.querySelector('tbody');
+             const rows = Array.from(tbody.querySelectorAll('tr'));
+             
+             rows.sort((a, b) => {
+                 const aText = a.cells[columnIndex].textContent.trim();
+                 const bText = b.cells[columnIndex].textContent.trim();
+                 
+                 // 如果是金额列，按数值排序
+                 if (aText.includes('¥') && bText.includes('¥')) {
+                     const aNum = parseFloat(aText.replace(/[¥,+]/g, ''));
+                     const bNum = parseFloat(bText.replace(/[¥,+]/g, ''));
+                     return bNum - aNum;
+                 }
+                 
+                 return aText.localeCompare(bText);
+             });
+             
+             rows.forEach(row => tbody.appendChild(row));
+         }
+
+         // 导出功能
+         function exportData() {
+             alert('正在导出数据，请稍候...');
+             // 这里可以添加实际的导出逻辑
+         }
+
+         function exportExpenseData() {
+             alert('正在导出费用数据，请稍候...');
+         }
+
+         // 自定义阈值设置
+         function openThresholdSettings() {
+             alert('自定义阈值设置功能开发中...');
+         }
+
+         // 部门展开/收起
+         function toggleDepartment(card) {
+             const icon = card.querySelector('.expand-icon');
+             if (icon.textContent === '+') {
+                 icon.textContent = '-';
+                 // 这里可以添加展开部门详细数据的逻辑
+             } else {
+                 icon.textContent = '+';
+             }
+         }
+
+         // 部门详情查看
+         function showDepartmentDetail(department) {
+             alert(`查看${department}的详细信息`);
+         }
+
+         // 奖金标签页切换
+         function switchBonusTab(tab, type) {
+             document.querySelectorAll('.bonus-tab').forEach(t => t.classList.remove('active'));
+             tab.classList.add('active');
+             
+             // 根据类型更新数据
+             const bonusData = {
+                 special: {
+                     current: '¥324,800',
+                     previous: '¥298,600',
+                     change: '+¥26,200',
+                     rate: '+8.77%',
+                     people: '156人',
+                     previousPeople: '142人',
+                     peopleChange: '+14人',
+                     peopleRate: '+9.86%'
+                 },
+                 referral: {
+                     current: '¥45,600',
+                     previous: '¥52,800',
+                     change: '-¥7,200',
+                     rate: '-13.64%',
+                     people: '24人',
+                     previousPeople: '32人',
+                     peopleChange: '-8人',
+                     peopleRate: '-25%'
+                 },
+                 patent: {
+                     current: '¥18,900',
+                     previous: '¥15,600',
+                     change: '+¥3,300',
+                     rate: '+21.15%',
+                     people: '9人',
+                     previousPeople: '6人',
+                     peopleChange: '+3人',
+                     peopleRate: '+50%'
+                 }
+             };
+             
+             const data = bonusData[type];
+             if (data) {
+                 // 更新金额数据
+                 const amountSection = document.querySelector('.bonus-amount-section');
+                 amountSection.querySelectorAll('.data-value')[0].textContent = data.current;
+                 amountSection.querySelectorAll('.data-value')[1].textContent = data.previous;
+                 amountSection.querySelector('.data-change').textContent = data.change;
+                 amountSection.querySelectorAll('.data-change')[1].textContent = data.rate;
+                 
+                 // 更新人数数据
+                 const peopleSection = document.querySelector('.bonus-people-section');
+                 peopleSection.querySelectorAll('.data-value')[0].textContent = data.people;
+                 peopleSection.querySelectorAll('.data-value')[1].textContent = data.previousPeople;
+                 peopleSection.querySelector('.data-change').textContent = data.peopleChange;
+                 peopleSection.querySelectorAll('.data-change')[1].textContent = data.peopleRate;
+             }
+         }
+
+         // 筛选器变化事件
+         document.getElementById('departmentSelect').addEventListener('change', function() {
+             console.log('部门筛选变化：', this.value);
+             // 这里可以添加根据部门筛选数据的逻辑
+         });
+
+         document.getElementById('timeRangeSelect').addEventListener('change', function() {
+             console.log('时间范围变化：', this.value);
+             // 这里可以添加根据时间范围更新数据的逻辑
+         });
+
+         // 页面加载完成后的初始化
+         document.addEventListener('DOMContentLoaded', function() {
+             console.log('工薪成本报表系统已加载完成');
+             
+             // 模拟数据加载
+             setTimeout(() => {
+                 console.log('数据加载完成');
+             }, 1000);
+         });
+     </script>
+ </body>
+ </html>

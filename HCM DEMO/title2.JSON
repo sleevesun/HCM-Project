@@ -1,0 +1,242 @@
+{
+    "tableHeader": {
+        "columns": [
+            {
+                "title": "部门",
+                "key": "department",
+                "type": "single",
+                "rowSpan": 4 
+            },
+            {
+                "title": "2025年",
+                "key": "2025",
+                "type": "group",
+                "colSpan": 13, 
+                "children": [
+                    {
+                        "title": "预算调整",
+                        "key": "2025_budget_adjust",
+                        "type": "single",
+                        "rowSpan": 3 
+                    },
+                    {
+                        "title": "HC",
+                        "key": "2025_hc",
+                        "type": "group",
+                        "colSpan": 10, 
+                        "children": [
+                            {
+                                "title": "当前",
+                                "key": "2025_hc_current",
+                                "type": "group",
+                                "colSpan": 5, 
+                                "children": [
+                                    {
+                                        "title": "正编",
+                                        "key": "2025_hc_current_regular",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "实习",
+                                        "key": "2025_hc_current_intern",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "劳务派遣",
+                                        "key": "2025_hc_current_labor",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "人力外包",
+                                        "key": "2025_hc_current_outsource",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "兼职",
+                                        "key": "2025_hc_current_parttime",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    }
+                                ]
+                            },
+                            {
+                                "title": "年末目标",
+                                "key": "2025_hc_year_end",
+                                "type": "group",
+                                "colSpan": 5, 
+                                "children": [
+                                    {
+                                        "title": "正编",
+                                        "key": "2025_hc_year_end_regular",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "实习",
+                                        "key": "2025_hc_year_end_intern",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "劳务派遣",
+                                        "key": "2025_hc_year_end_labor",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "人力外包",
+                                        "key": "2025_hc_year_end_outsource",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "兼职",
+                                        "key": "2025_hc_year_end_parttime",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "工薪成本（万）",
+                        "key": "2025_salary_cost",
+                        "type": "group",
+                        "colSpan": 2, 
+                        "children": [
+                            {
+                                "title": "累计已发生",
+                                "key": "2025_salary_cost_incurred",
+                                "type": "single",
+                                "rowSpan": 3 
+                            },
+                            {
+                                "title": "全年预算",
+                                "key": "2025_salary_cost_budget",
+                                "type": "single",
+                                "rowSpan": 3 
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "2026年",
+                "key": "2026",
+                "type": "group",
+                "colSpan": 12, 
+                "children": [
+                    {
+                        "title": "预算编制",
+                        "key": "2026_budget_make",
+                        "type": "single",
+                        "rowSpan": 3 
+                    },
+                    {
+                        "title": "HC",
+                        "key": "2026_hc",
+                        "type": "group",
+                        "colSpan": 10, 
+                        "children": [
+                            {
+                                "title": "年初计划",
+                                "key": "2026_hc_initial_plan",
+                                "type": "group",
+                                "colSpan": 5, 
+                                "children": [
+                                    {
+                                        "title": "正编",
+                                        "key": "2026_hc_initial_plan_regular",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "实习",
+                                        "key": "2026_hc_initial_plan_intern",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "劳务派遣",
+                                        "key": "2026_hc_initial_plan_labor",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "人力外包",
+                                        "key": "2026_hc_initial_plan_outsource",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "兼职",
+                                        "key": "2026_hc_initial_plan_parttime",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    }
+                                ]
+                            },
+                            {
+                                "title": "年末目标",
+                                "key": "2026_hc_year_end",
+                                "type": "group",
+                                "colSpan": 5, 
+                                "children": [
+                                    {
+                                        "title": "正编",
+                                        "key": "2026_hc_year_end_regular",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "实习",
+                                        "key": "2026_hc_year_end_intern",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "劳务派遣",
+                                        "key": "2026_hc_year_end_labor",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "人力外包",
+                                        "key": "2026_hc_year_end_outsource",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    },
+                                    {
+                                        "title": "兼职",
+                                        "key": "2026_hc_year_end_parttime",
+                                        "type": "single",
+                                        "rowSpan": 2 
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "title": "工薪成本（万）",
+                        "key": "2026_salary_cost",
+                        "type": "group",
+                        "colSpan": 1, 
+                        "children": [
+                            {
+                                "title": "全年预算",
+                                "key": "2026_salary_cost_budget",
+                                "type": "single",
+                                "rowSpan": 3 
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

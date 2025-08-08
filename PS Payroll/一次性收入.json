@@ -1,0 +1,201 @@
+{
+  "designStyle": "简洁、专业、注重表单数据录入和信息呈现。",
+  "colorPalette": {
+    "primary": "#3370FF",
+    "secondary": "#F0F2F5",
+    "accent": "#FF4D4F",
+    "background": {
+      "light": "#FFFFFF",
+      "dark": "#F0F2F5",
+      "modalOverlay": "rgba(0, 0, 0, 0.45)"
+    },
+    "text": {
+      "dark": "#333333",
+      "light": "#666666",
+      "placeholder": "#BBBBBB",
+      "link": "#3370FF"
+    },
+    "border": "#D9D9D9",
+    "success": "#52C41A"
+  },
+  "typography": {
+    "fontFamily": "PingFang SC, Microsoft YaHei, sans-serif",
+    "headings": {
+      "h3": {
+        "fontSize": "16px",
+        "fontWeight": "bold",
+        "lineHeight": "1.5"
+      }
+    },
+    "body": {
+      "default": {
+        "fontSize": "14px",
+        "fontWeight": "normal",
+        "lineHeight": "1.5"
+      },
+      "small": {
+        "fontSize": "12px",
+        "fontWeight": "normal",
+        "lineHeight": "1.5"
+      }
+    },
+    "label": {
+      "fontSize": "14px",
+      "fontWeight": "normal",
+      "color": "#333333"
+    }
+  },
+  "spacing": {
+    "unit": "4px",
+    "values": {
+      "xxs": "4px",
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px",
+      "xxl": "48px"
+    }
+  },
+  "visualHierarchy": "通过模态框（Modal）突出主要操作和数据录入。表单内部使用清晰的标签和输入框，通过加粗文字和蓝色链接引导用户关注关键信息和操作。表格数据通过行高和内边距保持清晰。",
+  "structuralElements": {
+    "layoutPrinciples": "模态框采用居中浮层布局，内部元素多为垂直堆叠和水平排列。表单字段采用左对齐标签和右对齐输入框，形成清晰的阅读流。表格数据左右对齐，操作按钮居右。",
+    "components": {
+      "buttons": [
+        {
+          "name": "Primary Button",
+          "states": {
+            "default": {
+              "backgroundColor": "#3370FF",
+              "borderColor": "transparent",
+              "borderRadius": "4px",
+              "fontColor": "#FFFFFF",
+              "padding": "8px 15px"
+            },
+            "hover": {
+              "backgroundColor": "#5B8EFF"
+            },
+            "active": {
+              "backgroundColor": "#0050B3"
+            }
+          }
+        },
+        {
+          "name": "Default Button",
+          "states": {
+            "default": {
+              "backgroundColor": "#FFFFFF",
+              "borderColor": "#D9D9D9",
+              "borderRadius": "4px",
+              "fontColor": "#333333",
+              "padding": "8px 15px"
+            },
+            "hover": {
+              "borderColor": "#3370FF",
+              "fontColor": "#3370FF"
+            },
+            "active": {
+              "borderColor": "#0050B3",
+              "fontColor": "#0050B3"
+            }
+          }
+        },
+        {
+          "name": "Text Button (Link)",
+          "states": {
+            "default": {
+              "backgroundColor": "transparent",
+              "borderColor": "transparent",
+              "borderRadius": "0px",
+              "fontColor": "#3370FF"
+            },
+            "hover": {
+              "fontColor": "#5B8EFF"
+            },
+            "active": {
+              "fontColor": "#0050B3"
+            }
+          }
+        },
+        {
+          "name": "Danger Button",
+          "states": {
+            "default": {
+              "backgroundColor": "transparent",
+              "borderColor": "transparent",
+              "borderRadius": "0px",
+              "fontColor": "#FF4D4F"
+            },
+            "hover": {
+              "fontColor": "#FA541C"
+            },
+            "active": {
+              "fontColor": "#D43808"
+            }
+          }
+        }
+      ],
+      "inputFields": {
+        "default": {
+          "backgroundColor": "#FFFFFF",
+          "borderColor": "#D9D9D9",
+          "borderRadius": "4px",
+          "fontColor": "#333333",
+          "placeholderColor": "#BBBBBB",
+          "padding": "7px 11px",
+          "height": "32px"
+        },
+        "focused": {
+          "borderColor": "#3370FF",
+          "boxShadow": "0 0 0 2px rgba(51, 112, 255, 0.2)"
+        },
+        "disabled": {
+          "backgroundColor": "#F5F5F5",
+          "fontColor": "#BBBBBB"
+        },
+        "textarea": {
+          "minHeight": "64px"
+        }
+      },
+      "modal": {
+        "backgroundColor": "#FFFFFF",
+        "borderRadius": "8px",
+        "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.15)",
+        "overlayColor": "rgba(0, 0, 0, 0.45)",
+        "padding": "24px"
+      },
+      "table": {
+        "header": {
+          "backgroundColor": "#F0F2F5",
+          "fontColor": "#333333",
+          "fontWeight": "bold",
+          "padding": "10px 16px"
+        },
+        "row": {
+          "backgroundColor": "#FFFFFF",
+          "fontColor": "#333333",
+          "borderColor": "#F0F0F0",
+          "padding": "10px 16px"
+        }
+      },
+      "select": {
+        "default": {
+          "backgroundColor": "#FFFFFF",
+          "borderColor": "#D9D9D9",
+          "borderRadius": "4px",
+          "fontColor": "#333333",
+          "padding": "7px 11px",
+          "height": "32px"
+        },
+        "arrowColor": "#BFBFBF"
+      }
+    }
+  },
+  "criticalAttributes": {
+    "cornerRadius": "4px",
+    "shadows": {
+      "modalShadow": "0 4px 12px rgba(0, 0, 0, 0.15)"
+    },
+    "iconography": "采用简洁的线性图标，如放大镜、加号、叉号、绿色勾选等，用于辅助操作和状态提示，尺寸统一，颜色与上下文保持一致。"
+  }
+}

@@ -1,0 +1,468 @@
+/*
+ * HCM System Styles
+ * Based on design_system.json specifications
+ */
+
+:root {
+    /* Color Palette */
+    --primary-main: #0066FF;
+    --primary-light: #4B9EFF;
+    --primary-dark: #0047B3;
+    --secondary-blue: #E5F0FF;
+    --secondary-gray: #F5F5F5;
+    --accent-green: #4CAF50;
+    --accent-red: #FF4D4F;
+    --text-primary: #262626;
+    --text-secondary: #595959;
+    --text-disabled: #8C8C8C;
+    --background-default: #FFFFFF;
+    --background-secondary: #F5F7FA;
+
+    /* Spacing */
+    --spacing-unit: 8px;
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    /* Corner Radius */
+    --border-radius-sm: 2px;
+    --border-radius-md: 4px;
+    --border-radius-lg: 8px;
+
+    /* Shadows */
+    --shadow-1: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-2: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--background-secondary);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* 顶部导航栏 */
+.header {
+    background: linear-gradient(135deg, var(--primary-main) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 0 var(--spacing-lg);
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.logo i {
+    font-size: 20px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 6px 12px;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.user-info:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 主要内容区域 */
+.main-content {
+    padding: var(--spacing-lg);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* 页面标题 */
+.page-title {
+    margin-bottom: var(--spacing-lg);
+}
+
+.page-title h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* 顶部数据卡片 */
+.top-cards {
+    margin-bottom: var(--spacing-lg);
+}
+
+.card-section {
+    background: var(--background-default);
+    border-radius: var(--border-radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-1);
+    border: 1px solid #e5e6eb;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.cards-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.data-card {
+    background: var(--background-secondary);
+    border: 1px solid #e5e6eb;
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    transition: all 0.2s;
+}
+
+.data-card:hover {
+    border-color: var(--primary-main);
+    box-shadow: 0 2px 8px rgba(0, 102, 255, 0.1);
+}
+
+.card-header {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.metric-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: var(--spacing-sm);
+    text-align: center;
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.metric-item .label {
+    font-size: 12px;
+    color: var(--text-disabled);
+}
+
+.metric-item .value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.metric-item .value.action {
+    color: var(--primary-main);
+    cursor: pointer;
+}
+
+.metric-item .value.action:hover {
+    text-decoration: underline;
+}
+
+/* 年度数据行 */
+.year-data-row {
+    background: var(--background-default);
+    border: 1px solid #e5e6eb;
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md) 20px;
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.year-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    min-width: 100px;
+}
+
+.data-items {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.data-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 60px;
+    text-align: center;
+}
+
+.data-item .label {
+    font-size: 12px;
+    color: var(--text-disabled);
+}
+
+.data-item .value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.data-item .value.action {
+    color: var(--primary-main);
+    cursor: pointer;
+}
+
+/* 预算执行情况 */
+.budget-execution {
+    background: var(--background-default);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-1);
+    border: 1px solid #e5e6eb;
+}
+
+.budget-execution h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+/* 年度选择器 */
+.year-selector {
+    margin-bottom: 20px;
+}
+
+.year-tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--secondary-gray);
+    padding: 2px;
+    border-radius: var(--border-radius-md);
+    width: fit-content;
+}
+
+.year-tab {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 14px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.year-tab.active {
+    background: var(--background-default);
+    color: var(--primary-main);
+    font-weight: 500;
+    box-shadow: var(--shadow-1);
+}
+
+.year-tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* 数据表格 */
+.data-table {
+    overflow-x: auto;
+    border-radius: var(--border-radius-md);
+    border: 1px solid #e5e6eb;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--background-default);
+    font-size: 14px;
+}
+
+th, td {
+    padding: 12px var(--spacing-sm);
+    text-align: center;
+    border-bottom: 1px solid #e5e6eb;
+    border-right: 1px solid #e5e6eb;
+}
+
+th:last-child, td:last-child {
+    border-right: none;
+}
+
+th {
+    background: var(--background-secondary);
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 13px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.department-row {
+    background: #fafbfc;
+}
+
+.department-row:hover {
+    background: var(--secondary-gray);
+}
+
+.sub-department {
+    background: var(--background-default);
+}
+
+.sub-department:hover {
+    background: var(--background-secondary);
+}
+
+.department-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.expand-icon {
+    color: var(--text-disabled);
+    cursor: pointer;
+    margin-right: var(--spacing-sm);
+    transition: transform 0.2s;
+}
+
+.expand-icon:hover {
+    color: var(--primary-main);
+}
+
+.indent {
+    padding-left: var(--spacing-lg) !important;
+    text-align: left !important;
+}
+
+.status-icon {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: var(--spacing-sm);
+}
+
+.status-icon.blue {
+    color: var(--primary-main);
+}
+
+.status-icon.green {
+    color: var(--accent-green);
+}
+
+.status-icon.orange {
+    color: #ff7d00;
+}
+
+.status-icon.red {
+    color: var(--accent-red);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .main-content {
+        padding: var(--spacing-md);
+    }
+    
+    .cards-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .year-data-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .data-items {
+        gap: 12px;
+    }
+    
+    .data-table {
+        font-size: 12px;
+    }
+    
+    th, td {
+        padding: var(--spacing-sm) 4px;
+    }
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--secondary-gray);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c9cdd4;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-disabled);
+}
+
+/* 动画效果 */
+.data-card, .year-data-row, .year-tab {
+    transition: all 0.2s ease;
+}
+
+.expandable {
+    cursor: pointer;
+}
+
+.expandable:hover .expand-icon {
+    transform: scale(1.1);
+}

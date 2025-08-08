@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工薪成本与人力分析看板 - 草图</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+            background-color: #f3f4f6; /* 更柔和的背景色 */
+        }
+        /* 为卡片添加一个细微的过渡效果 */
+        .kpi-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* 模拟展开/折叠的图标样式 */
+        .toggle-icon {
+            cursor: pointer;
+            font-weight: bold;
+            color: #6b7280;
+        }
+        .toggle-icon:hover {
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- ① 全局筛选区 -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">工薪成本与人力分析看板</h1>
+                <p class="text-sm text-gray-500 mt-1">数据更新于：2025年8月11日</p>
+            </div>
+            <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                <div class="flex items-center space-x-2">
+                    <label for="month-select" class="text-sm font-medium text-gray-700">月份:</label>
+                    <select id="month-select" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <option>2025年8月</option>
+                        <option>2025年7月</option>
+                        <option>2025年6月</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <label for="compare-select" class="text-sm font-medium text-gray-700">对比:</label>
+                    <select id="compare-select" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <option>上月</option>
+                        <option>去年同期</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- ② 核心指标（KPI）卡片区 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <!-- 卡片1: 总工薪成本 -->
+            <div class="kpi-card bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-gray-500 font-medium">总工薪成本</h3>
+                <p class="text-3xl font-bold text-gray-900 mt-2">¥1,253万</p>
+                <div class="flex items-center mt-2 text-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="font-semibold">¥58万 (+4.8%)</span>
+                    <span class="text-gray-500 ml-2">vs 上月</span>
+                </div>
+            </div>
+            <!-- 卡片2: 总在职人数 -->
+            <div class="kpi-card bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-gray-500 font-medium">总在职人数</h3>
+                <p class="text-3xl font-bold text-gray-900 mt-2">852人</p>
+                <div class="flex items-center mt-2 text-green-600">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="font-semibold">12人 (+1.4%)</span>
+                    <span class="text-gray-500 ml-2">vs 上月</span>
+                </div>
+            </div>
+            <!-- 卡片3: 核心奖金总额 -->
+            <div class="kpi-card bg-white p-6 rounded-lg shadow-md border-2 border-amber-400">
+                <h3 class="text-gray-500 font-medium">核心奖金总额</h3>
+                <p class="text-3xl font-bold text-gray-900 mt-2">¥89万</p>
+                <div class="flex items-center mt-2 text-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="font-semibold">¥25万 (+39%)</span>
+                    <span class="text-gray-500 ml-2">vs 上月</span>
+                </div>
+            </div>
+            <!-- 卡片4: 离职补偿金总额 -->
+            <div class="kpi-card bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-gray-500 font-medium">离职补偿金总额</h3>
+                <p class="text-3xl font-bold text-gray-900 mt-2">¥15万</p>
+                <div class="flex items-center mt-2 text-green-600">
+                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="font-semibold">¥5万 (-25%)</span>
+                    <span class="text-gray-500 ml-2">vs 上月</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ③ 关键趋势与构成分析区 -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
+            <!-- 左侧图表 -->
+            <div class="lg:col-span-3 bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">近6个月工薪成本与人数趋势</h3>
+                <img src="https://placehold.co/800x400/E2E8F0/4A5562?text=组合图+(柱状+折线)" alt="趋势图" class="w-full h-auto rounded">
+            </div>
+            <!-- 右侧图表 -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">工薪成本构成</h3>
+                    <img src="https://placehold.co/400x200/E2E8F0/4A5562?text=环形图" alt="成本构成图" class="w-full h-auto rounded">
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">在职人数构成</h3>
+                     <img src="https://placehold.co/400x200/E2E8F0/4A5562?text=环形图" alt="人数构成图" class="w-full h-auto rounded">
+                </div>
+            </div>
+        </div>
+
+        <!-- ④ 明细数据探索区 -->
+        <div class="bg-white rounded-lg shadow-md overflow-x-auto">
+             <h3 class="text-lg font-semibold text-gray-800 p-6">明细数据表：按部门</h3>
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">部门</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">总工薪成本 (本期/环比)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">应发工资 (本期/环比)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">...其中:调薪额度</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">在职人数 (本期/环比)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">...其中:调薪人数</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                    <!-- 一级部门：研发部 -->
+                    <tr class="bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap font-bold text-gray-800">
+                            <span class="toggle-icon">-</span> 研发部
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">
+                            ¥2.5M <span class="text-red-600">(+8%)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">
+                            ¥1.8M <span class="text-red-600">(+5%)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">¥8.5万</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">
+                            100 <span class="text-green-600">(+2%)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">12</td>
+                    </tr>
+                    <!-- 二级部门 -->
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap pl-12 text-gray-700">后端技术部</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">¥1.2M <span class="text-red-600">(+10%)</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">¥0.9M <span class="text-red-600">(+7%)</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">¥4.0万</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">50 <span class="text-green-600">(+4%)</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">5</td>
+                    </tr>
+                     <tr>
+                        <td class="px-6 py-4 whitespace-nowrap pl-12 text-gray-700">前端技术部</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">¥0.8M <span class="text-green-600">(-1%)</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">¥0.6M <span class="text-gray-500">(0%)</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">¥2.5万</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">30 <span class="text-gray-500">(0%)</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">4</td>
+                    </tr>
+                     <tr>
+                        <td class="px-6 py-4 whitespace-nowrap pl-12 text-gray-700">测试部</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">¥0.5M <span class="text-red-600">(+15%)</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">¥0.3M <span class="text-red-600">(+5%)</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">¥2.0万</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">20 <span class="text-gray-500">(0%)</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">3</td>
+                    </tr>
+                    <!-- 一级部门：市场部 -->
+                    <tr class="bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap font-bold text-gray-800">
+                           <span class="toggle-icon">+</span> 市场部
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">
+                            ¥1.2M <span class="text-green-600">(-3%)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">
+                            ¥0.9M <span class="text-green-600">(-2%)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">¥2.1万</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">
+                            50 <span class="text-gray-500">(0%)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">4</td>
+                    </tr>
+                    <!-- 一级部门：销售部 -->
+                    <tr class="bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap font-bold text-gray-800">
+                           <span class="toggle-icon">+</span> 销售部
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">
+                            ¥3.1M <span class="text-red-600">(+12%)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">
+                            ¥1.5M <span class="text-red-600">(+3%)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">¥5.0万</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">
+                            150 <span class="text-green-600">(+5%)</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold">15</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- 注释：实际的展开/折叠功能需要使用JavaScript来实现。这里仅为样式演示。 -->
+        </div>
+    </div>
+
+</body>
+</html>

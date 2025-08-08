@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发薪报表 - 在线演示</title>
+    <link rel="stylesheet" href="https://unpkg.com/@arco-design/web-react@2.62.0/dist/css/arco.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .report-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .report-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e6eb;
+            background: #fff;
+        }
+        
+        .report-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1d2129;
+            margin: 0 0 16px 0;
+        }
+        
+        .report-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            background: white;
+            color: #1d2129;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            border-color: #165dff;
+            color: #165dff;
+        }
+        
+        .btn.primary {
+            background: #165dff;
+            border-color: #165dff;
+            color: white;
+        }
+        
+        .btn.primary:hover {
+            background: #0e42d2;
+        }
+        
+        .table-container {
+            overflow: auto;
+            max-height: 70vh;
+        }
+        
+        .report-table {
+            border-collapse: collapse;
+            font-size: 14px;
+            table-layout: auto;
+            width: auto;
+            min-width: 100%;
+        }
+        
+        .report-table th,
+        .report-table td {
+            border: 1px solid #e5e6eb;
+            padding: 12px 8px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .report-table th {
+            background: #f7f8fa;
+            font-weight: 600;
+            color: #1d2129;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .report-table .dept-col {
+            position: sticky;
+            left: 0;
+            background: white;
+            z-index: 5;
+            text-align: left;
+            width: 150px;
+            min-width: 150px;
+            max-width: 150px;
+        }
+        
+        .report-table th.dept-col {
+            background: #f7f8fa;
+            z-index: 15;
+            width: 150px;
+            min-width: 150px;
+            max-width: 150px;
+        }
+        
+        .level-1-header {
+            background: #e8f4ff !important;
+            font-weight: 700;
+        }
+        
+        .level-2-header {
+            background: #f0f9ff !important;
+            font-weight: 600;
+        }
+        
+        .level-3-header {
+            background: #f8fcff !important;
+            font-weight: 500;
+        }
+        
+        .expand-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 2px 6px;
+            margin-right: 8px;
+            border-radius: 4px;
+            color: #165dff;
+            font-weight: bold;
+        }
+        
+        .expand-btn:hover {
+            background: #e8f4ff;
+        }
+        
+        .hidden-column {
+            display: none;
+        }
+        
+        .total-row {
+            background: #f0f9ff;
+            font-weight: 600;
+        }
+        
+        .comparison-mode .comparison-col {
+            background: #fff7e6;
+        }
+        
+        .increase {
+            color: #00b42a;
+        }
+        
+        .decrease {
+            color: #f53f3f;
+        }
+        
+        .arrow-up::before {
+            content: "↗";
+            margin-right: 4px;
+        }
+        
+        .arrow-down::before {
+            content: "↘";
+            margin-right: 4px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #86909c;
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <div class="report-header">
+            <h1 class="report-title">发薪报表</h1>
+            <div class="report-controls">
+                <button class="btn" id="expandAllBtn">全部展开</button>
+                <button class="btn" id="collapseAllBtn">全部收起</button>
+                <button class="btn primary" id="comparisonBtn">显示同期对比</button>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <table class="report-table" id="reportTable">
+                <thead id="tableHeader">
+                    <!-- 表头将通过JavaScript动态生成 -->
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="100%" class="loading">正在加载数据...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

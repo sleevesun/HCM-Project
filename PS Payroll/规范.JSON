@@ -1,0 +1,156 @@
+{
+  "designStyle": {
+    "description": "A clean, functional, and data-driven enterprise design style. It emphasizes clarity, structure, and efficiency, utilizing ample white space, clear dividers, and a minimalist aesthetic to facilitate complex form-based interactions."
+  },
+  "colorPalette": {
+    "primary": {
+      "main": "#409EFF",
+      "description": "Used for primary actions, links, active tabs, and highlights to draw user attention."
+    },
+    "secondary": {
+      "main": "#67C23A",
+      "description": "Potentially used for success states or secondary positive actions (inferred)."
+    },
+    "neutral": {
+      "background": "#FFFFFF",
+      "background_section": "#F5F7FA",
+      "border": "#DCDFE6",
+      "divider": "#E4E7ED"
+    },
+    "text": {
+      "primary": "#303133",
+      "regular": "#606266",
+      "secondary": "#909399",
+      "placeholder": "#C0C4CC"
+    },
+    "feedback": {
+      "success": "#67C23A",
+      "warning": "#E6A23C",
+      "error": "#F56C6C",
+      "info": "#909399"
+    }
+  },
+  "typography": {
+    "fontFamily": [
+      "Helvetica Neue",
+      "Helvetica",
+      "PingFang SC",
+      "Hiragino Sans GB",
+      "Microsoft YaHei",
+      "微软雅黑",
+      "Arial",
+      "sans-serif"
+    ],
+    "styles": {
+      "pageHeader": {
+        "fontSize": "20px",
+        "fontWeight": 600,
+        "lineHeight": "28px"
+      },
+      "sectionHeader": {
+        "fontSize": "16px",
+        "fontWeight": 700,
+        "lineHeight": "24px"
+      },
+      "body": {
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": "20px"
+      },
+      "label": {
+        "fontSize": "14px",
+        "fontWeight": 500,
+        "lineHeight": "20px"
+      },
+      "link": {
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": "20px"
+      }
+    }
+  },
+  "spacing": {
+    "baseUnit": "4px",
+    "scale": {
+      "xs": "4px",
+      "s": "8px",
+      "m": "16px",
+      "l": "24px",
+      "xl": "32px",
+      "xxl": "48px"
+    },
+    "description": "A 4px-based spacing system is used for consistent and scalable margins and paddings between elements and within components."
+  },
+  "visualHierarchy": {
+    "description": "Hierarchy is established through typography (size and weight), color (primary action color for focus), and spatial arrangement. Page titles are largest, followed by bold section headers. Form labels are distinct from their corresponding data or input fields, creating a clear scannable structure."
+  },
+  "structuralElements": {
+    "layoutPrinciples": {
+      "grid": "A flexible grid or Flexbox-based system is used to align form elements into clear rows and columns.",
+      "alignment": "Labels and inputs are predominantly left-aligned within their containers for predictable readability.",
+      "grouping": "Related fields are grouped under section headers, separated by horizontal dividers, to logically chunk information."
+    },
+    "components": {
+      "buttons": {
+        "description": "While only a link-style button is shown, a full system can be inferred.",
+        "linkButton": {
+          "default": { "color": "#409EFF", "background": "transparent" },
+          "hover": { "color": "#66B1FF" }
+        },
+        "primaryButton": {
+          "default": { "background": "#409EFF", "color": "#FFFFFF", "border": "1px solid #409EFF" },
+          "hover": { "background": "#66B1FF", "border": "1px solid #66B1FF" },
+          "active": { "background": "#3A8EE6", "border": "1px solid #3A8EE6" }
+        }
+      },
+      "inputFields": {
+        "style": "Rectangular input with a thin border and slightly rounded corners.",
+        "height": "32px",
+        "states": {
+          "default": { "border": "1px solid #DCDFE6", "background": "#FFFFFF" },
+          "hover": { "border": "1px solid #C0C4CC" },
+          "focus": { "border": "1px solid #409EFF" },
+          "disabled": { "border": "1px solid #E4E7ED", "background": "#F5F7FA" }
+        },
+        "placeholder": { "color": "#C0C4CC" }
+      },
+      "cards": {
+        "description": "The main content area acts as a large, borderless card.",
+        "style": {
+          "background": "#FFFFFF",
+          "padding": "24px",
+          "borderRadius": "0px",
+          "shadow": "none"
+        }
+      },
+      "tabs": {
+        "style": "Text-based tabs with a bottom border indicator.",
+        "states": {
+          "default": { "color": "#606266" },
+          "active": { "color": "#409EFF", "borderBottom": "2px solid #409EFF" },
+          "hover": { "color": "#409EFF" }
+        }
+      },
+      "icons": {
+        "style": "Linear (outline) style, single-color.",
+        "size": "14px",
+        "color": "#C0C4CC"
+      }
+    }
+  },
+  "criticalAttributes": {
+    "cornerRadius": {
+      "small": "4px",
+      "medium": "4px",
+      "large": "0px",
+      "description": "A subtle 4px radius is applied to interactive elements like inputs and buttons. Larger containers are sharp."
+    },
+    "shadows": {
+      "description": "The design is predominantly flat, with no significant use of shadows on primary components."
+    },
+    "iconography": {
+      "style": "Functional and minimalist linear icons.",
+      "usage": "Used sparingly within components like input fields (search, date) to indicate functionality without adding visual clutter."
+    }
+  }
+}

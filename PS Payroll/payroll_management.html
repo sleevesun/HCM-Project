@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调薪管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #f7f8fa;
+            color: #1d2129;
+            line-height: 1.5715;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            background: #FFFFFF;
+            color: #1d2129;
+            padding: 16px 24px;
+            border-bottom: 1px solid #e5e6eb;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.5715;
+            color: #1d2129;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: #86909c;
+            margin-bottom: 16px;
+        }
+
+        .summary-info {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .summary-item {
+            background: #FFFFFF;
+            padding: 16px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #e5e6eb;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            color: #1d2129;
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 4px;
+            margin-left: 4px;
+        }
+
+        .content-card {
+            background: #FFFFFF;
+            border: 1px solid #e5e6eb;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #e5e6eb;
+            font-size: 16px;
+            font-weight: 500;
+            color: #1d2129;
+            background: #f7f8fa;
+            line-height: 1.5715;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            border: 1px solid #e5e6eb;
+            table-layout: fixed;
+        }
+
+        th {
+            background: #f7f8fa;
+            padding: 6px 8px;
+            text-align: left;
+            font-weight: 500;
+            color: #1d2129;
+            border-right: 1px solid #e5e6eb;
+            border-bottom: 1px solid #e5e6eb;
+            white-space: nowrap;
+            font-size: 11px;
+        }
+
+        td {
+            padding: 6px 8px;
+            border-right: 1px solid #f2f3f5;
+            border-bottom: 1px solid #f2f3f5;
+            color: #1d2129;
+            background: white;
+            white-space: nowrap;
+        }
+
+        /* 设置各列的自适应宽度 */
+         th:nth-child(1), td:nth-child(1) { width: auto; min-width: 30px; } /* 选择框 */
+         th:nth-child(2), td:nth-child(2) { width: auto; min-width: 60px; } /* 员工ID */
+         th:nth-child(3), td:nth-child(3) { width: auto; min-width: 50px; } /* 姓名 */
+         th:nth-child(4), td:nth-child(4) { width: auto; min-width: 100px; } /* 部门 */
+         th:nth-child(5), td:nth-child(5) { width: auto; min-width: 60px; } /* 调薪前 */
+         th:nth-child(6), td:nth-child(6) { width: auto; min-width: 60px; } /* 调薪后 */
+         th:nth-child(7), td:nth-child(7) { width: auto; min-width: 100px; } /* 变化 */
+         th:nth-child(8), td:nth-child(8) { width: auto; min-width: 50px; } /* CR调薪前 */
+         th:nth-child(9), td:nth-child(9) { width: auto; min-width: 50px; } /* CR调薪后 */
+         th:nth-child(10), td:nth-child(10) { width: auto; min-width: 80px; } /* CR变化 */
+         th:nth-child(11), td:nth-child(11) { width: auto; min-width: 75px; } /* 入职时间 */
+         th:nth-child(12), td:nth-child(12) { width: auto; min-width: 40px; } /* 职级 */
+         th:nth-child(13), td:nth-child(13) { width: auto; min-width: 60px; } /* 绩效 */
+         th:nth-child(14), td:nth-child(14) { width: auto; min-width: 100px; } /* 调薪说明 */
+         th:nth-child(15), td:nth-child(15) { width: auto; min-width: 80px; } /* 员工档案 */
+
+        /* 员工ID输入框样式 */
+        .employee-id-input {
+            width: 100%;
+            max-width: 100px;
+            border: 1px solid #c9cdd4;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 12px;
+            color: #1d2129;
+            background: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .employee-id-input:focus {
+            border-color: #165dff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.1);
+        }
+
+        tr:nth-child(even) td {
+            background: #f7f8fa;
+        }
+
+        tr:hover td {
+            background: #e8f3ff;
+        }
+
+        .positive {
+            color: #52C41A;
+        }
+
+        .negative {
+            color: #FF4D4F;
+        }
+
+        .link {
+            color: #165dff;
+            text-decoration: none;
+            cursor: pointer;
+            margin-right: 8px;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .link:hover {
+            color: #4080ff;
+            text-decoration: underline;
+        }
+
+        .actions {
+            padding: 16px 24px;
+            border-top: 1px solid #e5e6eb;
+            display: flex;
+            gap: 12px;
+            background: #f7f8fa;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            border-color: #165dff;
+            color: #165dff;
+        }
+
+        .btn:active {
+            border-color: #0e42d2;
+            color: #0e42d2;
+        }
+
+        .btn-primary {
+            background: #165dff;
+            color: white;
+            box-shadow: 0 2px 4px rgba(22, 93, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: #4080ff;
+            box-shadow: 0 4px 8px rgba(22, 93, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f2f3f5;
+            color: #1d2129;
+            border: 1px solid #c9cdd4;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e6eb;
+        }
+
+        .status-badge {
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid transparent;
+            border-radius: 6px;
+        }
+
+        .status-a {
+            background: #e8f3ff;
+            color: #165dff;
+            border: 1px solid #bedaff;
+        }
+
+        .status-b {
+            background: #e8ffea;
+            color: #00b42a;
+            border: 1px solid #7bc77e;
+        }
+
+        .status-s {
+            background: #fff7e8;
+            color: #ff7d00;
+            border: 1px solid #ffb65d;
+        }
+
+        .date-selector {
+            padding: 8px 12px;
+            border: 1px solid #c9cdd4;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #1d2129;
+            background: #FFFFFF;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .date-selector:focus {
+            border-color: #165dff;
+            box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
+        }
+
+        .part-time-rule {
+            padding: 6px 12px;
+            border: 1px solid #c9cdd4;
+            border-radius: 6px;
+            background: #FFFFFF;
+            color: #1d2129;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .part-time-rule:hover {
+            border-color: #165dff;
+            color: #165dff;
+        }
+
+        .part-time-rule:disabled {
+            background: #f7f8fa;
+            color: #c9cdd4;
+            border-color: #e5e6eb;
+            cursor: not-allowed;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 140px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e6eb;
+            border-radius: 6px;
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+        }
+
+        .dropdown-content a {
+            color: #1d2129;
+            padding: 8px 12px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            border-bottom: 1px solid #f2f3f5;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #e8f3ff;
+            color: #165dff;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .salary-reason {
+            font-size: 14px;
+            color: #1d2129;
+            line-height: 1.5;
+            padding: 4px 0;
+            max-width: 200px;
+            word-wrap: break-word;
+            white-space: nowrap;
+        }
+
+        .approval-section {
+            background: #FFFFFF;
+            border: 1px solid #e5e6eb;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .approval-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border: 1px solid #c9cdd4;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #1d2129;
+            background: #FFFFFF;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+
+        .approval-textarea:focus {
+            border-color: #165dff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.1);
+        }
+
+        .approval-textarea::placeholder {
+            color: #86909c;
+        }
+
+        .workflow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .workflow-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .workflow-step.completed::after {
+            background: #00b42a;
+        }
+        
+        .workflow-step.current::after {
+            background: #165dff;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #c9cdd4;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .workflow-step.completed .step-number {
+            background: #00b42a;
+        }
+        
+        .workflow-step.current .step-number {
+            background: #165dff;
+        }
+        
+        .step-info {
+            max-width: 120px;
+        }
+        
+        .step-title {
+            font-weight: 500;
+            color: #1d2129;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+        
+        .step-detail {
+            font-size: 10px;
+            color: #86909c;
+            line-height: 1.3;
+        }
+
+        .approval-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            padding: 16px 24px;
+            border-top: 1px solid #e5e6eb;
+            background: #f7f8fa;
+        }
+
+        .btn-approve {
+            background: #00b42a;
+            color: white;
+            border: 1px solid #00b42a;
+        }
+
+        .btn-approve:hover {
+            background: #23c343;
+            border-color: #23c343;
+        }
+
+        .btn-reject {
+            background: #f53f3f;
+            color: white;
+            border: 1px solid #f53f3f;
+        }
+
+        .btn-reject:hover {
+            background: #f76560;
+            border-color: #f76560;
+        }
+
+        .summary-info {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .summary-item {
+            background: #FFFFFF;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #e5e6eb;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 11px;
+            color: #1d2129;
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 4px;
+            margin-left: 4px;
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .modal-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .salary-reason {
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #495057;
+            line-height: 1.5;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="page-title">调薪管理</div>
+            <div class="page-subtitle">流程编号：123456 &nbsp;&nbsp;&nbsp; 审批状态：待提交</div>
+        </div>
+
+        <div class="content-card" style="margin-bottom: 16px;">
+            <div class="section-header">调薪汇总信息</div>
+            <div style="padding: 24px;">
+                <div class="summary-info">
+                    <div class="summary-item">调薪部门<br><span class="summary-value">ABC工作室</span></div>
+                    <div class="summary-item">调薪人数<br><span id="employeeCount" class="summary-value">10人</span></div>
+                    <div class="summary-item">生效日期<br><span class="summary-value">2025/09</span></div>
+                </div>
+                <div class="cost-change-table">
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 12px;">
+                        <thead>
+                            <tr style="background: #f5f5f5; border: 1px solid #ddd;">
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">类型</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">调薪前</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">调薪后</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">变化值</th>
+                                <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">变化幅度</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">月度工薪成本（万）</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">120.5</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">138.8</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+18.3</span></td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+15.2%</span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">本年工薪成本预计（万）</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1446.0</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1523.2</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+77.2</span></td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+5.3%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <div class="section-header">调薪明细信息</div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+
+                            <th rowspan="2" style="text-align: center;">员工ID</th>
+                            <th rowspan="2" style="text-align: center;">姓名</th>
+                            <th rowspan="2" style="text-align: center;">部门</th>
+                            <th colspan="3" style="text-align: center;">月薪</th>
+                            <th colspan="3" style="text-align: center;">CR</th>
+                            <th rowspan="2" style="text-align: center;">入职时间</th>
+                            <th rowspan="2" style="text-align: center;">职级</th>
+                            <th rowspan="2" style="text-align: center;">最近3年绩效</th>
+                            <th rowspan="2" style="text-align: center;">调薪说明</th>
+                            <th rowspan="2" style="text-align: center;">员工档案</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center;">调薪前</th>
+                            <th style="text-align: center;">调薪后</th>
+                            <th style="text-align: center;">变化</th>
+                            <th style="text-align: center;">调薪前</th>
+                            <th style="text-align: center;">调薪后</th>
+                            <th style="text-align: center;">变化</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>112002</td>
+                            <td>李赫</td>
+                            <td>A项目组\美术部</td>
+                            <td>14300</td>
+                            <td>15730</td>
+                            <td style="color: red; text-align: right;">+1430(+10%)</td>
+                            <td>0.80</td>
+                            <td>0.88</td>
+                            <td style="color: red; text-align: right;">+0.08</td>
+                            <td>2021/06/26</td>
+                            <td>11</td>
+                            <td>B/A/B</td>
+                            <td><a href="#" class="link" onclick="showSalaryReason('张三因表现优异，申请调薪5%；'); return false;">查看调薪说明</a></td>
+                            <td><a href="#" class="link">查看员工档案</a></td>
+                        </tr>
+                        <tr>
+                            <td>112003</td>
+                            <td>王明</td>
+                            <td>A项目组\研发部</td>
+                            <td>18500</td>
+                            <td>20350</td>
+                            <td style="color: red; text-align: right;">+1850(+10%)</td>
+                            <td>0.75</td>
+                            <td>0.83</td>
+                            <td style="color: red; text-align: right;">+0.08</td>
+                            <td>2020/03/15</td>
+                            <td>12</td>
+                            <td>A/A/B</td>
+                            <td><a href="#" class="link" onclick="showSalaryReason('技术能力突出，项目贡献度高，调薪10%；'); return false;">查看调薪说明</a></td>
+                             <td><a href="#" class="link">查看员工档案</a></td>
+                         </tr>
+                         <tr>
+                             <td>112004</td>
+                             <td>陈小雨</td>
+                             <td>A项目组\策划部</td>
+                             <td>16800</td>
+                             <td>17640</td>
+                             <td style="color: red; text-align: right;">+840(+5%)</td>
+                             <td>0.82</td>
+                             <td>0.86</td>
+                             <td style="color: red; text-align: right;">+0.04</td>
+                             <td>2019/11/20</td>
+                             <td>13</td>
+                             <td>B/A/A</td>
+                             <td><a href="#" class="link" onclick="showSalaryReason('产品设计思路清晰，用户体验优化显著，调薪5%；'); return false;">查看调薪说明</a></td>
+                             <td><a href="#" class="link">查看员工档案</a></td>
+                         </tr>
+                         <tr>
+                             <td>112005</td>
+                             <td>刘强</td>
+                             <td>B项目组\运营部</td>
+                             <td>15200</td>
+                             <td>16720</td>
+                             <td style="color: red; text-align: right;">+1520(+10%)</td>
+                             <td>0.78</td>
+                             <td>0.86</td>
+                             <td style="color: red; text-align: right;">+0.08</td>
+                             <td>2021/01/08</td>
+                             <td>11</td>
+                             <td>A/B/A</td>
+                             <td><a href="#" class="link" onclick="showSalaryReason('运营策略执行有效，数据增长明显，调薪10%；'); return false;">查看调薪说明</a></td>
+                             <td><a href="#" class="link">查看员工档案</a></td>
+                         </tr>
+                         <tr>
+                             <td>112006</td>
+                             <td>张丽</td>
+                             <td>B项目组\美术部</td>
+                             <td>17300</td>
+                             <td>18876</td>
+                             <td style="color: red; text-align: right;">+1576(+9%)</td>
+                             <td>0.81</td>
+                             <td>0.88</td>
+                             <td style="color: red; text-align: right;">+0.07</td>
+                             <td>2020/07/12</td>
+                             <td>12</td>
+                             <td>S/A/A</td>
+                             <td><a href="#" class="link" onclick="showSalaryReason('设计创意突出，视觉效果获得好评，调薪9%；'); return false;">查看调薪说明</a></td>
+                             <td><a href="#" class="link">查看员工档案</a></td>
+                         </tr>
+                         <tr>
+                             <td>112007</td>
+                             <td>赵伟</td>
+                             <td>C项目组\市场部</td>
+                             <td>19600</td>
+                             <td>20580</td>
+                             <td style="color: red; text-align: right;">+980(+5%)</td>
+                             <td>0.76</td>
+                             <td>0.80</td>
+                             <td style="color: red; text-align: right;">+0.04</td>
+                             <td>2018/09/25</td>
+                             <td>14</td>
+                             <td>A/A/B</td>
+                             <td><a href="#" class="link" onclick="showSalaryReason('市场推广效果良好，客户满意度提升，调薪5%；'); return false;">查看调薪说明</a></td>
+                             <td><a href="#" class="link">查看员工档案</a></td>
+                         </tr>
+                         <tr>
+                             <td>112008</td>
+                             <td>孙娜</td>
+                             <td>C项目组\人事部</td>
+                             <td>14500</td>
+                             <td>15950</td>
+                             <td style="color: red; text-align: right;">+1450(+10%)</td>
+                             <td>0.85</td>
+                             <td>0.93</td>
+                             <td style="color: red; text-align: right;">+0.08</td>
+                             <td>2022/02/14</td>
+                             <td>10</td>
+                             <td>B/A/A</td>
+                             <td><a href="#" class="link" onclick="showSalaryReason('人事管理规范化程度高，团队建设成效显著，调薪10%；'); return false;">查看调薪说明</a></td>
+                             <td><a href="#" class="link">查看员工档案</a></td>
+                         </tr>
+                         <tr>
+                             <td>112009</td>
+                             <td>周杰</td>
+                             <td>D项目组\财务部</td>
+                             <td>16900</td>
+                             <td>18590</td>
+                             <td style="color: red; text-align: right;">+1690(+10%)</td>
+                             <td>0.79</td>
+                             <td>0.87</td>
+                             <td style="color: red; text-align: right;">+0.08</td>
+                             <td>2019/05/30</td>
+                             <td>13</td>
+                             <td>A/B/A</td>
+                             <td><a href="#" class="link" onclick="showSalaryReason('财务分析准确，成本控制有效，调薪10%；'); return false;">查看调薪说明</a></td>
+                             <td><a href="#" class="link">查看员工档案</a></td>
+                         </tr>
+                         <tr>
+                             <td>112010</td>
+                             <td>吴琳</td>
+                             <td>D项目组\客服部</td>
+                             <td>13800</td>
+                             <td>14490</td>
+                             <td style="color: red; text-align: right;">+690(+5%)</td>
+                             <td>0.88</td>
+                             <td>0.92</td>
+                             <td style="color: red; text-align: right;">+0.04</td>
+                             <td>2021/12/03</td>
+                             <td>9</td>
+                             <td>B/B/A</td>
+                             <td><a href="#" class="link" onclick="showSalaryReason('客户服务态度优良，问题解决及时，调薪5%；'); return false;">查看调薪说明</a></td>
+                             <td><a href="#" class="link">查看员工档案</a></td>
+                         </tr>
+                         <tr>
+                             <td>112011</td>
+                             <td>马超</td>
+                             <td>E项目组\销售部</td>
+                             <td>22000</td>
+                             <td>24200</td>
+                             <td style="color: red; text-align: right;">+2200(+10%)</td>
+                             <td>0.73</td>
+                             <td>0.80</td>
+                             <td style="color: red; text-align: right;">+0.07</td>
+                             <td>2017/08/16</td>
+                             <td>15</td>
+                             <td>S/A/S</td>
+                             <td><a href="#" class="link" onclick="showSalaryReason('销售业绩突出，超额完成目标，调薪10%；'); return false;">查看调薪说明</a></td>
+                             <td><a href="#" class="link">查看员工档案</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="padding: 8px 12px; border-top: 1px solid #c0c0c0; background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);">
+                <div style="margin-bottom: 4px; font-size: 11px; font-weight: bold; color: #000000;">调薪说明</div>
+                <textarea id="salaryAdjustmentReason" readonly style="width: 100%; min-height: 80px; padding: 8px 12px; border: 1px solid #e0e0e0; font-size: 12px; color: #666; resize: none; outline: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.5; background: #f8f9fa; cursor: default;">本次调薪涉及多个项目组共10名员工，调薪幅度为5%-10%不等。主要基于以下考虑：
+1. 员工个人绩效表现优异，在各自岗位上贡献突出
+2. 市场薪酬水平调研结果，确保薪酬竞争力
+3. 公司业务发展需要，激励核心人才留存
+4. 年度预算范围内的合理调整</textarea>
+            </div>
+
+        </div>
+
+        <!-- 审批流程预览 -->
+        <div class="approval-section">
+            <div class="section-header">审批流程</div>
+            <div class="workflow-container">
+                <div class="workflow-step completed">
+                    <div class="step-number">1</div>
+                    <div class="step-info">
+                        <div class="step-title">申请提交</div>
+                        <div class="step-detail">张三<br/>2024/01/15 09:30<br/>已完成</div>
+                    </div>
+                </div>
+                <div class="workflow-step completed">
+                    <div class="step-number">2</div>
+                    <div class="step-info">
+                        <div class="step-title">部门主管审批</div>
+                        <div class="step-detail">李四<br/>2024/01/15 14:20<br/>已通过</div>
+                    </div>
+                </div>
+                <div class="workflow-step current">
+                    <div class="step-number">3</div>
+                    <div class="step-info">
+                        <div class="step-title">HR审批</div>
+                        <div class="step-detail">王五<br/>待审批</div>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <div class="step-info">
+                        <div class="step-title">总经理审批</div>
+                        <div class="step-detail">赵六<br/>待审批</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 审批意见 -->
+        <div class="approval-section">
+            <div class="section-header">审批意见</div>
+            <div style="padding: 24px;">
+                <textarea class="approval-textarea" placeholder="请输入您的审批意见..."></textarea>
+            </div>
+            <div class="approval-buttons">
+                <button class="btn btn-reject">拒绝</button>
+                <button class="btn btn-approve" style="background-color: #007bff; border-color: #007bff;">通过</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 调薪说明弹窗 -->
+    <div id="salaryReasonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">调薪说明</span>
+                <span class="close" onclick="closeSalaryReasonModal()">&times;</span>
+            </div>
+            <div class="salary-reason" id="salaryReasonContent">
+                <!-- 调薪说明内容将在这里显示 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全选复选框功能已移除
+
+        // 动态计算统计数据
+        function updateStatistics() {
+            const rows = document.querySelectorAll('tbody tr');
+            let employeeCount = rows.length;
+            let monthlyCostChange = 0;
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                // 获取月薪变化数据（在第7列）
+                 const salaryChangeCell = cells[7];
+                if (salaryChangeCell && salaryChangeCell.textContent.trim()) {
+                    const changeValue = parseFloat(salaryChangeCell.textContent.replace(/[^\d.-]/g, '')) || 0;
+                    monthlyCostChange += changeValue;
+                }
+            });
+            
+            const yearlyCostChange = monthlyCostChange * 12;
+            
+            // 更新显示
+            const employeeCountElement = document.getElementById('employeeCount');
+            if (employeeCountElement) {
+                employeeCountElement.textContent = employeeCount + '人';
+            }
+            
+            const monthlyCostChangeElement = document.getElementById('monthlyCostChange');
+            if (monthlyCostChangeElement) {
+                monthlyCostChangeElement.textContent = (monthlyCostChange >= 0 ? '+' : '') + (monthlyCostChange / 10000).toFixed(1) + '万';
+            }
+            
+            const yearlyCostChangeElement = document.getElementById('yearlyCostChange');
+            if (yearlyCostChangeElement) {
+                yearlyCostChangeElement.textContent = (yearlyCostChange >= 0 ? '+' : '') + (yearlyCostChange / 10000).toFixed(1) + '万';
+            }
+        }
+
+        // 模拟员工数据加载
+        function loadEmployeeData(input) {
+            const employeeId = input.value.trim();
+            if (!employeeId) return;
+            
+            const row = input.closest('tr');
+            const cells = row.querySelectorAll('td');
+            
+            // 模拟根据员工ID加载数据
+            const mockData = {
+                name: '新员工',
+                currentSalary: '8000',
+                newSalary: '8500',
+                currentCR: '3.20',
+                newCR: '3.40',
+                salaryChange: '+500',
+                crChange: '+0.20',
+                joinDate: '2023-06-01',
+                level: 'P5',
+                performance1: 'B+',
+                performance2: 'A-',
+                isPartTime: false
+            };
+            
+            // 填充数据到表格
+            cells[2].textContent = mockData.name;
+            cells[3].textContent = mockData.currentSalary;
+            cells[4].textContent = mockData.newSalary;
+            cells[5].textContent = mockData.currentCR;
+            cells[6].textContent = mockData.newCR;
+            cells[7].textContent = mockData.salaryChange;
+            cells[8].textContent = mockData.crChange;
+            cells[9].textContent = mockData.joinDate;
+            cells[10].textContent = mockData.level;
+            cells[11].textContent = mockData.performance1;
+            cells[12].textContent = mockData.performance2;
+            
+            // 更新兼岗规则按钮
+            const partTimeButton = cells[13].querySelector('.part-time-rule');
+            if (mockData.isPartTime) {
+                partTimeButton.disabled = false;
+                partTimeButton.innerHTML = `
+                    兼岗规则 ▼
+                    <div class="dropdown-content">
+                        <a href="#" onclick="selectPartTimeRule(this, '等比例分配')">等比例分配</a>
+                        <a href="#" onclick="selectPartTimeRule(this, '增加到主岗')">增加到主岗</a>
+                        <a href="#" onclick="selectPartTimeRule(this, '增加到兼岗')">增加到兼岗</a>
+                    </div>
+                `;
+            }
+            
+            updateStatistics();
+        }
+
+        // 初始化统计数据
+        updateStatistics();
+
+        // 显示调薪说明弹窗
+        function showSalaryReason(reason) {
+            const modal = document.getElementById('salaryReasonModal');
+            const content = document.getElementById('salaryReasonContent');
+            content.textContent = reason;
+            modal.style.display = 'block';
+        }
+        
+        // 关闭调薪说明弹窗
+        function closeSalaryReasonModal() {
+            const modal = document.getElementById('salaryReasonModal');
+            modal.style.display = 'none';
+        }
+        
+        // 点击弹窗外部关闭弹窗
+        window.onclick = function(event) {
+            const modal = document.getElementById('salaryReasonModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // 复选框相关功能已移除
+
+        // 添加员工功能
+        const addButton = document.querySelector('.btn-primary');
+        if (addButton) {
+            addButton.addEventListener('click', function() {
+            const tbody = document.querySelector('tbody');
+            
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="请输入员工ID" class="employee-id-input" onchange="loadEmployeeData(this)"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><button class="part-time-rule" disabled>兼岗规则</button></td>
+                <td><a href="#" class="link">查看员工档案</a></td>
+            `;
+            
+            tbody.appendChild(newRow);
+            
+            // 复选框功能已移除
+            
+            // 更新统计数据
+            updateStatistics();
+            });
+        }
+
+        // 删除选择功能
+        const deleteButton = document.querySelector('.btn-secondary');
+        if (deleteButton) {
+            deleteButton.addEventListener('click', function() {
+                const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+                checkedBoxes.forEach(checkbox => {
+                    checkbox.closest('tr').remove();
+                });
+                updateSelectAllStatus();
+                updateStatistics();
+            });
+        }
+
+        // 生效日期选择器功能
+        const effectiveDateElement = document.getElementById('effectiveDate');
+        if (effectiveDateElement) {
+            effectiveDateElement.addEventListener('change', function() {
+                console.log('生效日期已更改为:', this.value);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一次性奖金申请</title>
+    <style>
+        :root {
+            --primary-color: #165DFF;
+            --primary-hover: #4080FF;
+            --primary-active: #0E42D2;
+            --success-color: #00B42A;
+            --warning-color: #FF7D00;
+            --error-color: #F53F3F;
+            --text-primary: #1D2129;
+            --text-secondary: #4E5969;
+            --text-tertiary: #86909C;
+            --border-color: #C9CDD4;
+            --border-light: #E5E6EB;
+            --background-light: #F7F8FA;
+            --background-white: #ffffff;
+            --shadow-light: 0 1px 4px rgba(0, 0, 0, 0.04);
+            --shadow-medium: 0 4px 10px rgba(0, 0, 0, 0.08);
+            --border-radius: 6px;
+            --border-radius-small: 4px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #F0F2F5;
+            padding: 24px;
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--background-white);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-medium);
+            padding: 24px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 400;
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 22px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 4px 11px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-small);
+            font-size: 14px;
+            line-height: 22px;
+            min-height: 32px;
+            transition: all 0.1s cubic-bezier(0, 0, 1, 1);
+            box-sizing: border-box;
+            background: var(--background-white);
+            color: var(--text-primary);
+        }
+
+        .form-control:hover {
+            border-color: var(--primary-color);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .required {
+            color: #FF4D4F;
+            margin-left: 4px;
+        }
+
+        .form-select {
+            width: 300px;
+            height: 32px;
+            background-color: #FFFFFF;
+            border: 1px solid #D9D9D9;
+            border-radius: 4px;
+            color: #333333;
+            padding: 7px 11px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-select:focus {
+            border-color: #3370FF;
+            box-shadow: 0 0 0 2px rgba(51, 112, 255, 0.2);
+        }
+
+        .summary-section {
+            background-color: var(--background-light);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-light);
+            margin-bottom: 24px;
+        }
+
+        .summary-row {
+            display: flex;
+            gap: 48px;
+            align-items: center;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: #333333;
+        }
+
+        .summary-value {
+            font-size: 14px;
+            color: #333333;
+            font-weight: bold;
+        }
+
+        .detail-section {
+            margin-bottom: 32px;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .import-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: transparent;
+            border: none;
+            color: #3370FF;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .import-btn:hover {
+            color: #5B8EFF;
+            background-color: rgba(51, 112, 255, 0.1);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 14px;
+            line-height: 22px;
+        }
+
+        .data-table th {
+            background: var(--background-light);
+            font-weight: 500;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table tbody tr {
+            background: var(--background-white);
+        }
+
+        .data-table tbody tr:hover {
+            background: #F7F8FA;
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .editable-icon {
+            margin-left: 8px;
+            color: #666666;
+            cursor: pointer;
+        }
+
+        .delete-link {
+            color: #3370FF;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .delete-link:hover {
+            color: #5B8EFF;
+        }
+
+        .add-row-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #3370FF;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .add-row-btn:hover {
+            background-color: #5B8EFF;
+        }
+
+        .attachment-section {
+            background: var(--background-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .attachment-list {
+            margin-bottom: 16px;
+        }
+
+        .attachment-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .attachment-link {
+            color: #3370FF;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .attachment-link:hover {
+            color: #5B8EFF;
+        }
+
+        .upload-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .upload-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--background-white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-small);
+            color: var(--text-primary);
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.1s cubic-bezier(0, 0, 1, 1);
+        }
+
+        .upload-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(22, 93, 255, 0.04);
+        }
+
+        .file-format-note {
+            font-size: 12px;
+            color: #666666;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #F0F0F0;
+        }
+
+        .btn {
+            padding: 6px 15px;
+            border: 1px solid transparent;
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 22px;
+            transition: all 0.1s cubic-bezier(0, 0, 1, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            min-height: 32px;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            padding: 8px 24px;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        .btn-primary:active {
+            background: var(--primary-active);
+            border-color: var(--primary-active);
+        }
+
+        .btn-secondary {
+            background: var(--background-white);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-default {
+            background-color: #FFFFFF;
+            color: #333333;
+            border: 1px solid #D9D9D9;
+            border-radius: 4px;
+            padding: 8px 24px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-default:hover {
+            border-color: #3370FF;
+            color: #3370FF;
+        }
+
+        .btn-danger {
+            background: var(--error-color);
+            color: white;
+            border-color: var(--error-color);
+        }
+
+        .btn-danger:hover {
+            background: #F76560;
+            border-color: #F76560;
+        }
+
+        .icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+        }
+
+        .auto-filled-text {
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 22px;
+            padding: 4px 0;
+        }
+
+        .icon-upload {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%233370FF" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,5 17,10"/><line x1="12" y1="5" x2="12" y2="15"/></svg>') no-repeat center;
+            background-size: contain;
+        }
+
+        .icon-edit {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23666666" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>') no-repeat center;
+            background-size: contain;
+        }
+
+        .icon-plus {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>') no-repeat center;
+            background-size: contain;
+        }
+
+        .icon-plus-gray {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23333333" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>') no-repeat center;
+            background-size: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <h1 class="page-title">一次性奖金申请</h1>
+        
+        <!-- 区域一：表单基础信息 -->
+        <div class="form-section">
+            <div class="form-group">
+                <label class="form-label">
+                    薪资科目<span class="required">*</span>
+                </label>
+                <select class="form-select" id="salarySubject">
+                    <option value="quarterly-bonus-taoyuan">季度奖金（桃花源）</option>
+                    <option value="launch-bonus-huanta">上线奖金（幻塔）</option>
+                    <option value="launch-bonus-qingyun">上线奖金（青云）</option>
+                    <option value="launch-bonus-heiyu">上线奖金（黑羽）</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 区域二：汇总信息 -->
+        <div class="summary-section">
+            <div class="section-title">总计</div>
+            <div class="summary-row">
+                <div class="summary-item">
+                    <span class="summary-label">总人数</span>
+                    <span class="summary-value" id="totalCount">2</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">总金额</span>
+                    <span class="summary-value" id="totalAmount">5,000.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 区域三：明细信息 -->
+        <div class="detail-section">
+            <div class="detail-header">
+                <div class="section-title">明细</div>
+                <button class="import-btn" onclick="importData()">
+                    <span class="icon icon-upload"></span>
+                    导入数据
+                </button>
+            </div>
+            
+            <table class="data-table" id="detailTable">
+                <thead>
+                    <tr>
+                        <th>员工ID</th>
+                        <th>员工姓名</th>
+                        <th>部门</th>
+                        <th>金额</th>
+                        <th>备注</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            67890
+                            <span class="icon icon-edit editable-icon" onclick="editEmployeeId(this)"></span>
+                        </td>
+                        <td>王乐乐</td>
+                        <td>桃花源工作室群\仙境工作室\诛仙手游项目组</td>
+                        <td>1,000.00</td>
+                        <td>桃花源2025年Q3季度奖</td>
+                        <td><a href="#" class="delete-link" onclick="deleteRow(this)">删除</a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            12345
+                            <span class="icon icon-edit editable-icon" onclick="editEmployeeId(this)"></span>
+                        </td>
+                        <td>李小明</td>
+                        <td>A项目部\研发部\后端开发组</td>
+                        <td>4,000.00</td>
+                        <td>Q3季度优秀表现奖励</td>
+                        <td><a href="#" class="delete-link" onclick="deleteRow(this)">删除</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <button class="add-row-btn" onclick="addNewRow()">
+                <span class="icon icon-plus"></span>
+                继续添加
+            </button>
+        </div>
+
+        <!-- 区域四：附件信息 -->
+        <div class="attachment-section">
+            <div class="attachment-list">
+                <div class="summary-label">附件:</div>
+                <div class="attachment-item">
+                    <a href="#" class="attachment-link">奖金明细清单(Q3).xlsx</a>
+                </div>
+            </div>
+            
+            <div class="upload-section">
+                <button class="upload-btn" onclick="uploadFile()">
+                    <span class="icon icon-plus-gray"></span>
+                    添加
+                </button>
+            </div>
+            
+            <div class="file-format-note">
+                支持文件格式: doc、xlsx、pdf
+            </div>
+        </div>
+
+        <!-- 区域五：申请原因/备注 -->
+        <div class="form-section">
+            <div class="form-group">
+                <label class="form-label">
+                    申请原因/备注
+                </label>
+                <textarea class="form-control" id="applicationReason" placeholder="请填写（600字以内）" rows="4" maxlength="600" style="resize: vertical; min-height: 80px;"></textarea>
+                <div style="text-align: right; margin-top: 4px; font-size: 12px; color: #86909C;">
+                    <span id="charCount">0</span>/600
+                </div>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="action-buttons">
+            <button class="btn-default" onclick="saveDraft()">保存</button>
+            <button class="btn-primary" onclick="submitApplication()">提交</button>
+        </div>
+    </div>
+
+    <script>
+        // 员工信息数据库
+        const employeeDatabase = {
+            '10001': { name: '张三', department: 'A项目部\\研发部' },
+            '10002': { name: '李四', department: 'A项目部\\策划部' },
+            '10003': { name: '王五', department: 'A项目部\\美术部' },
+            '10004': { name: '赵六', department: 'B项目部\\研发部' },
+            '10005': { name: '钱七', department: 'B项目部\\测试部' }
+        };
+
+        // 随机姓名库
+        const randomNames = [
+            '王小明', '李小红', '张小华', '刘小强', '陈小丽', '杨小军', '赵小芳', '黄小刚',
+            '周小敏', '吴小伟', '徐小娟', '朱小峰', '胡小燕', '郭小涛', '林小霞', '何小斌',
+            '高小玲', '梁小东', '郑小雪', '罗小辉', '宋小梅', '唐小龙', '韩小静', '冯小波',
+            '于小慧', '董小鹏', '薛小兰', '贺小磊', '龙小凤', '叶小超', '程小琴', '魏小飞'
+        ];
+
+        // 随机部门库
+        const randomDepartments = [
+            'A项目部\\研发部\\前端开发组',
+            'A项目部\\研发部\\后端开发组',
+            'A项目部\\策划部\\游戏策划组',
+            'A项目部\\美术部\\UI设计组',
+            'A项目部\\美术部\\3D建模组',
+            'B项目部\\研发部\\移动端开发组',
+            'B项目部\\测试部\\功能测试组',
+            'B项目部\\测试部\\性能测试组',
+            '桃花源工作室群\\仙境工作室\\诛仙手游项目组',
+            '桃花源工作室群\\梦幻工作室\\梦幻西游项目组',
+            'C项目部\\运营部\\用户运营组',
+            'C项目部\\运营部\\数据分析组',
+            'D项目部\\市场部\\品牌推广组',
+            'D项目部\\市场部\\渠道合作组'
+        ];
+
+        // 生成随机员工信息
+        function generateRandomEmployee() {
+            const randomName = randomNames[Math.floor(Math.random() * randomNames.length)];
+            const randomDepartment = randomDepartments[Math.floor(Math.random() * randomDepartments.length)];
+            return { name: randomName, department: randomDepartment };
+        }
+
+        // 自动填充员工信息
+        function autoFillEmployeeInfo(employeeIdInput) {
+            const employeeId = employeeIdInput.value.trim();
+            const row = employeeIdInput.closest('tr');
+            const nameSpan = row.cells[1].querySelector('.auto-filled-text');
+            const departmentSpan = row.cells[2].querySelector('.auto-filled-text');
+            
+            if (employeeDatabase[employeeId]) {
+                const employee = employeeDatabase[employeeId];
+                nameSpan.textContent = employee.name;
+                departmentSpan.textContent = employee.department;
+            } else if (employeeId === '') {
+                nameSpan.textContent = '';
+                departmentSpan.textContent = '';
+            } else {
+                // 生成随机员工信息
+                const randomEmployee = generateRandomEmployee();
+                nameSpan.textContent = randomEmployee.name;
+                departmentSpan.textContent = randomEmployee.department;
+            }
+        }
+
+        // 更新汇总信息
+        function updateSummary() {
+            const rows = document.querySelectorAll('#detailTable tbody tr');
+            const totalCount = rows.length;
+            let totalAmount = 0;
+            
+            rows.forEach(row => {
+                const amountCell = row.cells[3];
+                let amountValue = 0;
+                
+                // 检查是否是输入框还是文本
+                const input = amountCell.querySelector('input');
+                if (input) {
+                    amountValue = parseFloat(input.value.replace(/,/g, '')) || 0;
+                } else {
+                    amountValue = parseFloat(amountCell.textContent.replace(/,/g, '')) || 0;
+                }
+                
+                totalAmount += amountValue;
+            });
+            
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('totalAmount').textContent = totalAmount.toLocaleString('zh-CN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // 删除行
+        function deleteRow(element) {
+            if (confirm('确定要删除这条记录吗？')) {
+                element.closest('tr').remove();
+                updateSummary();
+            }
+        }
+
+        // 添加新行
+        function addNewRow() {
+            const tbody = document.querySelector('#detailTable tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>
+                    <input type="text" placeholder="请输入员工编号" style="border: 1px solid #D9D9D9; border-radius: 4px; padding: 4px 8px; width: 120px;" oninput="autoFillEmployeeInfo(this)" onblur="autoFillEmployeeInfo(this)">
+                </td>
+                <td>
+                    <span class="auto-filled-text"></span>
+                </td>
+                <td>
+                    <span class="auto-filled-text"></span>
+                </td>
+                <td>
+                    <input type="text" placeholder="请输入金额" style="border: 1px solid #D9D9D9; border-radius: 4px; padding: 4px 8px; width: 100px;" oninput="updateSummary()" onblur="updateSummary()">
+                </td>
+                <td>
+                    <input type="text" placeholder="请输入备注" style="border: 1px solid #D9D9D9; border-radius: 4px; padding: 4px 8px; width: 150px;">
+                </td>
+                <td>
+                    <button class="btn btn-danger" onclick="deleteRow(this)">删除</button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+            updateSummary();
+        }
+
+        // 编辑员工ID
+        function editEmployeeId(element) {
+            const cell = element.parentElement;
+            const currentId = cell.textContent.trim();
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentId;
+            input.style.cssText = 'border: 1px solid #D9D9D9; border-radius: 4px; padding: 4px 8px; width: 100px;';
+            
+            input.onblur = function() {
+                cell.innerHTML = this.value + '<span class="icon icon-edit editable-icon" onclick="editEmployeeId(this)"></span>';
+            };
+            
+            input.onkeypress = function(e) {
+                if (e.key === 'Enter') {
+                    this.blur();
+                }
+            };
+            
+            cell.innerHTML = '';
+            cell.appendChild(input);
+            input.focus();
+        }
+
+        // 导入数据
+        function importData() {
+            alert('导入数据功能开发中...');
+        }
+
+        // 上传文件
+        function uploadFile() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.doc,.docx,.xlsx,.xls,.pdf';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const attachmentList = document.querySelector('.attachment-list');
+                    const newAttachment = document.createElement('div');
+                    newAttachment.className = 'attachment-item';
+                    newAttachment.innerHTML = `<a href="#" class="attachment-link">${file.name}</a>`;
+                    attachmentList.appendChild(newAttachment);
+                }
+            };
+            input.click();
+        }
+
+        // 保存草稿
+        function saveDraft() {
+            alert('草稿已保存');
+        }
+
+        // 提交申请
+        function submitApplication() {
+            const salarySubject = document.getElementById('salarySubject').value;
+            if (!salarySubject) {
+                alert('请选择薪资科目');
+                return;
+            }
+            
+            const rows = document.querySelectorAll('#detailTable tbody tr');
+            if (rows.length === 0) {
+                alert('请至少添加一条明细记录');
+                return;
+            }
+            
+            alert('申请已提交，等待审批');
+        }
+
+        // 更新字符计数
+        function updateCharCount() {
+            const textarea = document.getElementById('applicationReason');
+            const charCount = document.getElementById('charCount');
+            const currentLength = textarea.value.length;
+            charCount.textContent = currentLength;
+            
+            // 当接近字符限制时改变颜色
+            if (currentLength > 550) {
+                charCount.style.color = '#F53F3F';
+            } else if (currentLength > 480) {
+                charCount.style.color = '#FF7D00';
+            } else {
+                charCount.style.color = '#86909C';
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSummary();
+            
+            // 绑定字符计数事件
+            const textarea = document.getElementById('applicationReason');
+            textarea.addEventListener('input', updateCharCount);
+            textarea.addEventListener('paste', function() {
+                setTimeout(updateCharCount, 10);
+            });
+        });
+    </script>
+</body>
+</html>

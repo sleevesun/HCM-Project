@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工薪成本与人力分析看板</title>
+    <link href="https://unpkg.com/@arco-design/web-react@2.62.0/dist/css/arco.css" rel="stylesheet">
+    <script src="https://unpkg.com/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f7f8fa;
+            color: #1d2129;
+            line-height: 1.5;
+        }
+
+        .dashboard-container {
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        /* 全局筛选区 */
+        .filter-section {
+            background: #ffffff;
+            border-radius: 6px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d2129;
+            margin: 0;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            color: #4e5969;
+            white-space: nowrap;
+        }
+
+        .filter-select {
+            min-width: 140px;
+            height: 32px;
+            border: 1px solid #c9cdd4;
+            border-radius: 6px;
+            padding: 0 12px;
+            font-size: 14px;
+            background: #ffffff;
+            color: #1d2129;
+            cursor: pointer;
+            transition: all 0.1s cubic-bezier(0, 0, 1, 1);
+        }
+
+        .filter-select:hover {
+            border-color: #3370ff;
+        }
+
+        .filter-select:focus {
+            border-color: #3370ff;
+            box-shadow: 0 0 0 2px rgba(51, 112, 255, 0.1);
+            outline: none;
+        }
+
+        .data-update-time {
+            font-size: 12px;
+            color: #86909c;
+            margin-left: 8px;
+        }
+
+        /* 核心指标KPI卡片区 */
+        .kpi-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .kpi-card {
+            background: #ffffff;
+            border-radius: 6px;
+            padding: 24px;
+            box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s cubic-bezier(0, 0, 1, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card:hover {
+            box-shadow: 0 4px 10px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3370ff, #722ed1);
+        }
+
+        .kpi-title {
+            font-size: 14px;
+            color: #4e5969;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .kpi-comparison {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .kpi-change {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+        }
+
+        .kpi-change.positive {
+            color: #f53f3f;
+        }
+
+        .kpi-change.negative {
+            color: #00b42a;
+        }
+
+        .kpi-change.neutral {
+            color: #86909c;
+        }
+
+        .change-icon {
+            font-size: 12px;
+        }
+
+        .vs-text {
+            color: #86909c;
+            font-size: 12px;
+        }
+
+        /* 关键趋势与构成分析区 */
+        .analysis-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .chart-card {
+            background: #ffffff;
+            border-radius: 6px;
+            padding: 24px;
+            box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d2129;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+        }
+
+        .trend-chart-card {
+            grid-column: 1 / -1;
+        }
+
+        .trend-chart-container {
+            height: 400px;
+        }
+
+        /* 明细数据探索区 */
+        .detail-section {
+            background: #ffffff;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .detail-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e6eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d2129;
+        }
+
+        .detail-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            height: 32px;
+            padding: 0 16px;
+            border: 1px solid #c9cdd4;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #4e5969;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.1s cubic-bezier(0, 0, 1, 1);
+        }
+
+        .action-btn:hover {
+            border-color: #3370ff;
+            color: #3370ff;
+        }
+
+        .action-btn.primary {
+            background: #3370ff;
+            border-color: #3370ff;
+            color: #ffffff;
+        }
+
+        .action-btn.primary:hover {
+            background: #2b5ce6;
+            border-color: #2b5ce6;
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .detail-table th {
+            background: #f7f8fa;
+            color: #1d2129;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e5e6eb;
+            font-size: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .detail-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        .detail-table th.sortable:hover {
+            background: #f2f3f5;
+        }
+
+        .detail-table th.sortable::after {
+            content: '⇅';
+            position: absolute;
+            right: 8px;
+            color: #c9cdd4;
+            font-size: 12px;
+        }
+
+        .detail-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f2f3f5;
+            font-size: 14px;
+            color: #1d2129;
+        }
+
+        .detail-table tr:hover {
+            background: #f7f8fa;
+        }
+
+        .department-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .expand-btn {
+            width: 16px;
+            height: 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            color: #4e5969;
+            font-size: 12px;
+        }
+
+        .expand-btn:hover {
+            background: #f2f3f5;
+        }
+
+        .value-cell {
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .change-cell {
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .change-positive {
+            color: #f53f3f;
+        }
+
+        .change-negative {
+            color: #00b42a;
+        }
+
+        .change-neutral {
+            color: #86909c;
+        }
+
+        .sub-department {
+            background: #fafbfc;
+        }
+
+        .sub-department .department-cell {
+            padding-left: 24px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .analysis-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 16px;
+            }
+
+            .filter-section {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .filter-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .kpi-section {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-table {
+                font-size: 12px;
+            }
+
+            .detail-table th,
+            .detail-table td {
+                padding: 8px 12px;
+            }
+        }
+
+        /* 加载状态 */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: #86909c;
+        }
+
+        /* 高亮异常变化 */
+        .highlight-change {
+            background: linear-gradient(90deg, rgba(245, 63, 63, 0.1), rgba(245, 63, 63, 0.05));
+            border-left: 3px solid #f53f3f;
+        }
+
+        .highlight-improvement {
+            background: linear-gradient(90deg, rgba(0, 180, 42, 0.1), rgba(0, 180, 42, 0.05));
+            border-left: 3px solid #00b42a;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- 全局筛选区 -->
+        <div class="filter-section">
+            <div>
+                <h1 class="dashboard-title">工薪成本与人力分析看板</h1>
+                <span class="data-update-time">数据更新时间：2024年1月10日</span>
+            </div>
+            <div class="filter-controls">
+                <div class="filter-item">
+                    <span class="filter-label">月份选择：</span>
+                    <select class="filter-select" id="monthSelect">
+                        <option value="2024-01">2024年1月</option>
+                        <option value="2023-12">2023年12月</option>
+                        <option value="2023-11">2023年11月</option>
+                        <option value="2023-10">2023年10月</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <span class="filter-label">对比周期：</span>
+                    <select class="filter-select" id="compareSelect">
+                        <option value="month">与上月对比</option>
+                        <option value="quarter">与上季度对比</option>
+                        <option value="year">与去年同期对比</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心指标KPI卡片区 -->
+        <div class="kpi-section">
+            <div class="kpi-card">
+                <div class="kpi-title">总工薪成本</div>
+                <div class="kpi-value">¥1,253万</div>
+                <div class="kpi-comparison">
+                    <span class="kpi-change positive">
+                        <span class="change-icon">▲</span>
+                        <span>¥58万 (+4.8%)</span>
+                    </span>
+                    <span class="vs-text">vs 上月</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">总在职人数</div>
+                <div class="kpi-value">852人</div>
+                <div class="kpi-comparison">
+                    <span class="kpi-change positive">
+                        <span class="change-icon">▲</span>
+                        <span>12人 (+1.4%)</span>
+                    </span>
+                    <span class="vs-text">vs 上月</span>
+                </div>
+            </div>
+            <div class="kpi-card highlight-change">
+                <div class="kpi-title">核心奖金总额</div>
+                <div class="kpi-value">¥89万</div>
+                <div class="kpi-comparison">
+                    <span class="kpi-change positive">
+                        <span class="change-icon">▲</span>
+                        <span>¥25万 (+39%)</span>
+                    </span>
+                    <span class="vs-text">vs 上月</span>
+                </div>
+            </div>
+            <div class="kpi-card highlight-improvement">
+                <div class="kpi-title">离职补偿金总额</div>
+                <div class="kpi-value">¥15万</div>
+                <div class="kpi-comparison">
+                    <span class="kpi-change negative">
+                        <span class="change-icon">▼</span>
+                        <span>¥5万 (-25%)</span>
+                    </span>
+                    <span class="vs-text">vs 上月</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 关键趋势与构成分析区 -->
+        <div class="analysis-section">
+            <div class="chart-card">
+                <div class="chart-title">工薪成本构成</div>
+                <div class="chart-container" id="costCompositionChart"></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">在职人数构成</div>
+                <div class="chart-container" id="staffCompositionChart"></div>
+            </div>
+            <div class="chart-card trend-chart-card">
+                <div class="chart-title">近6个月工薪成本与人数趋势</div>
+                <div class="chart-container trend-chart-container" id="trendChart"></div>
+            </div>
+        </div>
+
+        <!-- 明细数据探索区 -->
+        <div class="detail-section">
+            <div class="detail-header">
+                <div class="detail-title">部门明细数据</div>
+                <div class="detail-actions">
+                    <button class="action-btn">筛选</button>
+                    <button class="action-btn">导出</button>
+                    <button class="action-btn primary">刷新数据</button>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable">部门</th>
+                            <th class="sortable">总工薪成本</th>
+                            <th class="sortable">环比变化</th>
+                            <th class="sortable">应发工资</th>
+                            <th class="sortable">调薪额度</th>
+                            <th class="sortable">奖金</th>
+                            <th class="sortable">工作特殊奖励</th>
+                            <th class="sortable">在职人数</th>
+                            <th class="sortable">调薪人数</th>
+                        </tr>
+                    </thead>
+                    <tbody id="departmentTableBody">
+                        <tr>
+                            <td>
+                                <div class="department-cell">
+                                    <button class="expand-btn">+</button>
+                                    <span>技术部</span>
+                                </div>
+                            </td>
+                            <td class="value-cell">¥456万</td>
+                            <td class="change-cell change-positive">+6.2%</td>
+                            <td class="value-cell">¥398万</td>
+                            <td class="value-cell">¥28万</td>
+                            <td class="value-cell">¥45万</td>
+                            <td class="value-cell">¥32万</td>
+                            <td class="value-cell">285人</td>
+                            <td class="value-cell">45人</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="department-cell">
+                                    <button class="expand-btn">+</button>
+                                    <span>市场部</span>
+                                </div>
+                            </td>
+                            <td class="value-cell">¥298万</td>
+                            <td class="change-cell change-positive">+3.8%</td>
+                            <td class="value-cell">¥245万</td>
+                            <td class="value-cell">¥15万</td>
+                            <td class="value-cell">¥28万</td>
+                            <td class="value-cell">¥18万</td>
+                            <td class="value-cell">186人</td>
+                            <td class="value-cell">28人</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="department-cell">
+                                    <button class="expand-btn">+</button>
+                                    <span>产品部</span>
+                                </div>
+                            </td>
+                            <td class="value-cell">¥189万</td>
+                            <td class="change-cell change-negative">-2.1%</td>
+                            <td class="value-cell">¥156万</td>
+                            <td class="value-cell">¥8万</td>
+                            <td class="value-cell">¥18万</td>
+                            <td class="value-cell">¥12万</td>
+                            <td class="value-cell">98人</td>
+                            <td class="value-cell">15人</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="department-cell">
+                                    <button class="expand-btn">+</button>
+                                    <span>人事部</span>
+                                </div>
+                            </td>
+                            <td class="value-cell">¥125万</td>
+                            <td class="change-cell change-positive">+8.5%</td>
+                            <td class="value-cell">¥98万</td>
+                            <td class="value-cell">¥12万</td>
+                            <td class="value-cell">¥8万</td>
+                            <td class="value-cell">¥5万</td>
+                            <td class="value-cell">65人</td>
+                            <td class="value-cell">18人</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="department-cell">
+                                    <button class="expand-btn">+</button>
+                                    <span>财务部</span>
+                                </div>
+                            </td>
+                            <td class="value-cell">¥95万</td>
+                            <td class="change-cell change-neutral">+0.8%</td>
+                            <td class="value-cell">¥78万</td>
+                            <td class="value-cell">¥5万</td>
+                            <td class="value-cell">¥6万</td>
+                            <td class="value-cell">¥3万</td>
+                            <td class="value-cell">42人</td>
+                            <td class="value-cell">8人</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="department-cell">
+                                    <button class="expand-btn">+</button>
+                                    <span>运营部</span>
+                                </div>
+                            </td>
+                            <td class="value-cell">¥90万</td>
+                            <td class="change-cell change-positive">+12.5%</td>
+                            <td class="value-cell">¥68万</td>
+                            <td class="value-cell">¥8万</td>
+                            <td class="value-cell">¥12万</td>
+                            <td class="value-cell">¥9万</td>
+                            <td class="value-cell">56人</td>
+                            <td class="value-cell">12人</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化图表
+        function initCharts() {
+            // 工薪成本构成饼图
+            const costChart = echarts.init(document.getElementById('costCompositionChart'));
+            const costOption = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: {c}万 ({d}%)'
+                },
+                legend: {
+                    bottom: '0%',
+                    left: 'center'
+                },
+                series: [{
+                    name: '工薪成本构成',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['50%', '45%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 6,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: 16,
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 1045, name: '应发工资', itemStyle: { color: '#3370ff' } },
+                        { value: 89, name: '奖金', itemStyle: { color: '#722ed1' } },
+                        { value: 78, name: '五险一金司付', itemStyle: { color: '#f7ba1e' } },
+                        { value: 41, name: '其他费用', itemStyle: { color: '#f53f3f' } }
+                    ]
+                }]
+            };
+            costChart.setOption(costOption);
+
+            // 在职人数构成饼图
+            const staffChart = echarts.init(document.getElementById('staffCompositionChart'));
+            const staffOption = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: {c}人 ({d}%)'
+                },
+                legend: {
+                    bottom: '0%',
+                    left: 'center'
+                },
+                series: [{
+                    name: '在职人数构成',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['50%', '45%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 6,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: 16,
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 798, name: '正式员工', itemStyle: { color: '#00b42a' } },
+                        { value: 54, name: '实习生', itemStyle: { color: '#14c9c9' } }
+                    ]
+                }]
+            };
+            staffChart.setOption(staffOption);
+
+            // 趋势图
+            const trendChart = echarts.init(document.getElementById('trendChart'));
+            const trendOption = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    }
+                },
+                legend: {
+                    top: '0%',
+                    left: 'center'
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: ['8月', '9月', '10月', '11月', '12月', '1月'],
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '工薪成本(万元)',
+                        min: 0,
+                        max: 1400,
+                        interval: 200,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: '在职人数(人)',
+                        min: 0,
+                        max: 900,
+                        interval: 150,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '总工薪成本',
+                        type: 'bar',
+                        tooltip: {
+                            valueFormatter: function (value) {
+                                return value + '万元';
+                            }
+                        },
+                        data: [1156, 1189, 1198, 1195, 1253, 1253],
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#3370ff' },
+                                { offset: 1, color: '#722ed1' }
+                            ])
+                        }
+                    },
+                    {
+                        name: '总在职人数',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        tooltip: {
+                            valueFormatter: function (value) {
+                                return value + '人';
+                            }
+                        },
+                        data: [798, 812, 825, 840, 852, 852],
+                        itemStyle: {
+                            color: '#f53f3f'
+                        },
+                        lineStyle: {
+                            width: 3
+                        }
+                    }
+                ]
+            };
+            trendChart.setOption(trendOption);
+
+            // 响应式处理
+            window.addEventListener('resize', function() {
+                costChart.resize();
+                staffChart.resize();
+                trendChart.resize();
+            });
+        }
+
+        // 表格交互功能
+        function initTableInteractions() {
+            // 展开/收起功能
+            document.querySelectorAll('.expand-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const isExpanded = this.textContent === '-';
+                    this.textContent = isExpanded ? '+' : '-';
+                    
+                    // 这里可以添加展开子部门的逻辑
+                    if (!isExpanded) {
+                        // 模拟添加子部门行
+                        console.log('展开部门:', this.parentElement.querySelector('span').textContent);
+                    }
+                });
+            });
+
+            // 表格排序功能
+            document.querySelectorAll('.sortable').forEach(header => {
+                header.addEventListener('click', function() {
+                    const column = this.textContent;
+                    console.log('排序列:', column);
+                    // 这里可以添加排序逻辑
+                });
+            });
+        }
+
+        // 筛选器变化处理
+        function initFilterHandlers() {
+            document.getElementById('monthSelect').addEventListener('change', function() {
+                console.log('月份变化:', this.value);
+                // 这里可以添加数据刷新逻辑
+            });
+
+            document.getElementById('compareSelect').addEventListener('change', function() {
+                console.log('对比周期变化:', this.value);
+                // 这里可以添加数据刷新逻辑
+            });
+        }
+
+        // 操作按钮功能
+        function initActionButtons() {
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const action = this.textContent;
+                    switch(action) {
+                        case '筛选':
+                            console.log('打开筛选面板');
+                            break;
+                        case '导出':
+                            console.log('导出数据');
+                            break;
+                        case '刷新数据':
+                            console.log('刷新数据');
+                            break;
+                    }
+                });
+            });
+        }
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            initTableInteractions();
+            initFilterHandlers();
+            initActionButtons();
+        });
+    </script>
+</body>
+</html>

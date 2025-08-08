@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>薪酬调整申请</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: PingFang SC, Microsoft YaHei, sans-serif;
+            background-color: #FFFFFF;
+            color: #333333;
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .phone-container {
+            width: 430px;
+            height: 932px;
+            background: #000000;
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #F0F2F5;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 126px;
+            height: 37px;
+            background: #000000;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .phone-content {
+            padding: 45px 16px 16px 16px;
+            height: calc(100% - 45px);
+            overflow-y: auto;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333333;
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 16px 0;
+            background: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .card {
+            background: #FFFFFF;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: #666666;
+            flex: 0 0 auto;
+            margin-right: 16px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: #333333;
+            flex: 1;
+            text-align: right;
+            word-break: break-all;
+        }
+
+        .info-value.highlight {
+            color: #3370FF;
+            font-weight: bold;
+        }
+
+        .info-value.positive {
+            color: #FF4D4F;
+            font-weight: bold;
+        }
+
+        .info-value.success {
+            color: #FF4D4F;
+            font-weight: bold;
+        }
+
+        /* 调薪明细列表样式 */
+        .detail-list {
+            margin-top: 16px;
+        }
+
+        .list-header {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto auto;
+            gap: 8px;
+            padding: 12px 16px;
+            background-color: #F5F5F5;
+            border-bottom: 1px solid #E8E8E8;
+        }
+
+        .list-header-item {
+            font-size: 14px;
+            font-weight: 600;
+            color: #262626;
+            text-align: center;
+        }
+
+        .list-item {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto auto;
+            gap: 8px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #F0F0F0;
+            align-items: center;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item-text {
+            font-size: 14px;
+            color: #262626;
+            text-align: left;
+        }
+
+        .list-item-detail {
+            font-size: 14px;
+            color: #262626;
+            text-align: right;
+        }
+
+        .list-item-detail a {
+            color: #3370FF;
+            text-decoration: none;
+        }
+
+        .list-item-detail a:hover {
+            text-decoration: underline;
+        }
+
+        .list-item-salary {
+            font-size: 14px;
+            color: #262626;
+            text-align: right;
+        }
+
+        .list-item-change {
+            font-size: 14px;
+            color: #FF4D4F;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        /* 调薪说明样式 */
+        .description-text {
+            font-size: 14px;
+            color: #333333;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+
+        /* 审批记录样式 */
+        .approval-timeline {
+            margin-top: 16px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 11px;
+            top: 24px;
+            width: 2px;
+            height: calc(100% + 8px);
+            background: #F0F0F0;
+        }
+
+        .timeline-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .timeline-icon.completed {
+            background: #3370FF;
+            color: #FFFFFF;
+        }
+
+        .timeline-icon.processing {
+            background: #FFFFFF;
+            border: 2px solid #3370FF;
+            color: #3370FF;
+        }
+
+        .timeline-icon.pending {
+            background: #F0F2F5;
+            color: #BBBBBB;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-approver {
+            font-size: 14px;
+            color: #333333;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .timeline-status {
+            font-size: 12px;
+            color: #666666;
+            margin-bottom: 2px;
+        }
+
+        .timeline-time {
+            font-size: 12px;
+            color: #BBBBBB;
+        }
+
+        /* 审批操作样式 */
+        .approval-input {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 1px solid #D9D9D9;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333333;
+            background: #FFFFFF;
+            resize: vertical;
+            margin-bottom: 16px;
+        }
+
+        .approval-input:focus {
+            border-color: #3370FF;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(51, 112, 255, 0.2);
+        }
+
+        .approval-input::placeholder {
+            color: #BBBBBB;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-reject {
+            background: #FFFFFF;
+            color: #FF4D4F;
+            border: 1px solid #FF4D4F;
+        }
+
+        .btn-reject:hover {
+            background: #FF4D4F;
+            color: #FFFFFF;
+        }
+
+        .btn-approve {
+            background: #3370FF;
+            color: #FFFFFF;
+        }
+
+        .btn-approve:hover {
+            background: #5B8EFF;
+        }
+
+        .btn-approve:active {
+            background: #0050B3;
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: absolute;
+            z-index: 1000;
+            left: 0;
+            top: 45px;
+            width: 100%;
+            height: calc(100% - 45px);
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 0 0 40px 40px;
+        }
+
+        .modal-content {
+            background-color: #FFFFFF;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 320px;
+            max-height: 85%;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #F0F0F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333333;
+            margin: 0;
+        }
+
+        .close {
+            color: #999999;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .close:hover {
+            color: #333333;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .info-section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px 0;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-item-label {
+            font-size: 14px;
+            color: #666666;
+            flex: 0 0 auto;
+            margin-right: 16px;
+        }
+
+        .info-item-value {
+            font-size: 14px;
+            color: #333333;
+            flex: 1;
+            text-align: right;
+            word-break: break-all;
+        }
+
+        .info-item-value.positive {
+            color: #FF4D4F;
+            font-weight: bold;
+        }
+
+        .salary-group {
+            margin-bottom: 16px;
+            padding: 12px;
+            background-color: #F8F9FA;
+            border-radius: 4px;
+        }
+
+        .salary-group-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 12px;
+        }
+
+        .salary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .salary-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .salary-label {
+            font-size: 14px;
+            color: #666666;
+            flex: 0 0 auto;
+            margin-right: 12px;
+        }
+
+        .salary-value {
+            font-size: 14px;
+            color: #333333;
+            flex: 1;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .salary-value.positive {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .card {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .list-header,
+            .list-item {
+                grid-template-columns: auto auto auto auto auto auto;
+                gap: 4px;
+                padding: 8px 12px;
+            }
+
+            .list-header-item,
+            .list-item-text,
+            .list-item-salary,
+            .list-item-change {
+                font-size: 12px;
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="phone-content">
+                <!-- 页面标题 -->
+                <div class="page-title">薪酬调整申请</div>
+
+                <!-- 卡片一：基础信息 -->
+                <div class="card">
+                    <div class="info-row">
+                        <span class="info-label">流程编号</span>
+                        <span class="info-value">123456</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">流程发起人</span>
+                        <span class="info-value">张三</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">提交时间</span>
+                        <span class="info-value">2025/07/17</span>
+                    </div>
+                </div>
+
+                 <!-- 卡片二：调薪汇总信息 -->
+                 <div class="card">
+                     <div class="card-title">调薪汇总信息</div>
+                     <div class="info-row">
+                         <span class="info-label">调薪部门</span>
+                         <span class="info-value">ABC工作室</span>
+                     </div>
+                     <div class="info-row">
+                         <span class="info-label">调薪人数</span>
+                         <span class="info-value highlight">10人</span>
+                     </div>
+                     <div class="info-row">
+                         <span class="info-label">月度工薪成本变化</span>
+                         <span class="info-value positive">+12.3万</span>
+                     </div>
+                     <div class="info-row">
+                         <span class="info-label">本年工薪成本变化</span>
+                         <span class="info-value positive">+77.2万</span>
+                     </div>
+                     <div class="info-row">
+                         <span class="info-label">生效时间</span>
+                         <span class="info-value">2025/09</span>
+                     </div>
+                 </div>
+
+                 <!-- 卡片三：调薪明细信息 -->
+                 <div class="card">
+                     <div class="card-title">调薪明细信息</div>
+                     <div class="detail-list">
+                         <div class="list-header">
+                             <div class="list-header-item">姓名</div>
+                             <div class="list-header-item">调薪前</div>
+                             <div class="list-header-item">调薪后</div>
+                             <div class="list-header-item">变化</div>
+                             <div class="list-header-item">幅度</div>
+                             <div class="list-header-item">详情</div>
+                         </div>
+                         <div class="list-item">
+                             <div class="list-item-text">张三</div>
+                             <div class="list-item-salary">15,000</div>
+                             <div class="list-item-salary">16,000</div>
+                             <div class="list-item-change">+1,000</div>
+                             <div class="list-item-change">6.7%</div>
+                             <div class="list-item-detail"><a href="#" onclick="viewEmployeeDetail('张三')">查看</a></div>
+                         </div>
+                         <div class="list-item">
+                             <div class="list-item-text">李四</div>
+                             <div class="list-item-salary">18,000</div>
+                             <div class="list-item-salary">19,000</div>
+                             <div class="list-item-change">+1,000</div>
+                             <div class="list-item-change">5.6%</div>
+                             <div class="list-item-detail"><a href="#" onclick="viewEmployeeDetail('李四')">查看</a></div>
+                         </div>
+                         <div class="list-item">
+                             <div class="list-item-text">王五</div>
+                             <div class="list-item-salary">20,000</div>
+                             <div class="list-item-salary">21,400</div>
+                             <div class="list-item-change">+1,400</div>
+                             <div class="list-item-change">7.0%</div>
+                             <div class="list-item-detail"><a href="#" onclick="viewEmployeeDetail('王五')">查看</a></div>
+                         </div>
+                         <div class="list-item">
+                             <div class="list-item-text">赵六</div>
+                             <div class="list-item-salary">16,500</div>
+                             <div class="list-item-salary">17,160</div>
+                             <div class="list-item-change">+660</div>
+                             <div class="list-item-change">4.0%</div>
+                             <div class="list-item-detail"><a href="#" onclick="viewEmployeeDetail('赵六')">查看</a></div>
+                         </div>
+                         <div class="list-item">
+                             <div class="list-item-text">陈七</div>
+                             <div class="list-item-salary">22,000</div>
+                             <div class="list-item-salary">23,100</div>
+                             <div class="list-item-change">+1,100</div>
+                             <div class="list-item-change">5.0%</div>
+                             <div class="list-item-detail"><a href="#" onclick="viewEmployeeDetail('陈七')">查看</a></div>
+                         </div>
+                         <div class="list-item">
+                             <div class="list-item-text">周八</div>
+                             <div class="list-item-salary">19,000</div>
+                             <div class="list-item-salary">19,380</div>
+                             <div class="list-item-change">+380</div>
+                             <div class="list-item-change">2.0%</div>
+                             <div class="list-item-detail"><a href="#" onclick="viewEmployeeDetail('周八')">查看</a></div>
+                         </div>
+                         <div class="list-item">
+                             <div class="list-item-text">吴九</div>
+                             <div class="list-item-salary">17,500</div>
+                             <div class="list-item-salary">18,375</div>
+                             <div class="list-item-change">+875</div>
+                             <div class="list-item-change">5.0%</div>
+                             <div class="list-item-detail"><a href="#" onclick="viewEmployeeDetail('吴九')">查看</a></div>
+                         </div>
+                         <div class="list-item">
+                             <div class="list-item-text">郑十</div>
+                             <div class="list-item-salary">25,000</div>
+                             <div class="list-item-salary">27,000</div>
+                             <div class="list-item-change">+2,000</div>
+                             <div class="list-item-change">8.0%</div>
+                             <div class="list-item-detail"><a href="#" onclick="viewEmployeeDetail('郑十')">查看</a></div>
+                         </div>
+                         <div class="list-item">
+                             <div class="list-item-text">孙十一</div>
+                             <div class="list-item-salary">21,000</div>
+                             <div class="list-item-salary">23,100</div>
+                             <div class="list-item-change">+2,100</div>
+                             <div class="list-item-change">10.0%</div>
+                             <div class="list-item-detail"><a href="#" onclick="viewEmployeeDetail('孙十一')">查看</a></div>
+                         </div>
+                         <div class="list-item">
+                             <div class="list-item-text">黄十二</div>
+                             <div class="list-item-salary">18,500</div>
+                             <div class="list-item-salary">19,055</div>
+                             <div class="list-item-change">+555</div>
+                             <div class="list-item-change">3.0%</div>
+                             <div class="list-item-detail"><a href="#" onclick="viewEmployeeDetail('黄十二')">查看</a></div>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- 卡片四：调薪说明 -->
+                 <div class="card">
+                     <div class="card-title">调薪说明</div>
+                     <div class="description-text">
+                         本次调薪涉及多个项目组共10名员工，调薪幅度为5%-10%不等。主要基于以下考虑：<br>
+                         1. 员工个人绩效表现优异，在各自岗位上贡献突出<br>
+                         2. 市场薪酬水平调研结果，确保薪酬竞争力<br>
+                         3. 公司业务发展需要，激励核心人才留存<br>
+                         4. 年度预算范围内的合理调整
+                     </div>
+                 </div>
+
+                 <!-- 卡片五：审批记录 -->
+                 <div class="card">
+                     <div class="card-title">审批记录</div>
+                     <div class="approval-timeline">
+                         <div class="timeline-item">
+                             <div class="timeline-icon completed">✓</div>
+                             <div class="timeline-content">
+                                 <div class="timeline-approver">白雪</div>
+                                 <div class="timeline-status">已审批</div>
+                                 <div class="timeline-time">2023-03-03 13:40</div>
+                             </div>
+                         </div>
+                         <div class="timeline-item">
+                             <div class="timeline-icon processing">●</div>
+                             <div class="timeline-content">
+                                 <div class="timeline-approver">曾天</div>
+                                 <div class="timeline-status">审批中</div>
+                             </div>
+                         </div>
+                         <div class="timeline-item">
+                             <div class="timeline-icon pending">●</div>
+                             <div class="timeline-content">
+                                 <div class="timeline-approver">杨晓曦</div>
+                                 <div class="timeline-status">待审批</div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- 卡片六：审批意见及操作 -->
+                 <div class="card">
+                     <div class="card-title">审批意见</div>
+                     <textarea class="approval-input" placeholder="请输入"></textarea>
+                     <div class="button-group">
+                         <button class="btn btn-reject">拒绝</button>
+                         <button class="btn btn-approve">通过</button>
+                     </div>
+                 </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 员工详情弹窗 -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">员工调薪详情</h2>
+                <button class="close" onclick="closeEmployeeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 基本信息区块 -->
+                <div class="info-section">
+                    <div class="section-title">基本信息</div>
+                    <div class="info-item">
+                        <span class="info-item-label">姓名</span>
+                        <span class="info-item-value" id="modal-name">张三</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-item-label">员工ID</span>
+                        <span class="info-item-value" id="modal-id">123456</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-item-label">部门</span>
+                        <span class="info-item-value" id="modal-department">ABC工作室\A项目组\美术部</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-item-label">入职时间</span>
+                        <span class="info-item-value" id="modal-joindate">2021/06/26</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-item-label">职级</span>
+                        <span class="info-item-value" id="modal-level">11</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-item-label">最近3年绩效</span>
+                        <span class="info-item-value" id="modal-performance">B/A/B</span>
+                    </div>
+                </div>
+
+                <!-- 调薪信息区块 -->
+                <div class="info-section">
+                    <div class="section-title">调薪信息</div>
+                    
+                    <!-- 月薪子信息组 -->
+                    <div class="salary-group">
+                        <div class="salary-group-title">月薪</div>
+                        <div class="salary-item">
+                            <span class="salary-label">调整前</span>
+                            <span class="salary-value" id="modal-salary-before">15,000</span>
+                        </div>
+                        <div class="salary-item">
+                            <span class="salary-label">调整后</span>
+                            <span class="salary-value" id="modal-salary-after">16,500</span>
+                        </div>
+                        <div class="salary-item">
+                            <span class="salary-label">变化</span>
+                            <span class="salary-value positive" id="modal-salary-change">+1,500（10.0%）</span>
+                        </div>
+                    </div>
+
+                    <!-- CR子信息组 -->
+                    <div class="salary-group">
+                        <div class="salary-group-title">CR</div>
+                        <div class="salary-item">
+                            <span class="salary-label">调整前</span>
+                            <span class="salary-value" id="modal-cr-before">0.78</span>
+                        </div>
+                        <div class="salary-item">
+                            <span class="salary-label">调整后</span>
+                            <span class="salary-value" id="modal-cr-after">0.86</span>
+                        </div>
+                        <div class="salary-item">
+                            <span class="salary-label">变化</span>
+                            <span class="salary-value positive" id="modal-cr-change">+0.08</span>
+                        </div>
+                    </div>
+
+                    <!-- 调薪说明 -->
+                    <div class="info-item">
+                        <span class="info-item-label">调薪说明</span>
+                        <span class="info-item-value" id="modal-reason">张三因表现优异，申请调薪10%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 按钮点击事件
+        document.querySelector('.btn-reject').addEventListener('click', function() {
+            const opinion = document.querySelector('.approval-input').value.trim();
+            if (!opinion) {
+                alert('请输入审批意见');
+                return;
+            }
+            if (confirm('确认拒绝此申请？')) {
+                alert('已拒绝申请');
+                // 这里可以添加实际的提交逻辑
+            }
+        });
+
+        document.querySelector('.btn-approve').addEventListener('click', function() {
+            const opinion = document.querySelector('.approval-input').value.trim();
+            if (confirm('确认通过此申请？')) {
+                alert('已通过申请');
+                // 这里可以添加实际的提交逻辑
+            }
+        });
+
+        // 查看员工详情函数
+        function viewEmployeeDetail(employeeName) {
+            // 显示员工详情弹窗
+            document.getElementById('employeeModal').style.display = 'block';
+            
+            // 这里可以根据employeeName加载具体的员工数据
+            // 目前使用示例数据
+        }
+        
+        function closeEmployeeModal() {
+            document.getElementById('employeeModal').style.display = 'none';
+        }
+        
+        // 点击弹窗外部关闭弹窗
+        window.onclick = function(event) {
+            const modal = document.getElementById('employeeModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
