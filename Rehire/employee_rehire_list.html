@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重新雇佣员工列表 - HR自助工作台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background-color: #F8F9FA;
+            color: #333333;
+            line-height: 1.6;
+            font-size: 14px;
+            overflow-x: hidden;
+        }
+
+        /* 顶部导航栏 */
+        .top-navbar {
+            background: #FFFFFF;
+            color: #333333;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            border-bottom: 1px solid #D9D9D9;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 16px;
+            font-weight: 600;
+            color: #FF6857;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0;
+        }
+
+        .nav-tab {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666666;
+            transition: all 0.2s;
+        }
+
+        .nav-tab.active {
+            background: #FFFFFF;
+            color: #FF6857;
+            border-bottom: 2px solid #FF6857;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover:not(.active) {
+            color: #FF6857;
+            background: #F8F9FA;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 104, 87, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #FF6857;
+        }
+
+        .switch-btn {
+            padding: 6px 12px;
+            background: #F8F9FA;
+            color: #333333;
+            border: 1px solid #E5E5E5;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .switch-btn:hover {
+            border-color: #FF6857;
+            color: #FF6857;
+        }
+
+        /* 主容器 */
+        .main-container {
+            display: flex;
+            margin-top: 48px;
+            height: calc(100vh - 48px);
+        }
+
+        /* 左侧菜单栏 */
+        .sidebar {
+            width: 240px;
+            background: #2C3E50;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu-header {
+            padding: 12px 16px;
+            background: transparent;
+            border-bottom: none;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #FFFFFF;
+            transition: all 0.2s;
+        }
+
+        .menu-header:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .menu-header.active {
+            background: #FF6857;
+            color: #FFFFFF;
+        }
+
+        .menu-icon {
+            font-size: 16px;
+        }
+
+        .submenu {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .submenu-item {
+            padding: 8px 32px;
+            font-size: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            color: rgba(255,255,255,0.8);
+            transition: all 0.2s;
+        }
+
+        .submenu-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: #FFFFFF;
+        }
+
+        .submenu-item.active {
+            background: #FF6857;
+            color: #FFFFFF;
+            font-weight: 500;
+        }
+
+        /* 主内容区 */
+        .content-area {
+            flex: 1;
+            background: #F0F2F5;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .content-header {
+            background: #FFFFFF;
+            color: #333333;
+            padding: 16px 24px;
+            border: 1px solid #D9D9D9;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-title {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .content-subtitle {
+            font-size: 12px;
+            color: #666666;
+            margin-top: 4px;
+        }
+
+        /* 操作区域 */
+        .action-bar {
+            padding: 16px 24px;
+            background: #FFFFFF;
+            border: 1px solid #D9D9D9;
+            border-radius: 4px 4px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-left {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .action-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-input {
+            padding: 6px 12px;
+            border: 1px solid #D9D9D9;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 200px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #FF6857;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .pagination-select {
+            padding: 4px 8px;
+            border: 1px solid #D9D9D9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .pagination-btn {
+            padding: 4px 8px;
+            border: 1px solid #D9D9D9;
+            background: #FFFFFF;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .pagination-btn:hover {
+            border-color: #FF6857;
+            color: #FF6857;
+        }
+
+        .pagination-btn:disabled {
+            background: #F5F5F5;
+            color: #CCCCCC;
+            cursor: not-allowed;
+        }
+
+        /* 表格样式 */
+        .table-container {
+            background: #FFFFFF;
+            border: 1px solid #D9D9D9;
+            border-radius: 0 0 4px 4px;
+            overflow: hidden;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .table th {
+            background: #F0F2F5;
+            color: #333333;
+            font-weight: 500;
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #D9D9D9;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #F0F2F5;
+            font-size: 12px;
+            color: #333333;
+            white-space: nowrap;
+        }
+
+        .table tr:hover {
+            background: #F0F2F5;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-link {
+            background: transparent;
+            color: #FF6857;
+            border: 1px solid transparent;
+            text-decoration: none;
+        }
+
+        .btn-link:hover {
+            color: #FF8A7A;
+        }
+
+        .btn-action {
+            background: #F0F2F5;
+            color: #333333;
+            border: 1px solid #D9D9D9;
+            margin: 0 2px;
+        }
+
+        .btn-action:hover {
+            border-color: #FF6857;
+            color: #FF6857;
+        }
+
+        /* 状态标签 */
+        .status-badge {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #F6FFED;
+            color: #52C41A;
+            border: 1px solid #B7EB8F;
+        }
+
+        .status-inactive {
+            background: #FFF2F0;
+            color: #FF4D4F;
+            border: 1px solid #FFCCC7;
+        }
+
+        .status-pending {
+            background: #FFF7E6;
+            color: #FA8C16;
+            border: 1px solid #FFD591;
+        }
+
+        .status-rejected {
+            background: #FFF2F0;
+            color: #FF4D4F;
+            border: 1px solid #FFCCC7;
+        }
+
+        .status-link {
+            color: #FF6857;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .status-link:hover {
+            text-decoration: underline;
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .modal-body {
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="logo-section">
+            <div class="logo">完美世界</div>
+            <div class="nav-tabs">
+                <button class="nav-tab">设置</button>
+                <button class="nav-tab">主菜单</button>
+                <button class="nav-tab">关系资产管理</button>
+                <button class="nav-tab">组织人员管理</button>
+                <button class="nav-tab active">今日事务处理人员管理</button>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="user-info">
+                <div class="user-avatar">用</div>
+                <span>登录用户</span>
+            </div>
+            <button class="switch-btn">HR333系统</button>
+            <button class="switch-btn">帮助</button>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 左侧菜单栏 -->
+        <div class="sidebar">
+            <div class="menu-item">
+                <div class="menu-header active">
+                    <span class="menu-icon">📋</span>
+                    <span>重新雇佣管理</span>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item">重新雇佣查询</div>
+                    <div class="submenu-item active">风险雇佣员工管理</div>
+                    <div class="submenu-item">审批流程</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-header">
+                    <span class="menu-icon">👥</span>
+                    <span>员工管理</span>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-header">
+                    <span class="menu-icon">💰</span>
+                    <span>薪酬管理</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="content-area">
+            <div class="content-header">
+                <div class="content-title">风险雇佣员工列表</div>
+                <div class="content-subtitle">管理和查看风险雇佣员工的详细信息</div>
+            </div>
+
+            <!-- 操作栏 -->
+            <div class="action-bar">
+                <div class="action-left">
+                    <div class="search-box">
+                        <span>🔍</span>
+                        <input type="text" class="search-input" placeholder="搜索员工信息...">
+                    </div>
+                </div>
+                <div class="action-right">
+                    <div class="pagination">
+                        <span>1-10/178</span>
+                        <button class="pagination-btn" disabled>‹</button>
+                        <button class="pagination-btn">›</button>
+                        <select class="pagination-select">
+                            <option>跳至第1页</option>
+                            <option>跳至第2页</option>
+                            <option>跳至第3页</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 员工信息表格 -->
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>身份证号</th>
+                            <th>员工ID</th>
+                            <th>姓名</th>
+                            <th>雇佣限制</th>
+                            <th>HR</th>
+                            <th>主管姓名</th>
+                            <th>详细信息</th>
+                            <th>状态</th>
+                            <th>上次更新</th>
+                            <th>上次更新者</th>
+                            <th>重新雇佣审批时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>110101197901022039</td>
+                            <td>108166</td>
+                            <td>田飞</td>
+                            <td><span class="status-badge status-rejected">禁止雇佣</span></td>
+                            <td>104172张</td>
+                            <td>张经理-104172</td>
+                            <td><a href="#" class="btn-link detail-link" data-reason="该员工在职期间存在严重违纪行为，包括泄露公司机密信息，不适合重新雇佣。">详细信息</a></td>
+                            <td><a href="#" class="status-link">状态</a></td>
+                            <td>2024/09/09 19:33</td>
+                            <td>DEFAULT_USER</td>
+                            <td>2024/09/15 14:20</td>
+                            <td>
+                                <button class="btn btn-action">+</button>
+                                <button class="btn btn-action">-</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>110101198709011510</td>
+                            <td>115241</td>
+                            <td>李浩</td>
+                            <td><span class="status-badge status-pending">风险雇佣</span></td>
+                            <td>jiayu115241</td>
+                            <td></td>
+                            <td><a href="#" class="btn-link detail-link" data-reason="该员工离职时存在项目交接不完整的情况，需要额外关注其工作责任心。">详细信息</a></td>
+                            <td><a href="#" class="status-link">状态</a></td>
+                            <td>2025/06/06 11:14</td>
+                            <td>SYSADMIN</td>
+                            <td>2025/06/10 09:30</td>
+                            <td>
+                                <button class="btn btn-action">+</button>
+                                <button class="btn btn-action">-</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>110101199212253551</td>
+                            <td>118553</td>
+                            <td>张强</td>
+                            <td><span class="status-badge status-rejected">禁止雇佣</span></td>
+                            <td></td>
+                            <td></td>
+                            <td><a href="#" class="btn-link detail-link" data-reason="该员工曾因工作态度问题被多次警告，且在离职时未按规定办理交接手续。">详细信息</a></td>
+                            <td><a href="#" class="status-link">状态</a></td>
+                            <td>2024/05/27 11:40</td>
+                            <td>langcong</td>
+                            <td>2024/05/30 16:45</td>
+                            <td>
+                                <button class="btn btn-action">+</button>
+                                <button class="btn btn-action">-</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>110102198403031136</td>
+                            <td>116298</td>
+                            <td>李子涵</td>
+                            <td><span class="status-badge status-pending">风险雇佣</span></td>
+                            <td></td>
+                            <td></td>
+                            <td><a href="#" class="btn-link detail-link" data-reason="该员工技能水平良好，但在团队协作方面需要改进，建议加强沟通培训。">详细信息</a></td>
+                            <td><a href="#" class="status-link">状态</a></td>
+                            <td>2024/05/27 13:35</td>
+                            <td>langcong</td>
+                            <td>2024/06/01 10:15</td>
+                            <td>
+                                <button class="btn btn-action">+</button>
+                                <button class="btn btn-action">-</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>110102198704100414</td>
+                            <td>115203</td>
+                            <td>陈启兴</td>
+                            <td><span class="status-badge status-pending">风险雇佣</span></td>
+                            <td></td>
+                            <td></td>
+                            <td><a href="#" class="btn-link detail-link" data-reason="该员工工作能力较强，但曾有迟到早退记录，需要加强考勤管理。">详细信息</a></td>
+                            <td><a href="#" class="status-link">状态</a></td>
+                            <td>2024/05/27 11:38</td>
+                            <td>langcong</td>
+                            <td>2024/05/28 14:22</td>
+                            <td>
+                                <button class="btn btn-action">+</button>
+                                <button class="btn btn-action">-</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>110102198701151915</td>
+                            <td>HRS14217</td>
+                            <td>许德胜</td>
+                            <td><span class="status-badge status-rejected">禁止雇佣</span></td>
+                            <td>yongyuan</td>
+                            <td>李经理-127764</td>
+                            <td><a href="#" class="btn-link detail-link" data-reason="该员工在法务工作中出现重大失误，导致公司承担法律风险，不建议重新雇佣。">详细信息</a></td>
+                            <td><a href="#" class="status-link">状态</a></td>
+                            <td>2024/05/27 20:26</td>
+                            <td>yongyuan</td>
+                            <td>2024/05/29 11:40</td>
+                            <td>
+                                <button class="btn btn-action">+</button>
+                                <button class="btn btn-action">-</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>110103198306040337</td>
+                            <td>000575</td>
+                            <td>王伟</td>
+                            <td><span class="status-badge status-pending">风险雇佣</span></td>
+                            <td></td>
+                            <td></td>
+                            <td><a href="#" class="btn-link detail-link" data-reason="该员工专业技能优秀，但在项目管理方面经验不足，需要提供相关培训。">详细信息</a></td>
+                            <td><a href="#" class="status-link">状态</a></td>
+                            <td>2024/07/01 20:26</td>
+                            <td>langcong</td>
+                            <td>2024/07/03 09:15</td>
+                            <td>
+                                <button class="btn btn-action">+</button>
+                                <button class="btn btn-action">-</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>110103198506271227</td>
+                            <td>100886</td>
+                            <td>刘明</td>
+                            <td><span class="status-badge status-rejected">禁止雇佣</span></td>
+                            <td>jiayu</td>
+                            <td>嘉鱼-106615</td>
+                            <td><a href="#" class="btn-link detail-link" data-reason="该员工曾因违反公司保密协议被处罚，存在信息安全风险，不适合重新雇佣。">详细信息</a></td>
+                            <td><a href="#" class="status-link">状态</a></td>
+                            <td>2024/04/30 11:34</td>
+                            <td>SYSADMIN</td>
+                            <td>2024/05/02 16:20</td>
+                            <td>
+                                <button class="btn btn-action">+</button>
+                                <button class="btn btn-action">-</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>110103199005201815</td>
+                            <td>118295</td>
+                            <td>李华</td>
+                            <td><span class="status-badge status-pending">风险雇佣</span></td>
+                            <td></td>
+                            <td></td>
+                            <td><a href="#" class="btn-link detail-link" data-reason="该员工工作表现良好，但曾有请假频繁的情况，需要关注其工作稳定性。">详细信息</a></td>
+                            <td><a href="#" class="status-link">状态</a></td>
+                            <td>2025/06/30 19:34</td>
+                            <td>langcong</td>
+                            <td>2025/07/01 08:45</td>
+                            <td>
+                                <button class="btn btn-action">+</button>
+                                <button class="btn btn-action">-</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>110104198112130037</td>
+                            <td>001777</td>
+                            <td>张宇</td>
+                            <td><span class="status-badge status-rejected">禁止雇佣</span></td>
+                            <td>jiayu</td>
+                            <td>嘉鱼-106615</td>
+                            <td><a href="#" class="btn-link detail-link" data-reason="该员工在职期间存在财务违规行为，已被公司列入黑名单，严禁重新雇佣。">详细信息</a></td>
+                            <td><a href="#" class="status-link">状态</a></td>
+                            <td></td>
+                            <td></td>
+                            <td>2025/07/02 10:30</td>
+                            <td>
+                                <button class="btn btn-action">+</button>
+                                <button class="btn btn-action">-</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 详细信息弹窗 -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">员工雇佣限制详情</div>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 详细信息内容将在这里显示 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 获取弹窗元素
+        const modal = document.getElementById('detailModal');
+        const modalBody = document.getElementById('modalBody');
+        const closeBtn = document.querySelector('.close');
+
+        // 简单的交互功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 搜索功能
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('input', function() {
+                // 这里可以添加搜索逻辑
+                console.log('搜索:', this.value);
+            });
+
+            // 分页按钮
+            const paginationBtns = document.querySelectorAll('.pagination-btn');
+            paginationBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (!this.disabled) {
+                        console.log('分页操作');
+                    }
+                });
+            });
+
+            // 操作按钮
+            const actionBtns = document.querySelectorAll('.btn-action');
+            actionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    console.log('操作按钮点击:', this.textContent);
+                });
+            });
+
+            // 详细信息链接 - 显示弹窗
+            const detailLinks = document.querySelectorAll('.detail-link');
+            detailLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const reason = this.getAttribute('data-reason');
+                    modalBody.textContent = reason;
+                    modal.style.display = 'block';
+                });
+            });
+
+            // 状态链接点击
+            const statusLinks = document.querySelectorAll('.status-link');
+            statusLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('状态点击');
+                    // 这里可以添加状态相关的操作
+                });
+            });
+
+            // 关闭弹窗
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            // 点击弹窗外部关闭
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
