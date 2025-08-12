@@ -650,12 +650,11 @@
                     </div>
                 </div>
 
-                <!-- 复职说明 -->
+                <!-- 重新雇佣说明 -->
                 <div class="info-section">
-                    <div class="section-title">复职说明</div>
-                    <div class="info-label">HR填写的原因说明</div>
-                    <div class="description-box">
-                        该候选人虽然离职前绩效表现不佳，但在离职期间通过自我提升和学习，技能水平有了显著提高。考虑到当前项目急需相关技术人员，且该候选人对公司业务熟悉，建议给予特殊录用机会。同时建议设置试用期考核，确保其能够胜任新岗位要求。
+                    <div class="section-title">重新雇佣说明</div>
+                    <div class="approval-comments">
+                        <textarea class="comment-input" placeholder="请填写重新雇佣说明...">该候选人虽然离职前绩效表现不佳，但在离职期间通过自我提升和学习，技能水平有了显著提高。考虑到当前项目急需相关技术人员，且该候选人对公司业务熟悉，建议给予特殊录用机会。同时建议设置试用期考核，确保其能够胜任新岗位要求。</textarea>
                     </div>
                 </div>
 
@@ -665,29 +664,34 @@
                     <div class="approval-process">
                         <div class="process-step completed">
                             <div class="step-icon completed">✓</div>
-                            <div class="step-label">HR发起</div>
+                            <div class="step-label">招聘HR发起</div>
                             <div class="step-user">张HR</div>
                         </div>
                         <div class="process-step current">
                             <div class="step-icon current">2</div>
-                            <div class="step-label">部门审批</div>
+                            <div class="step-label">用人部门直接上级</div>
                             <div class="step-user">李经理</div>
                         </div>
                         <div class="process-step pending">
                             <div class="step-icon pending">3</div>
-                            <div class="step-label">HR审批</div>
+                            <div class="step-label">二级部门负责人</div>
                             <div class="step-user">王总监</div>
                         </div>
                         <div class="process-step pending">
                             <div class="step-icon pending">4</div>
-                            <div class="step-label">最终审批</div>
-                            <div class="step-user">总经理</div>
+                            <div class="step-label">业务线HRD</div>
+                            <div class="step-user">赵总监</div>
+                        </div>
+                        <div class="process-step pending">
+                            <div class="step-icon pending">5</div>
+                            <div class="step-label">业务线HR负责人</div>
+                            <div class="step-user">陈总经理</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 审批意见 -->
-                <div class="info-section">
+                <div class="info-section" style="display: none;">
                     <div class="section-title">审批意见</div>
                     <div class="approval-comments">
                         <textarea class="comment-input" placeholder="请输入您的审批意见..."></textarea>
@@ -706,37 +710,37 @@
 
     <script>
         function approveApplication() {
-            const comment = document.querySelector('.comment-input').value.trim();
-            if (!comment) {
-                alert('请填写审批意见！');
+            const rehireExplanation = document.querySelector('.comment-input').value.trim();
+            if (!rehireExplanation) {
+                alert('请填写重新雇佣说明！');
                 return;
             }
             if (confirm('确认同意该特殊录用申请吗？')) {
-                alert('审批通过！申请已同意。\n审批意见：' + comment);
+                alert('审批通过！申请已同意。\n重新雇佣说明：' + rehireExplanation);
                 // 这里可以调用后端API提交审批结果
             }
         }
 
         function rejectApplication() {
-            const comment = document.querySelector('.comment-input').value.trim();
-            if (!comment) {
-                alert('请填写审批意见！');
+            const rehireExplanation = document.querySelector('.comment-input').value.trim();
+            if (!rehireExplanation) {
+                alert('请填写重新雇佣说明！');
                 return;
             }
             if (confirm('确认拒绝该特殊录用申请吗？')) {
-                alert('审批已拒绝。\n审批意见：' + comment);
+                alert('审批已拒绝。\n重新雇佣说明：' + rehireExplanation);
                 // 这里可以调用后端API提交审批结果
             }
         }
 
         function returnApplication() {
-            const comment = document.querySelector('.comment-input').value.trim();
-            if (!comment) {
-                alert('请填写审批意见！');
+            const rehireExplanation = document.querySelector('.comment-input').value.trim();
+            if (!rehireExplanation) {
+                alert('请填写重新雇佣说明！');
                 return;
             }
             if (confirm('确认退回该特殊录用申请吗？')) {
-                alert('申请已退回。\n审批意见：' + comment);
+                alert('申请已退回。\n重新雇佣说明：' + rehireExplanation);
                 // 这里可以调用后端API提交审批结果
             }
         }
