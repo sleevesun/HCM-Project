@@ -818,8 +818,6 @@
                             <th>候选人姓名</th>
                             <th>拟招聘部门</th>
                             <th>招聘职位</th>
-                            <th>风险雇佣原因</th>
-                            <th>最近离职日期</th>
                             <th>状态</th>
                             <th>详细</th>
                         </tr>
@@ -886,13 +884,7 @@
                         </div>
                     </div>
 
-                    <div class="form-section">
-                        <h4>复职说明</h4>
-                        <div class="form-group">
-                            <label for="description">原因说明 <span class="required">*</span></label>
-                            <textarea id="description" name="description" rows="4" placeholder="请详细说明申请特殊录用的原因..." required></textarea>
-                        </div>
-                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -1008,7 +1000,7 @@
                 // 显示空状态
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="8">
+                        <td colspan="6">
                             <div class="empty-state">
                                 <div class="empty-icon">📋</div>
                                 <div class="empty-text">暂无数据</div>
@@ -1028,8 +1020,6 @@
                     <td>${item.candidateName}</td>
                     <td>${item.department}</td>
                     <td>${item.position}</td>
-                    <td>${item.riskReason}</td>
-                    <td>${item.lastLeaveDate}</td>
                     <td><span class="status-badge status-${item.status}">${item.statusText}</span></td>
                     <td><button class="btn btn-link" onclick="viewDetails('${item.id}')">查看</button></td>
                 `;
