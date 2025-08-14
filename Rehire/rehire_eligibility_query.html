@@ -292,6 +292,26 @@
             flex: 1;
         }
 
+        /* 提示信息样式 */
+        .query-hint {
+            background: #F0F8FF;
+            border: 1px solid #D4E8FC;
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #1890FF;
+        }
+
+        .query-hint .hint-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .query-hint .hint-content {
+            color: #666666;
+        }
+
         /* 按钮样式 */
         .btn {
             padding: 8px 16px;
@@ -572,20 +592,43 @@
                 </div>
                 <div class="card-content">
                     <form id="queryForm">
+                        <!-- 查询提示信息 -->
+                        <div class="query-hint">
+                            <div class="hint-title">查询说明</div>
+                            <div class="hint-content">
+                                • 身份证号：可进行精准查询，获得准确的匹配结果<br>
+                                • 手机号或邮箱：仅支持模糊查询，匹配度可能不完全准确<br>
+                                • 请至少填写身份证号、手机号、邮箱中的一项
+                            </div>
+                        </div>
+
+                        <!-- 姓名字段（必填） -->
+                        <div class="form-group">
+                            <label class="form-label">姓名 <span style="color: #FF4D4F;">*</span></label>
+                            <input type="text" class="form-input" id="candidateName" placeholder="请输入候选人姓名" required>
+                        </div>
+
+                        <!-- 查询字段 -->
+                        <div class="form-group">
+                            <label class="form-label">身份证号</label>
+                            <input type="text" class="form-input" id="candidateIdCard" placeholder="请输入身份证号（精准查询）" maxlength="18">
+                        </div>
+
                         <div class="form-row">
                             <div class="form-col">
                                 <div class="form-group">
-                                    <label class="form-label">姓名 <span style="color: #FF4D4F;">*</span></label>
-                                    <input type="text" class="form-input" id="candidateName" placeholder="请输入候选人姓名" required>
+                                    <label class="form-label">手机号</label>
+                                    <input type="tel" class="form-input" id="candidatePhone" placeholder="请输入手机号（模糊查询）" maxlength="11">
                                 </div>
                             </div>
                             <div class="form-col">
                                 <div class="form-group">
-                                    <label class="form-label">身份证号 <span style="color: #FF4D4F;">*</span></label>
-                                    <input type="text" class="form-input" id="candidateIdCard" placeholder="请输入身份证号" required>
+                                    <label class="form-label">个人邮箱</label>
+                                    <input type="email" class="form-input" id="candidateEmail" placeholder="请输入个人邮箱（模糊查询）">
                                 </div>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">
                                 <span>🔍</span>
@@ -629,29 +672,65 @@
 
     <script>
         // 简化的测试数据逻辑
-        function getTestResult(name) {
-            if (name === '张三') {
-                return {
-                    status: 'eligible',
-                    message: '符合重新雇佣基本条件',
-                    reason: '离职时间超过180天，离职原因为个人发展，无不良记录。'
-                };
-            } else if (name === '李四') {
-                return {
-                    status: 'ineligible',
-                    message: '不符合重新雇佣基本条件',
-                    reason: '离职时间不足180天，需要特殊审批。'
-                };
-            } else if (name === '王五') {
-                return {
-                    status: 'prohibited',
-                    message: '此员工属于禁止雇佣范围，不可录用',
-                    reason: '员工因严重违反公司规章制度被解除劳动合同，列入禁止雇佣名单。'
-                };
+        function getTestResult(name, queryData, queryType) {
+            // 根据查询方式和数据返回不同结果
+            if (queryType === 'exact') {
+                // 精准查询逻辑
+                if (name === '张三' && queryData.idCard) {
+                    return {
+                        status: 'eligible',
+                        message: '符合重新雇佣基本条件',
+                        reason: '离职时间超过180天，离职原因为个人发展，无不良记录。',
+                        queryType: 'exact',
+                        matchInfo: '身份证号精准匹配'
+                    };
+                } else if (name === '李四' && queryData.idCard) {
+                    return {
+                        status: 'ineligible',
+                        message: '不符合重新雇佣基本条件',
+                        reason: '离职时间不足180天，需要特殊审批。',
+                        queryType: 'exact',
+                        matchInfo: '身份证号精准匹配'
+                    };
+                } else if (name === '王五' && queryData.idCard) {
+                    return {
+                        status: 'prohibited',
+                        message: '此员工属于禁止雇佣范围，不可录用',
+                        reason: '员工因严重违反公司规章制度被解除劳动合同，列入禁止雇佣名单。',
+                        queryType: 'exact',
+                        matchInfo: '身份证号精准匹配'
+                    };
+                }
             } else {
-                return null;
+                // 模糊查询逻辑
+                if (name === '张三' && (queryData.phone || queryData.email)) {
+                    return {
+                        status: 'eligible',
+                        message: '找到疑似匹配记录，符合重新雇佣基本条件',
+                        reason: '根据姓名和联系方式匹配到历史记录，离职原因为个人发展。',
+                        queryType: 'fuzzy',
+                        matchInfo: queryData.phone ? '手机号部分匹配' : '邮箱部分匹配',
+                        confidence: '85%'
+                    };
+                } else if (name === '李四' && (queryData.phone || queryData.email)) {
+                    return {
+                        status: 'ineligible',
+                        message: '找到疑似匹配记录，不符合重新雇佣基本条件',
+                        reason: '根据姓名和联系方式匹配到历史记录，离职时间不足180天。',
+                        queryType: 'fuzzy',
+                        matchInfo: queryData.phone ? '手机号部分匹配' : '邮箱部分匹配',
+                        confidence: '78%'
+                    };
+                }
             }
+            return null;
         }
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面加载完成后的初始化逻辑
+            console.log('重新雇佣资格查询页面已加载');
+        });
 
         // 表单提交处理
         document.getElementById('queryForm').addEventListener('submit', function(e) {
@@ -659,37 +738,95 @@
             
             const name = document.getElementById('candidateName').value.trim();
             const idCard = document.getElementById('candidateIdCard').value.trim();
+            const phone = document.getElementById('candidatePhone').value.trim();
+            const email = document.getElementById('candidateEmail').value.trim();
             
-            if (!name || !idCard) {
-                alert('请填写完整的候选人信息');
+            // 验证姓名必填
+            if (!name) {
+                alert('请输入候选人姓名');
                 return;
             }
             
-            queryEligibility(name, idCard);
+            // 验证至少填写一项查询条件
+            if (!idCard && !phone && !email) {
+                alert('请至少填写身份证号、手机号或邮箱中的一项');
+                return;
+            }
+            
+            // 验证身份证号格式
+            if (idCard && !validateIdCard(idCard)) {
+                alert('请输入正确的身份证号格式');
+                return;
+            }
+            
+            // 验证手机号格式
+            if (phone && !validatePhone(phone)) {
+                alert('请输入正确的手机号格式');
+                return;
+            }
+            
+            // 验证邮箱格式
+            if (email && !validateEmail(email)) {
+                alert('请输入正确的邮箱格式');
+                return;
+            }
+            
+            // 根据填写的字段自动判断查询类型
+            let queryType, queryData;
+            if (idCard) {
+                // 有身份证号，进行精准查询
+                queryType = 'exact';
+                queryData = { idCard: idCard };
+            } else {
+                // 没有身份证号，进行模糊查询
+                queryType = 'fuzzy';
+                queryData = { phone: phone, email: email };
+            }
+            
+            queryEligibility(name, queryData, queryType);
         });
 
+        // 表单验证函数
+        function validateIdCard(idCard) {
+            // 身份证号验证：18位数字，最后一位可以是X
+            const idCardRegex = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+            return idCardRegex.test(idCard);
+        }
+        
+        function validatePhone(phone) {
+            // 手机号验证：11位数字，1开头
+            const phoneRegex = /^1[3-9]\d{9}$/;
+            return phoneRegex.test(phone);
+        }
+        
+        function validateEmail(email) {
+            // 邮箱验证
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
         // 查询资格
-        function queryEligibility(name, idCard) {
+        function queryEligibility(name, queryData, queryType) {
             // 显示加载状态
             document.getElementById('loadingState').style.display = 'block';
             document.getElementById('resultContainer').style.display = 'none';
             
             // 模拟API调用延迟
             setTimeout(() => {
-                const result = getTestResult(name);
+                const result = getTestResult(name, queryData, queryType);
                 
                 document.getElementById('loadingState').style.display = 'none';
                 
                 if (result) {
-                    displayResult(result);
+                    displayResult(result, queryType);
                 } else {
-                    displayNoRecord(name, idCard);
+                    displayNoRecord(name, queryData, queryType);
                 }
             }, 1500);
         }
 
         // 显示查询结果
-        function displayResult(result) {
+        function displayResult(result, queryType) {
             const resultContainer = document.getElementById('resultContainer');
             const resultCard = document.getElementById('resultCard');
             const resultHeader = document.getElementById('resultHeader');
@@ -698,7 +835,6 @@
             const resultMessage = document.getElementById('resultMessage');
             const resultReason = document.getElementById('resultReason');
             const resultActions = document.getElementById('resultActions');
-            const employeeInfo = document.getElementById('employeeInfo');
             
             // 清除之前的样式类
             resultCard.className = 'result-card';
@@ -708,13 +844,13 @@
                 case 'eligible':
                     resultCard.classList.add('result-eligible');
                     resultIcon.textContent = '✓';
-                    resultTitle.textContent = '符合重新雇佣条件';
+                    resultTitle.textContent = queryType === 'exact' ? '符合重新雇佣条件' : '疑似符合重新雇佣条件';
                     resultActions.style.display = 'none';
                     break;
                 case 'ineligible':
                     resultCard.classList.add('result-ineligible');
                     resultIcon.textContent = '!';
-                    resultTitle.textContent = '不符合基本条件';
+                    resultTitle.textContent = queryType === 'exact' ? '不符合基本条件' : '疑似不符合基本条件';
                     resultActions.style.display = 'flex';
                     resultActions.innerHTML = '<button class="btn btn-primary" onclick="startSpecialApproval()">发起特殊录用审批</button>';
                     break;
@@ -723,23 +859,33 @@
                     resultIcon.textContent = '✕';
                     resultTitle.textContent = '禁止雇佣';
                     resultActions.style.display = 'none';
-                    resultReason.style.display = 'none';
                     break;
             }
             
-            resultMessage.textContent = result.message;
+            // 构建完整的结果消息
+            let fullMessage = result.message;
+            if (result.matchInfo) {
+                fullMessage += `\n\n匹配信息：${result.matchInfo}`;
+            }
+            if (result.confidence) {
+                fullMessage += `\n匹配度：${result.confidence}`;
+            }
             
-            // 只有不符合条件的情况才显示原因
-            if (result.status === 'ineligible') {
+            resultMessage.innerHTML = fullMessage.replace(/\n/g, '<br>');
+            
+            // 显示原因（除了禁止雇佣的情况）
+            if (result.status !== 'prohibited' && result.reason) {
                 resultReason.textContent = result.reason;
                 resultReason.style.display = 'block';
+            } else {
+                resultReason.style.display = 'none';
             }
             
             resultContainer.style.display = 'block';
         }
 
         // 显示无记录结果
-        function displayNoRecord(name, idCard) {
+        function displayNoRecord(name, queryData, queryType) {
             const resultContainer = document.getElementById('resultContainer');
             const resultCard = document.getElementById('resultCard');
             const resultHeader = document.getElementById('resultHeader');
@@ -748,14 +894,19 @@
             const resultMessage = document.getElementById('resultMessage');
             const resultReason = document.getElementById('resultReason');
             const resultActions = document.getElementById('resultActions');
-            const employeeInfo = document.getElementById('employeeInfo');
             
             // 清除之前的样式类
             resultCard.className = 'result-card result-eligible';
             
             resultIcon.textContent = 'ℹ';
             resultTitle.textContent = '无历史记录';
-            resultMessage.textContent = '该候选人无公司历史雇佣记录，可正常进入招聘流程。';
+            
+            let message = '该候选人无公司历史雇佣记录，可正常进入招聘流程。';
+            if (queryType === 'fuzzy') {
+                message = '根据提供的信息未找到匹配的历史记录，该候选人可正常进入招聘流程。';
+            }
+            
+            resultMessage.textContent = message;
             resultReason.style.display = 'none';
             resultActions.style.display = 'none';
             
@@ -766,6 +917,9 @@
         function clearForm() {
             document.getElementById('candidateName').value = '';
             document.getElementById('candidateIdCard').value = '';
+            document.getElementById('candidatePhone').value = '';
+            document.getElementById('candidateEmail').value = '';
+            
             document.getElementById('resultContainer').style.display = 'none';
             document.getElementById('loadingState').style.display = 'none';
         }
