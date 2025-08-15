@@ -294,6 +294,27 @@
             box-shadow: 0 1px 2px rgba(22, 93, 255, 0.4);
         }
 
+        .action-btn.btn-secondary {
+            background: #f2f3f5;
+            color: #1d2129;
+            border: 1px solid #c9cdd4;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-btn.btn-secondary:hover {
+            background: #e5e6eb;
+            border-color: #165dff;
+            color: #165dff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-btn.btn-secondary:active {
+            background: #d9dadd;
+            border-color: #0e42d2;
+            color: #0e42d2;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
         /* 表格样式 */
         .table-container {
             background: white;
@@ -1072,7 +1093,7 @@
                                 <th>所属部门</th>
                                 <th>调薪人数</th>
                                 <th>月薪变化</th>
-                                <th>本年工资成本变化</th>
+                                <th>全年工资变化</th>
                                 <th>生效时间</th>
                                 <th>操作</th>
                                 <th>详情</th>
@@ -1197,7 +1218,7 @@
                                             <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+15.2%</span></td>
                                         </tr>
                                         <tr>
-                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">本年工资成本预计（万）</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">全年工资（万）</td>
                                             <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1446.0</td>
                                             <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1523.2</td>
                                             <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+77.2</span></td>
@@ -1211,9 +1232,12 @@
 
                     <div class="content-card">
                         <div class="section-header">调薪明细信息</div>
-                        <div style="padding: 8px 12px; display: flex; gap: 8px; border-bottom: 1px solid #c0c0c0; background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);">
-                            <button class="btn btn-primary" id="modalAddEmployeeBtn">添加员工</button>
-                            <button class="btn btn-secondary" id="modalDeleteSelectedBtn">删除选择</button>
+                        <div style="padding: 8px 12px; display: flex; gap: 8px; justify-content: space-between; align-items: center; border-bottom: 1px solid #c0c0c0; background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);">
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-primary" id="modalAddEmployeeBtn">添加员工</button>
+                                <button class="btn btn-secondary" id="modalDeleteSelectedBtn">删除选择</button>
+                            </div>
+                            <button class="btn btn-secondary" onclick="openBatchImportModal()">批量导入</button>
                         </div>
                         <div class="table-container">
                             <table id="modalPayrollTable">
@@ -1325,7 +1349,7 @@
                                             <td style="padding: 8px; border: 1px solid #ddd; text-align: center;" id="newModalMonthlyPercent">0%</td>
                                         </tr>
                                         <tr>
-                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">本年工资成本预计（万）</td>
+                                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">全年工资（万）</td>
                                             <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1446.0</td>
                                             <td style="padding: 8px; border: 1px solid #ddd; text-align: center;" id="newModalYearlyAfter">1446.0</td>
                                             <td style="padding: 8px; border: 1px solid #ddd; text-align: center;" id="newModalYearlyCostChange">0</td>
@@ -1339,9 +1363,12 @@
 
                     <div class="content-card">
                         <div class="section-header">调薪明细信息</div>
-                        <div style="padding: 8px 12px; display: flex; gap: 8px; border-bottom: 1px solid #c0c0c0; background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);">
-                            <button class="btn btn-primary" id="newModalAddEmployeeBtn">添加员工</button>
-                            <button class="btn btn-secondary" id="newModalDeleteSelectedBtn">删除选择</button>
+                        <div style="padding: 8px 12px; display: flex; gap: 8px; justify-content: space-between; align-items: center; border-bottom: 1px solid #c0c0c0; background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);">
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-primary" id="newModalAddEmployeeBtn">添加员工</button>
+                                <button class="btn btn-secondary" id="newModalDeleteSelectedBtn">删除选择</button>
+                            </div>
+                            <button class="btn btn-secondary" onclick="openBatchImportModal()">批量导入</button>
                         </div>
                         <div class="table-container">
                             <table id="newModalPayrollTable">
@@ -1417,19 +1444,19 @@
         const tableHeaders = {
             '待发起': [
                 '流程编号', '所属部门', '调薪人数', '月薪变化', 
-                '本年工资成本变化', '生效时间', '操作', '详情'
+                '全年工资变化', '生效时间', '操作', '详情'
             ],
             '进行中': [
                 '流程编号', '所属部门', '调薪人数', '月薪变化', 
-                '本年工资成本变化', '生效时间', '提交时间', '当前审批人', '详情'
+                '全年工资变化', '生效时间', '提交时间', '当前审批人', '详情'
             ],
             '已完成': [
                 '流程编号', '所属部门', '调薪人数', '月薪变化', 
-                '本年工资成本变化', '生效时间', '提交时间', '详情'
+                '全年工资变化', '生效时间', '提交时间', '详情'
             ],
             '全部': [
                 '流程编号', '所属部门', '调薪人数', '月薪变化', 
-                '本年工资成本变化', '生效时间', '提交时间', '审批单状态', '详情'
+                '全年工资变化', '生效时间', '提交时间', '审批单状态', '详情'
             ]
         };
 
@@ -2069,7 +2096,183 @@
             updateNewModalStatistics();
         }
         
+        // 批量导入功能
+        function openBatchImportModal() {
+            document.getElementById('batchImportModal').style.display = 'flex';
+        }
+        
+        function closeBatchImportModal() {
+            document.getElementById('batchImportModal').style.display = 'none';
+        }
+        
+        function downloadTemplate() {
+            // 创建模板数据
+            const templateData = [
+                ['员工ID', '姓名', '部门', '调薪前月薪', '调薪后月薪', '调薪前CR', '入职时间', '职级', '最近3年绩效', '调薪说明'],
+                ['1001', '张三', 'A项目部\\研发部', '12000', '13200', '0.75', '2020-03-15', '12', 'A/B/A', '绩效优秀，晋升调薪'],
+                ['1002', '李四', 'A项目部\\策划部', '10000', '11000', '0.68', '2021-06-20', '11', 'B/B/A', '年度调薪']
+            ];
+            
+            // 创建CSV内容
+            const csvContent = templateData.map(row => row.join(',')).join('\n');
+            
+            // 创建下载链接
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', '批量调薪模板.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert('模板下载成功！请按照模板格式填写数据后上传。');
+        }
+        
+        function uploadTemplate() {
+            // 创建文件输入元素
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.xlsx,.xls,.csv';
+            fileInput.style.display = 'none';
+            
+            // 添加文件选择事件监听
+            fileInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    closeBatchImportModal();
+                    handleBatchImport(file);
+                }
+            });
+            
+            // 触发文件选择对话框
+            document.body.appendChild(fileInput);
+            fileInput.click();
+            document.body.removeChild(fileInput);
+        }
+        
+        // 处理批量导入文件
+        function handleBatchImport(file) {
+            // 显示处理中的提示
+            alert('正在处理批量导入文件，请稍候...');
+            
+            // 模拟文件处理过程
+            setTimeout(() => {
+                // 这里应该是实际的文件解析逻辑
+                // 目前使用模拟数据演示功能
+                const importedData = [
+                    {
+                        employeeId: '1001',
+                        name: '张三',
+                        dept: 'A项目部\\研发部',
+                        currentSalary: 12000,
+                        newSalary: 13200,
+                        currentCR: 0.75,
+                        joinDate: '2020-03-15',
+                        level: '12',
+                        performance: 'A/B/A'
+                    },
+                    {
+                        employeeId: '1002',
+                        name: '李四',
+                        dept: 'A项目部\\策划部',
+                        currentSalary: 10000,
+                        newSalary: 11000,
+                        currentCR: 0.68,
+                        joinDate: '2021-06-20',
+                        level: '11',
+                        performance: 'B/B/A'
+                    }
+                ];
+                
+                // 打开新建调薪流程弹窗
+                openNewPayrollModal();
+                
+                // 等待弹窗完全加载后添加导入的数据
+                setTimeout(() => {
+                    addImportedEmployees(importedData);
+                    alert(`成功导入 ${importedData.length} 名员工的调薪数据！`);
+                }, 500);
+                
+            }, 1000);
+        }
+        
+        // 添加导入的员工数据
+        function addImportedEmployees(employeeData) {
+            const tbody = document.getElementById('newModalPayrollTableBody');
+            
+            employeeData.forEach(employee => {
+                const newRow = document.createElement('tr');
+                
+                // 计算薪资变化
+                const salaryChange = employee.newSalary - employee.currentSalary;
+                const changePercent = ((salaryChange / employee.currentSalary) * 100).toFixed(1);
+                const color = salaryChange > 0 ? 'red' : (salaryChange < 0 ? 'green' : 'black');
+                
+                // 计算新CR
+                const newCR = (employee.newSalary * 0.65 / 8000).toFixed(2);
+                const crChange = (newCR - employee.currentCR).toFixed(2);
+                const crColor = crChange > 0 ? 'red' : (crChange < 0 ? 'green' : 'black');
+                
+                newRow.innerHTML = `
+                    <td><input type="checkbox" class="modal-row-checkbox" style="cursor: pointer;"></td>
+                    <td>${employee.employeeId}</td>
+                    <td>${employee.name}</td>
+                    <td>${employee.dept}</td>
+                    <td>${employee.currentSalary}</td>
+                    <td><input type="number" class="salary-input" value="${employee.newSalary}" onchange="calculateSalaryChange(this)" style="width: 80px; border: 1px solid #d9d9d9; padding: 2px 4px;"></td>
+                    <td><span style="color: ${color}">${salaryChange >= 0 ? '+' : ''}${salaryChange} (${salaryChange >= 0 ? '+' : ''}${changePercent}%)</span></td>
+                    <td>${employee.currentCR}</td>
+                    <td><span class="auto-calculated-cr">${newCR}</span></td>
+                    <td><span style="color: ${crColor}">${crChange >= 0 ? '+' : ''}${crChange}</span></td>
+                    <td>${employee.joinDate}</td>
+                    <td>${employee.level}</td>
+                    <td>${employee.performance}</td>
+                    <td><button class="part-time-rule" onclick="openSalaryReasonModal(this)">调薪说明</button></td>
+                    <td><a href="#" class="link">查看员工档案</a></td>
+                `;
+                
+                tbody.appendChild(newRow);
+                
+                // 为新添加的复选框添加事件监听
+                const newCheckbox = newRow.querySelector('.modal-row-checkbox');
+                newCheckbox.addEventListener('change', updateNewModalSelectAllStatus);
+            });
+            
+            // 更新统计数据
+            updateNewModalStatistics();
+        }
 
     </script>
+
+    <!-- 批量导入弹窗 -->
+    <div id="batchImportModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container" style="width: 400px; max-width: 90vw;">
+            <div class="modal-header">
+                <div class="modal-title">批量导入</div>
+                <button class="modal-close" onclick="closeBatchImportModal()">&times;</button>
+            </div>
+            <div class="modal-content" style="padding: 24px;">
+                <div style="text-align: center;">
+                    <div style="margin-bottom: 24px; color: #666; font-size: 14px;">
+                        请先下载模板，按照模板格式填写数据后上传
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <button class="btn btn-primary" onclick="downloadTemplate()" style="width: 100%; padding: 12px; font-size: 14px;">
+                            📥 下载模板
+                        </button>
+                        <button class="btn btn-secondary" onclick="uploadTemplate()" style="width: 100%; padding: 12px; font-size: 14px;">
+                            📤 上传模板
+                        </button>
+                    </div>
+                    <div style="margin-top: 16px; font-size: 12px; color: #999;">
+                        支持格式：.xlsx, .xls, .csv
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
