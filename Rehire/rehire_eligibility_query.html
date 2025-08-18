@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>重新雇佣资格查询 - HR自助工作台</title>
+    <title>重新雇佣资格查询 - HCM系统</title>
     <style>
         * {
             margin: 0;
@@ -12,275 +12,113 @@
         }
 
         body {
-            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-            background-color: #F8F9FA;
-            color: #333333;
-            line-height: 1.6;
-            font-size: 14px;
-            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        /* 顶部导航栏 */
-        .top-navbar {
-            background: #FFFFFF;
-            color: #333333;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
-            border-bottom: 1px solid #E5E5E5;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 16px;
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        .logo {
-            font-size: 16px;
+        .header h1 {
+            color: white;
+            font-size: 28px;
             font-weight: 600;
-            color: #FF6857;
+            margin-bottom: 8px;
         }
 
-        .nav-tabs {
-            display: flex;
-            gap: 0;
-        }
-
-        .nav-tab {
-            padding: 8px 16px;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid transparent;
-            cursor: pointer;
-            font-size: 14px;
-            color: #666666;
-            transition: all 0.2s;
-        }
-
-        .nav-tab.active {
-            background: #FFFFFF;
-            color: #FF6857;
-            border-bottom: 2px solid #FF6857;
-            font-weight: 500;
-        }
-
-        .nav-tab:hover:not(.active) {
-            color: #FF6857;
-            background: #F8F9FA;
-        }
-
-        .user-section {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .user-avatar {
-            width: 24px;
-            height: 24px;
-            background: rgba(255, 104, 87, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: #FF6857;
-        }
-
-        .switch-btn {
-            padding: 6px 12px;
-            background: #F8F9FA;
-            color: #333333;
-            border: 1px solid #E5E5E5;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .switch-btn:hover {
-            border-color: #FF6857;
-            color: #FF6857;
-        }
-
-        /* 主容器 */
-        .main-container {
-            display: flex;
-            margin-top: 48px;
-            height: calc(100vh - 48px);
-        }
-
-        /* 左侧菜单栏 */
-        .sidebar {
-            width: 240px;
-            background: #2C3E50;
-            overflow-y: auto;
-            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .menu-item {
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .menu-header {
-            padding: 12px 16px;
-            background: transparent;
-            border-bottom: none;
-            font-weight: 500;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #FFFFFF;
-            transition: all 0.2s;
-        }
-
-        .menu-header:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .menu-header.active {
-            background: #FF6857;
-            color: #FFFFFF;
-        }
-
-        .menu-icon {
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
             font-size: 16px;
         }
 
-        .submenu {
-            background: rgba(0,0,0,0.1);
-        }
-
-        .submenu-item {
-            padding: 8px 32px;
-            font-size: 12px;
-            cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            color: rgba(255,255,255,0.8);
-            transition: all 0.2s;
-        }
-
-        .submenu-item:hover {
-            background: rgba(255,255,255,0.1);
-            color: #FFFFFF;
-        }
-
-        .submenu-item.active {
-            background: #FF6857;
-            color: #FFFFFF;
-            font-weight: 500;
-        }
-
-        /* 主内容区 */
-        .content-area {
-            flex: 1;
-            background: #F8F9FA;
-            overflow-y: auto;
-            padding: 24px;
-        }
-
-        .content-header {
-            background: #FFFFFF;
-            color: #333333;
-            padding: 16px 24px;
-            border: 1px solid #E5E5E5;
-            border-radius: 4px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-
-        .content-title {
-            font-size: 20px;
-            font-weight: bold;
-            line-height: 1.5;
-        }
-
-        .content-subtitle {
-            font-size: 12px;
-            color: #666666;
-            margin-top: 4px;
-        }
-
-        .content-card {
-            background: #FFFFFF;
-            border: 1px solid #E5E5E5;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            margin-bottom: 16px;
+        .main-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
 
         .card-header {
-            padding: 16px 24px;
-            background: #F8F9FA;
-            border-bottom: 1px solid #E5E5E5;
-            border-radius: 4px 4px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #333333;
-            line-height: 1.5;
-        }
-
-        .card-content {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             padding: 24px;
+            color: white;
         }
 
-        /* 表单样式 */
+        .card-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .card-body {
+            padding: 32px;
+        }
+
+        .query-hint {
+            background: #f8f9ff;
+            border: 1px solid #e6f0ff;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .hint-title {
+            font-weight: 600;
+            color: #1890ff;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .hint-content {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .form-label {
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #333333;
+            color: #333;
+            font-size: 14px;
         }
 
         .form-input {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #E5E5E5;
-            border-radius: 4px;
+            padding: 12px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
             font-size: 14px;
-            color: #333333;
-            background: #FFFFFF;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
+            background: #fff;
         }
 
         .form-input:focus {
-            border-color: #FF6857;
             outline: none;
-            box-shadow: 0 0 0 2px rgba(255, 104, 87, 0.2);
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
         }
 
         .form-input::placeholder {
-            color: #999999;
+            color: #bfbfbf;
         }
 
         .form-row {
@@ -292,379 +130,266 @@
             flex: 1;
         }
 
-        /* 提示信息样式 */
-        .query-hint {
-            background: #F0F8FF;
-            border: 1px solid #D4E8FC;
-            border-radius: 4px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            font-size: 13px;
-            color: #1890FF;
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
         }
 
-        .query-hint .hint-title {
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        .query-hint .hint-content {
-            color: #666666;
-        }
-
-        /* 按钮样式 */
         .btn {
-            padding: 8px 16px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
-            cursor: pointer;
             font-weight: 500;
-            transition: all 0.2s;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
         }
 
         .btn-primary {
-            background: #FF6857;
-            color: #FFFFFF;
-            border: 1px solid #FF6857;
-            box-shadow: none;
+            background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+            color: white;
         }
 
         .btn-primary:hover {
-            background: #FF8A7A;
-            border: 1px solid #FF8A7A;
-            box-shadow: 0 2px 4px rgba(255,104,87,0.3);
-        }
-
-        .btn-primary:active {
-            background: #E55A4A;
+            background: linear-gradient(135deg, #096dd9 0%, #0050b3 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
         }
 
         .btn-secondary {
-            background: #FFFFFF;
-            color: #333333;
-            border: 1px solid #E5E5E5;
+            background: #f5f5f5;
+            color: #666;
+            border: 1px solid #d9d9d9;
         }
 
         .btn-secondary:hover {
-            border-color: #FF6857;
-            color: #FF6857;
+            background: #e6f7ff;
+            border-color: #1890ff;
+            color: #1890ff;
         }
 
-        .btn-secondary:active {
-            border-color: #E55A4A;
-            color: #E55A4A;
-        }
-
-        .btn-link {
-            background: transparent;
-            color: #FF6857;
-            border: 1px solid transparent;
-            padding: 4px 8px;
-        }
-
-        .btn-link:hover {
-            color: #FF8A7A;
-        }
-
-        .btn-link:active {
-            color: #E55A4A;
-        }
-
-        /* 查询结果样式 */
-        .result-container {
-            display: none;
-            margin-top: 24px;
-        }
-
-        .result-card {
-            background: #FFFFFF;
-            border: 1px solid #D9D9D9;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-        }
-
-        .result-header {
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .result-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .result-eligible .result-header {
-            background: #F6FFED;
-            border-bottom: 1px solid #B7EB8F;
-        }
-
-        .result-eligible .result-icon {
-            background: #52C41A;
-            color: #FFFFFF;
-        }
-
-        .result-ineligible .result-header {
-            background: #FFF7E6;
-            border-bottom: 1px solid #FFD591;
-        }
-
-        .result-ineligible .result-icon {
-            background: #FA8C16;
-            color: #FFFFFF;
-        }
-
-        .result-prohibited .result-header {
-            background: #FFF2F0;
-            border-bottom: 1px solid #FFCCC7;
-        }
-
-        .result-prohibited .result-icon {
-            background: #FF4D4F;
-            color: #FFFFFF;
-        }
-
-        .result-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #333333;
-        }
-
-        .result-content {
-            padding: 24px;
-        }
-
-        .result-message {
-            font-size: 14px;
-            color: #333333;
-            margin-bottom: 16px;
-        }
-
-        .result-reason {
-            font-size: 12px;
-            color: #666666;
-            background: #F0F2F5;
-            padding: 12px;
-            border-radius: 4px;
-            margin-bottom: 16px;
-        }
-
-        .result-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        /* 员工信息展示 */
-        .employee-info {
-            background: #F0F2F5;
-            padding: 16px;
-            border-radius: 4px;
-            margin-bottom: 16px;
-        }
-
-        .employee-info-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #333333;
-            margin-bottom: 12px;
-        }
-
-        .employee-info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-        }
-
-        .employee-info-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-        }
-
-        .employee-info-label {
-            color: #666666;
-        }
-
-        .employee-info-value {
-            color: #333333;
-            font-weight: 500;
-        }
-
-        /* 加载状态 */
-        .loading {
+        .loading-state {
             display: none;
             text-align: center;
-            padding: 24px;
-            color: #666666;
+            padding: 40px;
+            color: #666;
         }
 
         .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #F0F2F5;
-            border-top: 2px solid #3370FF;
+            width: 32px;
+            height: 32px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1890ff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 12px;
+            margin: 0 auto 16px;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .result-container {
+            display: none;
+            margin-top: 24px;
+        }
+
+        .result-card {
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .result-eligible {
+            background: #f6ffed;
+            border: 1px solid #b7eb8f;
+        }
+
+        .result-ineligible {
+            background: #fff2e8;
+            border: 1px solid #ffbb96;
+        }
+
+        .result-prohibited {
+            background: #fff1f0;
+            border: 1px solid #ffa39e;
+        }
+
+        .result-not-found {
+            background: #fafafa;
+            border: 1px solid #d9d9d9;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .result-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .result-eligible .result-icon {
+            background: #52c41a;
+            color: white;
+        }
+
+        .result-ineligible .result-icon {
+            background: #fa8c16;
+            color: white;
+        }
+
+        .result-prohibited .result-icon {
+            background: #f5222d;
+            color: white;
+        }
+
+        .result-not-found .result-icon {
+            background: #8c8c8c;
+            color: white;
+        }
+
+        .result-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .result-eligible .result-title {
+            color: #389e0d;
+        }
+
+        .result-ineligible .result-title {
+            color: #d46b08;
+        }
+
+        .result-prohibited .result-title {
+            color: #cf1322;
+        }
+
+        .result-not-found .result-title {
+            color: #595959;
+        }
+
+        .result-content {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .result-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+            padding-top: 12px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .confidence-badge {
+            background: #e6f7ff;
+            color: #1890ff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .card-body {
+                padding: 24px 20px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- 顶部导航栏 -->
-    <div class="top-navbar">
-        <div class="logo-section">
-            <div class="logo">HR自助工作台</div>
-            <div class="nav-tabs">
-                <button class="nav-tab">薪酬管理</button>
-                <button class="nav-tab active">招聘管理</button>
-                <button class="nav-tab">员工管理</button>
-            </div>
-        </div>
-        <div class="user-section">
-            <div class="user-info">
-                <div class="user-avatar">HR</div>
-                <span>张小明</span>
-            </div>
-            <button class="switch-btn">切换角色</button>
-        </div>
-    </div>
-
-    <!-- 主容器 -->
-    <div class="main-container">
-        <!-- 左侧菜单栏 -->
-        <div class="sidebar">
-            <div class="menu-item">
-                <div class="menu-header">
-                    <span class="menu-icon">📋</span>
-                    <span>招聘管理</span>
-                </div>
-                <div class="submenu">
-                    <div class="submenu-item">职位发布</div>
-                    <div class="submenu-item">简历筛选</div>
-                    <div class="submenu-item active">重新雇佣查询</div>
-                    <div class="submenu-item" onclick="window.location.href='special_hire_approval.html'">特殊录用审批</div>
-                    <div class="submenu-item">面试安排</div>
-                    <div class="submenu-item">录用审批</div>
-                </div>
-            </div>
-            <div class="menu-item">
-                <div class="menu-header">
-                    <span class="menu-icon">👥</span>
-                    <span>员工管理</span>
-                </div>
-            </div>
-            <div class="menu-item">
-                <div class="menu-header">
-                    <span class="menu-icon">💰</span>
-                    <span>薪酬管理</span>
-                </div>
-            </div>
+    <div class="container">
+        <div class="header">
+            <h1>重新雇佣资格查询</h1>
+            <p>快速查询候选人的重新雇佣资格状态</p>
         </div>
 
-        <!-- 主内容区 -->
-        <div class="content-area">
-            <div class="content-header">
-                <div class="content-title">重新雇佣资格查询</div>
-                <div class="content-subtitle">在招聘流程早期查询候选人的重新雇佣资格，确保合规招聘</div>
+        <div class="main-card">
+            <div class="card-header">
+                <h2>候选人信息查询</h2>
+                <p>请输入候选人的基本信息进行查询</p>
             </div>
 
-            <!-- 查询表单 -->
-            <div class="content-card">
-                <div class="card-header">
-                    <div class="card-title">候选人信息查询</div>
-                </div>
-                <div class="card-content">
-                    <form id="queryForm">
-                        <!-- 查询提示信息 -->
-                        <div class="query-hint">
-                            <div class="hint-title">查询说明</div>
-                            <div class="hint-content">
-                                • 身份证号：可进行精准查询，获得准确的匹配结果<br>
-                                • 手机号或邮箱：仅支持模糊查询，匹配度可能不完全准确<br>
-                                • 请至少填写身份证号、手机号、邮箱中的一项
-                            </div>
-                        </div>
-
-                        <!-- 姓名字段（必填） -->
-                        <div class="form-group">
-                            <label class="form-label">姓名 <span style="color: #FF4D4F;">*</span></label>
-                            <input type="text" class="form-input" id="candidateName" placeholder="请输入候选人姓名" required>
-                        </div>
-
-                        <!-- 查询字段 -->
-                        <div class="form-group">
-                            <label class="form-label">身份证号</label>
-                            <input type="text" class="form-input" id="candidateIdCard" placeholder="请输入身份证号（精准查询）" maxlength="18">
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-col">
-                                <div class="form-group">
-                                    <label class="form-label">手机号</label>
-                                    <input type="tel" class="form-input" id="candidatePhone" placeholder="请输入手机号（模糊查询）" maxlength="11">
-                                </div>
-                            </div>
-                            <div class="form-col">
-                                <div class="form-group">
-                                    <label class="form-label">个人邮箱</label>
-                                    <input type="email" class="form-input" id="candidateEmail" placeholder="请输入个人邮箱（模糊查询）">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">
-                                <span>🔍</span>
-                                查询资格
-                            </button>
-                            <button type="button" class="btn btn-secondary" onclick="clearForm()">
-                                重置
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- 加载状态 -->
-            <div class="loading" id="loadingState">
-                <div class="loading-spinner"></div>
-                <div>正在查询候选人资格...</div>
-            </div>
-
-            <!-- 查询结果 -->
-            <div class="result-container" id="resultContainer">
-                <div class="result-card" id="resultCard">
-                    <div class="result-header" id="resultHeader">
-                        <div class="result-icon" id="resultIcon">✓</div>
-                        <div class="result-title" id="resultTitle">查询结果</div>
-                    </div>
-                    <div class="result-content">
-
-
-                        <div class="result-message" id="resultMessage">查询结果将在此显示</div>
-                        <div class="result-reason" id="resultReason" style="display: none;">原因说明</div>
-                        <div class="result-actions" id="resultActions" style="display: none;">
-                            <button class="btn btn-primary" onclick="startSpecialApproval()">发起特殊录用审批</button>
-                            <button class="btn btn-secondary" onclick="continueRecruitment()">继续招聘流程</button>
+            <div class="card-body">
+                <form id="queryForm">
+                    <div class="query-hint">
+                        <div class="hint-title">查询说明</div>
+                        <div class="hint-content">
+                            • 身份证号为必填项，用于精准查询候选人信息<br>
+                            • 姓名为选填项，可辅助验证查询结果的准确性<br>
+                            • 系统将基于身份证号进行精准匹配
                         </div>
                     </div>
+
+                    <!-- 身份证号字段（必填） -->
+                    <div class="form-group">
+                        <label class="form-label">身份证号 <span style="color: #FF4D4F;">*</span></label>
+                        <input type="text" class="form-input" id="candidateIdCard" placeholder="请输入18位身份证号" maxlength="18" required>
+                    </div>
+
+                    <!-- 姓名字段（选填） -->
+                    <div class="form-group">
+                        <label class="form-label">姓名</label>
+                        <input type="text" class="form-input" id="candidateName" placeholder="请输入候选人姓名（选填）">
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">
+                            <span>🔍</span>
+                            查询资格
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                            <span>🔄</span>
+                            重置
+                        </button>
+                    </div>
+                </form>
+
+                <!-- 加载状态 -->
+                <div id="loadingState" class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>正在查询候选人信息，请稍候...</p>
+                </div>
+
+                <!-- 查询结果 -->
+                <div id="resultContainer" class="result-container">
+                    <!-- 结果将通过JavaScript动态插入 -->
                 </div>
             </div>
         </div>
@@ -673,64 +398,65 @@
     <script>
         // 简化的测试数据逻辑
         function getTestResult(name, queryData, queryType) {
-            // 根据查询方式和数据返回不同结果
-            if (queryType === 'exact') {
-                // 精准查询逻辑
-                if (name === '张三' && queryData.idCard) {
-                    return {
-                        status: 'eligible',
-                        message: '符合重新雇佣基本条件',
-                        reason: '离职时间超过180天，离职原因为个人发展，无不良记录。',
-                        queryType: 'exact',
-                        matchInfo: '身份证号精准匹配'
-                    };
-                } else if (name === '李四' && queryData.idCard) {
-                    return {
-                        status: 'ineligible',
-                        message: '不符合重新雇佣基本条件',
-                        reason: '离职时间不足180天，需要特殊审批。',
-                        queryType: 'exact',
-                        matchInfo: '身份证号精准匹配'
-                    };
-                } else if (name === '王五' && queryData.idCard) {
-                    return {
-                        status: 'prohibited',
-                        message: '此员工属于禁止雇佣范围，不可录用',
-                        reason: '员工因严重违反公司规章制度被解除劳动合同，列入禁止雇佣名单。',
-                        queryType: 'exact',
-                        matchInfo: '身份证号精准匹配'
-                    };
-                }
-            } else {
-                // 模糊查询逻辑
-                if (name === '张三' && (queryData.phone || queryData.email)) {
-                    return {
-                        status: 'eligible',
-                        message: '找到疑似匹配记录，符合重新雇佣基本条件',
-                        reason: '根据姓名和联系方式匹配到历史记录，离职原因为个人发展。',
-                        queryType: 'fuzzy',
-                        matchInfo: queryData.phone ? '手机号部分匹配' : '邮箱部分匹配',
-                        confidence: '85%'
-                    };
-                } else if (name === '李四' && (queryData.phone || queryData.email)) {
-                    return {
-                        status: 'ineligible',
-                        message: '找到疑似匹配记录，不符合重新雇佣基本条件',
-                        reason: '根据姓名和联系方式匹配到历史记录，离职时间不足180天。',
-                        queryType: 'fuzzy',
-                        matchInfo: queryData.phone ? '手机号部分匹配' : '邮箱部分匹配',
-                        confidence: '78%'
-                    };
-                }
+            // 基于身份证号的精准查询逻辑
+            if (queryData.idCard === '110101199001011234') {
+                return {
+                    status: 'eligible',
+                    message: '符合重新雇佣基本条件',
+                    reason: '离职时间超过180天，离职原因为个人发展，无不良记录。',
+                    queryType: 'exact',
+                    matchInfo: '身份证号精准匹配',
+                    employeeInfo: {
+                        name: '张三',
+                        idCard: '110101199001011234',
+                        lastDepartment: '技术部',
+                        lastPosition: '高级工程师',
+                        resignationDate: '2023-06-15',
+                        resignationReason: '个人发展'
+                    }
+                };
+            } else if (queryData.idCard === '110101199002022345') {
+                return {
+                    status: 'ineligible',
+                    message: '不符合重新雇佣基本条件',
+                    reason: '离职时间不足180天，需要特殊审批。',
+                    queryType: 'exact',
+                    matchInfo: '身份证号精准匹配',
+                    employeeInfo: {
+                        name: '李四',
+                        idCard: '110101199002022345',
+                        lastDepartment: '市场部',
+                        lastPosition: '市场专员',
+                        resignationDate: '2024-08-15',
+                        resignationReason: '个人原因'
+                    }
+                };
+            } else if (queryData.idCard === '110101199003033456') {
+                return {
+                    status: 'prohibited',
+                    message: '此员工属于禁止雇佣范围，不可录用',
+                    reason: '员工因严重违反公司规章制度被解除劳动合同，列入禁止雇佣名单。',
+                    queryType: 'exact',
+                    matchInfo: '身份证号精准匹配',
+                    employeeInfo: {
+                        name: '王五',
+                        idCard: '110101199003033456',
+                        lastDepartment: '财务部',
+                        lastPosition: '会计',
+                        resignationDate: '2024-01-20',
+                        resignationReason: '违纪解除'
+                    }
+                };
             }
-            return null;
+            
+            return {
+                status: 'not_found',
+                message: '未找到匹配的员工记录',
+                reason: '系统中未找到与该身份证号匹配的员工记录，可能是新员工或身份证号有误。',
+                queryType: 'exact',
+                matchInfo: '无匹配记录'
+            };
         }
-
-        // 页面初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 页面加载完成后的初始化逻辑
-            console.log('重新雇佣资格查询页面已加载');
-        });
 
         // 表单提交处理
         document.getElementById('queryForm').addEventListener('submit', function(e) {
@@ -738,219 +464,98 @@
             
             const name = document.getElementById('candidateName').value.trim();
             const idCard = document.getElementById('candidateIdCard').value.trim();
-            const phone = document.getElementById('candidatePhone').value.trim();
-            const email = document.getElementById('candidateEmail').value.trim();
             
-            // 验证姓名必填
-            if (!name) {
-                alert('请输入候选人姓名');
+            // 验证必填字段
+            if (!idCard) {
+                alert('请输入身份证号');
                 return;
             }
             
-            // 验证至少填写一项查询条件
-            if (!idCard && !phone && !email) {
-                alert('请至少填写身份证号、手机号或邮箱中的一项');
-                return;
-            }
-            
-            // 验证身份证号格式
-            if (idCard && !validateIdCard(idCard)) {
+            // 身份证号格式验证
+            if (!/^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(idCard)) {
                 alert('请输入正确的身份证号格式');
                 return;
             }
             
-            // 验证手机号格式
-            if (phone && !validatePhone(phone)) {
-                alert('请输入正确的手机号格式');
-                return;
-            }
-            
-            // 验证邮箱格式
-            if (email && !validateEmail(email)) {
-                alert('请输入正确的邮箱格式');
-                return;
-            }
-            
-            // 根据填写的字段自动判断查询类型
-            let queryType, queryData;
-            if (idCard) {
-                // 有身份证号，进行精准查询
-                queryType = 'exact';
-                queryData = { idCard: idCard };
-            } else {
-                // 没有身份证号，进行模糊查询
-                queryType = 'fuzzy';
-                queryData = { phone: phone, email: email };
-            }
-            
-            queryEligibility(name, queryData, queryType);
+            // 执行查询
+            performQuery({
+                name: name,
+                idCard: idCard
+            });
         });
 
-        // 表单验证函数
-        function validateIdCard(idCard) {
-            // 身份证号验证：18位数字，最后一位可以是X
-            const idCardRegex = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
-            return idCardRegex.test(idCard);
-        }
-        
-        function validatePhone(phone) {
-            // 手机号验证：11位数字，1开头
-            const phoneRegex = /^1[3-9]\d{9}$/;
-            return phoneRegex.test(phone);
-        }
-        
-        function validateEmail(email) {
-            // 邮箱验证
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
-        // 查询资格
-        function queryEligibility(name, queryData, queryType) {
+        // 执行查询
+        function performQuery(queryData) {
             // 显示加载状态
             document.getElementById('loadingState').style.display = 'block';
             document.getElementById('resultContainer').style.display = 'none';
             
             // 模拟API调用延迟
             setTimeout(() => {
-                const result = getTestResult(name, queryData, queryType);
-                
+                // 隐藏加载状态
                 document.getElementById('loadingState').style.display = 'none';
                 
-                if (result) {
-                    displayResult(result, queryType);
-                } else {
-                    displayNoRecord(name, queryData, queryType);
-                }
+                // 基于身份证号进行精准查询
+                const result = getTestResult(queryData.name, queryData, 'exact');
+                
+                // 显示结果
+                displayResult(result);
             }, 1500);
         }
 
         // 显示查询结果
-        function displayResult(result, queryType) {
-            const resultContainer = document.getElementById('resultContainer');
-            const resultCard = document.getElementById('resultCard');
-            const resultHeader = document.getElementById('resultHeader');
-            const resultIcon = document.getElementById('resultIcon');
-            const resultTitle = document.getElementById('resultTitle');
-            const resultMessage = document.getElementById('resultMessage');
-            const resultReason = document.getElementById('resultReason');
-            const resultActions = document.getElementById('resultActions');
+        function displayResult(result) {
+            const container = document.getElementById('resultContainer');
             
-            // 清除之前的样式类
-            resultCard.className = 'result-card';
-            
-            // 根据状态设置样式和内容
-            switch (result.status) {
+            let iconSymbol, statusClass;
+            switch(result.status) {
                 case 'eligible':
-                    resultCard.classList.add('result-eligible');
-                    resultIcon.textContent = '✓';
-                    resultTitle.textContent = queryType === 'exact' ? '符合重新雇佣条件' : '疑似符合重新雇佣条件';
-                    resultActions.style.display = 'none';
+                    iconSymbol = '✓';
+                    statusClass = 'result-eligible';
                     break;
                 case 'ineligible':
-                    resultCard.classList.add('result-ineligible');
-                    resultIcon.textContent = '!';
-                    resultTitle.textContent = queryType === 'exact' ? '不符合基本条件' : '疑似不符合基本条件';
-                    resultActions.style.display = 'flex';
-                    resultActions.innerHTML = '<button class="btn btn-primary" onclick="startSpecialApproval()">发起特殊录用审批</button>';
+                    iconSymbol = '⚠';
+                    statusClass = 'result-ineligible';
                     break;
                 case 'prohibited':
-                    resultCard.classList.add('result-prohibited');
-                    resultIcon.textContent = '✕';
-                    resultTitle.textContent = '禁止雇佣';
-                    resultActions.style.display = 'none';
+                    iconSymbol = '✕';
+                    statusClass = 'result-prohibited';
                     break;
+                default:
+                    iconSymbol = '?';
+                    statusClass = 'result-not-found';
             }
-            
-            // 构建完整的结果消息
-            let fullMessage = result.message;
-            if (result.matchInfo) {
-                fullMessage += `\n\n匹配信息：${result.matchInfo}`;
-            }
-            if (result.confidence) {
-                fullMessage += `\n匹配度：${result.confidence}`;
-            }
-            
-            resultMessage.innerHTML = fullMessage.replace(/\n/g, '<br>');
-            
-            // 显示原因（除了禁止雇佣的情况）
-            if (result.status !== 'prohibited' && result.reason) {
-                resultReason.textContent = result.reason;
-                resultReason.style.display = 'block';
-            } else {
-                resultReason.style.display = 'none';
-            }
-            
-            resultContainer.style.display = 'block';
-        }
 
-        // 显示无记录结果
-        function displayNoRecord(name, queryData, queryType) {
-            const resultContainer = document.getElementById('resultContainer');
-            const resultCard = document.getElementById('resultCard');
-            const resultHeader = document.getElementById('resultHeader');
-            const resultIcon = document.getElementById('resultIcon');
-            const resultTitle = document.getElementById('resultTitle');
-            const resultMessage = document.getElementById('resultMessage');
-            const resultReason = document.getElementById('resultReason');
-            const resultActions = document.getElementById('resultActions');
-            
-            // 清除之前的样式类
-            resultCard.className = 'result-card result-eligible';
-            
-            resultIcon.textContent = 'ℹ';
-            resultTitle.textContent = '无历史记录';
-            
-            let message = '该候选人无公司历史雇佣记录，可正常进入招聘流程。';
-            if (queryType === 'fuzzy') {
-                message = '根据提供的信息未找到匹配的历史记录，该候选人可正常进入招聘流程。';
+            let confidenceBadge = '';
+            if (result.confidence) {
+                confidenceBadge = `<span class="confidence-badge">匹配度: ${result.confidence}</span>`;
             }
+
+            container.innerHTML = `
+                <div class="result-card ${statusClass}">
+                    <div class="result-header">
+                        <div class="result-icon">${iconSymbol}</div>
+                        <div class="result-title">${result.message}</div>
+                    </div>
+                    <div class="result-content">
+                        ${result.reason}
+                    </div>
+                    <div class="result-meta">
+                        <span>${result.matchInfo}</span>
+                        ${confidenceBadge}
+                    </div>
+                </div>
+            `;
             
-            resultMessage.textContent = message;
-            resultReason.style.display = 'none';
-            resultActions.style.display = 'none';
-            
-            resultContainer.style.display = 'block';
+            container.style.display = 'block';
         }
 
         // 清空表单
         function clearForm() {
             document.getElementById('candidateName').value = '';
             document.getElementById('candidateIdCard').value = '';
-            document.getElementById('candidatePhone').value = '';
-            document.getElementById('candidateEmail').value = '';
-            
             document.getElementById('resultContainer').style.display = 'none';
-            document.getElementById('loadingState').style.display = 'none';
         }
-
-        // 发起特殊录用审批
-        function startSpecialApproval() {
-            // 跳转到特殊录用审批页面
-            window.location.href = 'special_hire_approval.html';
-        }
-
-        // 继续招聘流程
-        function continueRecruitment() {
-            alert('候选人资格确认完成，可继续后续招聘流程。');
-            // 这里可以跳转到招聘流程页面
-        }
-
-        // 菜单项点击
-        document.querySelectorAll('.menu-header').forEach(header => {
-            header.addEventListener('click', function() {
-                document.querySelectorAll('.menu-header').forEach(h => h.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        // 导航标签切换
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
     </script>
 </body>
 </html>
