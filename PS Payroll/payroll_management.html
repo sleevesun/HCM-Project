@@ -136,10 +136,10 @@
          th:nth-child(4), td:nth-child(4) { width: auto; min-width: 100px; } /* 部门 */
          th:nth-child(5), td:nth-child(5) { width: auto; min-width: 60px; } /* 调薪前 */
          th:nth-child(6), td:nth-child(6) { width: auto; min-width: 60px; } /* 调薪后 */
-         th:nth-child(7), td:nth-child(7) { width: auto; min-width: 100px; } /* 变化 */
-         th:nth-child(8), td:nth-child(8) { width: auto; min-width: 50px; } /* CR调薪前 */
-         th:nth-child(9), td:nth-child(9) { width: auto; min-width: 50px; } /* CR调薪后 */
-         th:nth-child(10), td:nth-child(10) { width: auto; min-width: 80px; } /* CR变化 */
+         th:nth-child(7), td:nth-child(7) { width: auto; min-width: 60px; } /* 调薪额度 */
+         th:nth-child(8), td:nth-child(8) { width: auto; min-width: 60px; } /* 调薪幅度 */
+         th:nth-child(9), td:nth-child(9) { width: auto; min-width: 50px; } /* CR调薪前 */
+         th:nth-child(10), td:nth-child(10) { width: auto; min-width: 50px; } /* CR调薪后 */
          th:nth-child(11), td:nth-child(11) { width: auto; min-width: 75px; } /* 入职时间 */
          th:nth-child(12), td:nth-child(12) { width: auto; min-width: 40px; } /* 职级 */
          th:nth-child(13), td:nth-child(13) { width: auto; min-width: 60px; } /* 绩效 */
@@ -626,7 +626,7 @@
                                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+15.2%</span></td>
                             </tr>
                             <tr>
-                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">本年工资成本（万）</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">全年工资（万）</td>
                                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1446.0</td>
                                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">1523.2</td>
                                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><span style="color: red;">+77.2</span></td>
@@ -649,8 +649,8 @@
                             <th rowspan="2" style="text-align: center;">员工ID</th>
                             <th rowspan="2" style="text-align: center;">姓名</th>
                             <th rowspan="2" style="text-align: center;">部门</th>
-                            <th colspan="3" style="text-align: center;">月薪</th>
-                            <th colspan="3" style="text-align: center;">CR</th>
+                            <th colspan="4" style="text-align: center;">月薪</th>
+                            <th colspan="2" style="text-align: center;">CR</th>
                             <th rowspan="2" style="text-align: center;">入职时间</th>
                             <th rowspan="2" style="text-align: center;">职级</th>
                             <th rowspan="2" style="text-align: center;">最近3年绩效</th>
@@ -660,10 +660,10 @@
                         <tr>
                             <th style="text-align: center;">调薪前</th>
                             <th style="text-align: center;">调薪后</th>
-                            <th style="text-align: center;">变化</th>
+                            <th style="text-align: center;">调薪额度</th>
+                            <th style="text-align: center;">调薪幅度</th>
                             <th style="text-align: center;">调薪前</th>
                             <th style="text-align: center;">调薪后</th>
-                            <th style="text-align: center;">变化</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -673,10 +673,10 @@
                             <td>A项目组\美术部</td>
                             <td>14300</td>
                             <td>15730</td>
-                            <td style="color: red; text-align: right;">+1430(+10%)</td>
+                            <td style="color: red; text-align: right;">+1430</td>
+                            <td style="color: red; text-align: right;">+10%</td>
                             <td>0.80</td>
                             <td>0.88</td>
-                            <td style="color: red; text-align: right;">+0.08</td>
                             <td>2021/06/26</td>
                             <td>11</td>
                             <td>B/A/B</td>
@@ -689,10 +689,10 @@
                             <td>A项目组\研发部</td>
                             <td>18500</td>
                             <td>20350</td>
-                            <td style="color: red; text-align: right;">+1850(+10%)</td>
+                            <td style="color: red; text-align: right;">+1850</td>
+                            <td style="color: red; text-align: right;">+10%</td>
                             <td>0.75</td>
                             <td>0.83</td>
-                            <td style="color: red; text-align: right;">+0.08</td>
                             <td>2020/03/15</td>
                             <td>12</td>
                             <td>A/A/B</td>
@@ -705,10 +705,10 @@
                              <td>A项目组\策划部</td>
                              <td>16800</td>
                              <td>17640</td>
-                             <td style="color: red; text-align: right;">+840(+5%)</td>
+                             <td style="color: red; text-align: right;">+840</td>
+                             <td style="color: red; text-align: right;">+5%</td>
                              <td>0.82</td>
                              <td>0.86</td>
-                             <td style="color: red; text-align: right;">+0.04</td>
                              <td>2019/11/20</td>
                              <td>13</td>
                              <td>B/A/A</td>
@@ -721,10 +721,10 @@
                              <td>B项目组\运营部</td>
                              <td>15200</td>
                              <td>16720</td>
-                             <td style="color: red; text-align: right;">+1520(+10%)</td>
+                             <td style="color: red; text-align: right;">+1520</td>
+                             <td style="color: red; text-align: right;">+10%</td>
                              <td>0.78</td>
                              <td>0.86</td>
-                             <td style="color: red; text-align: right;">+0.08</td>
                              <td>2021/01/08</td>
                              <td>11</td>
                              <td>A/B/A</td>
@@ -737,10 +737,10 @@
                              <td>B项目组\美术部</td>
                              <td>17300</td>
                              <td>18876</td>
-                             <td style="color: red; text-align: right;">+1576(+9%)</td>
+                             <td style="color: red; text-align: right;">+1576</td>
+                             <td style="color: red; text-align: right;">+9%</td>
                              <td>0.81</td>
                              <td>0.88</td>
-                             <td style="color: red; text-align: right;">+0.07</td>
                              <td>2020/07/12</td>
                              <td>12</td>
                              <td>S/A/A</td>
@@ -753,10 +753,10 @@
                              <td>C项目组\市场部</td>
                              <td>19600</td>
                              <td>20580</td>
-                             <td style="color: red; text-align: right;">+980(+5%)</td>
+                             <td style="color: red; text-align: right;">+980</td>
+                             <td style="color: red; text-align: right;">+5%</td>
                              <td>0.76</td>
                              <td>0.80</td>
-                             <td style="color: red; text-align: right;">+0.04</td>
                              <td>2018/09/25</td>
                              <td>14</td>
                              <td>A/A/B</td>
@@ -769,10 +769,10 @@
                              <td>C项目组\人事部</td>
                              <td>14500</td>
                              <td>15950</td>
-                             <td style="color: red; text-align: right;">+1450(+10%)</td>
+                             <td style="color: red; text-align: right;">+1450</td>
+                             <td style="color: red; text-align: right;">+10%</td>
                              <td>0.85</td>
                              <td>0.93</td>
-                             <td style="color: red; text-align: right;">+0.08</td>
                              <td>2022/02/14</td>
                              <td>10</td>
                              <td>B/A/A</td>
@@ -785,10 +785,10 @@
                              <td>D项目组\财务部</td>
                              <td>16900</td>
                              <td>18590</td>
-                             <td style="color: red; text-align: right;">+1690(+10%)</td>
+                             <td style="color: red; text-align: right;">+1690</td>
+                             <td style="color: red; text-align: right;">+10%</td>
                              <td>0.79</td>
                              <td>0.87</td>
-                             <td style="color: red; text-align: right;">+0.08</td>
                              <td>2019/05/30</td>
                              <td>13</td>
                              <td>A/B/A</td>
@@ -801,10 +801,10 @@
                              <td>D项目组\客服部</td>
                              <td>13800</td>
                              <td>14490</td>
-                             <td style="color: red; text-align: right;">+690(+5%)</td>
+                             <td style="color: red; text-align: right;">+690</td>
+                             <td style="color: red; text-align: right;">+5%</td>
                              <td>0.88</td>
                              <td>0.92</td>
-                             <td style="color: red; text-align: right;">+0.04</td>
                              <td>2021/12/03</td>
                              <td>9</td>
                              <td>B/B/A</td>
@@ -817,10 +817,10 @@
                              <td>E项目组\销售部</td>
                              <td>22000</td>
                              <td>24200</td>
-                             <td style="color: red; text-align: right;">+2200(+10%)</td>
+                             <td style="color: red; text-align: right;">+2200</td>
+                             <td style="color: red; text-align: right;">+10%</td>
                              <td>0.73</td>
                              <td>0.80</td>
-                             <td style="color: red; text-align: right;">+0.07</td>
                              <td>2017/08/16</td>
                              <td>15</td>
                              <td>S/A/S</td>
