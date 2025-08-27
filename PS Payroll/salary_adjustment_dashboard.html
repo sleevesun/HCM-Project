@@ -1090,10 +1090,10 @@
                         <thead>
                             <tr>
                                 <th>流程编号</th>
-                                <th>所属部门</th>
+                                <th>调薪部门</th>
                                 <th>调薪人数</th>
-                                <th>月薪变化</th>
-                                <th>全年工资变化</th>
+                                <th>月薪变化（万）</th>
+                                <th>全年工资变化（万）</th>
                                 <th>生效时间</th>
                                 <th>操作</th>
                                 <th>详情</th>
@@ -1104,8 +1104,8 @@
                                 <td>123456</td>
                                 <td>ABC工作室</td>
                                 <td>10</td>
-                                <td class="negative">+18.3万</td>
-                                <td class="negative">+77.2万</td>
+                                <td class="negative" style="text-align: right;">+18.3万</td>
+                                <td class="negative" style="text-align: right;">+77.2万</td>
                                 <td>2025/09</td>
                                 <td>
                                     <a href="#" class="link">流程关闭</a>
@@ -1119,8 +1119,8 @@
                                 <td>123457</td>
                                 <td>技术部</td>
                                 <td>15</td>
-                                <td class="negative">+25.6万</td>
-                                <td class="negative">+102.4万</td>
+                                <td class="negative" style="text-align: right;">+25.6万</td>
+                                <td class="negative" style="text-align: right;">+102.4万</td>
                                 <td>2025/10</td>
                                 <td>
                                     <a href="#" class="link">流程关闭</a>
@@ -1134,8 +1134,8 @@
                                 <td>123458</td>
                                 <td>产品部</td>
                                 <td>8</td>
-                                <td class="negative">+12.8万</td>
-                                <td class="negative">+51.2万</td>
+                                <td class="negative" style="text-align: right;">+12.8万</td>
+                                <td class="negative" style="text-align: right;">+51.2万</td>
                                 <td>2025/11</td>
                                 <td>
                                     <a href="#" class="link">流程关闭</a>
@@ -1247,8 +1247,8 @@
                                         <th rowspan="2" style="text-align: center;">员工ID</th>
                                         <th rowspan="2" style="text-align: center;">姓名</th>
                                         <th rowspan="2" style="text-align: center;">部门</th>
-                                        <th colspan="3" style="text-align: center;">月薪</th>
-                                        <th colspan="3" style="text-align: center;">CR</th>
+                                        <th colspan="4" style="text-align: center;">月薪</th>
+                                        <th colspan="2" style="text-align: center;">CR</th>
                                         <th rowspan="2" style="text-align: center;">入职时间</th>
                                         <th rowspan="2" style="text-align: center;">职级</th>
                                         <th rowspan="2" style="text-align: center;">最近3年绩效</th>
@@ -1258,10 +1258,10 @@
                                     <tr>
                                         <th style="text-align: center;">调整前</th>
                                         <th style="text-align: center;">调整后</th>
-                                        <th style="text-align: center;">变化</th>
+                                        <th style="text-align: center;">调整金额</th>
+                                        <th style="text-align: center;">调整幅度</th>
                                         <th style="text-align: center;">调整前</th>
                                         <th style="text-align: center;">调整后</th>
-                                        <th style="text-align: center;">变化</th>
                                     </tr>
                                 </thead>
                                 <tbody id="modalPayrollTableBody">
@@ -1272,6 +1272,9 @@
                         <div style="padding: 8px 12px; border-top: 1px solid #c0c0c0; background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);">
                             <div style="margin-bottom: 4px; font-size: 11px; font-weight: bold; color: #000000;">调薪说明</div>
                             <textarea id="modalSalaryAdjustmentReason" placeholder="请输入调薪原因..." style="width: 100%; min-height: 60px; padding: 4px 6px; border: 1px solid #808080; font-size: 11px; color: #000000; resize: vertical; outline: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.4; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); background: white;" onfocus="this.style.borderColor='#4a90e2'; this.style.boxShadow='inset 0 1px 2px rgba(0,0,0,0.1), 0 0 3px rgba(74,144,226,0.3)';" onblur="this.style.borderColor='#808080'; this.style.boxShadow='inset 0 1px 2px rgba(0,0,0,0.1)';"></textarea>
+                        </div>
+                        <div style="padding: 8px 12px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; margin: 8px 12px; font-size: 12px; color: #856404; line-height: 1.4;">
+                            <strong>请注意：</strong>调薪将在审批通过后的次月生效。若审批完成较晚，系统会为员工自动追溯应得薪资，并在次月工资中补发，无需额外操作。
                         </div>
                         <div class="actions">
                             <button class="btn btn-secondary">保存</button>
@@ -1378,8 +1381,8 @@
                                         <th rowspan="2" style="text-align: center;">员工ID</th>
                                         <th rowspan="2" style="text-align: center;">姓名</th>
                                         <th rowspan="2" style="text-align: center;">部门</th>
-                                        <th colspan="3" style="text-align: center;">月薪</th>
-                                        <th colspan="3" style="text-align: center;">CR</th>
+                                        <th colspan="4" style="text-align: center;">月薪</th>
+                                        <th colspan="2" style="text-align: center;">CR</th>
                                         <th rowspan="2" style="text-align: center;">入职时间</th>
                                         <th rowspan="2" style="text-align: center;">职级</th>
                                         <th rowspan="2" style="text-align: center;">最近3年绩效</th>
@@ -1389,10 +1392,10 @@
                                     <tr>
                                         <th style="text-align: center;">调整前</th>
                                         <th style="text-align: center;">调整后</th>
-                                        <th style="text-align: center;">变化</th>
+                                        <th style="text-align: center;">调整金额</th>
+                                        <th style="text-align: center;">调整幅度</th>
                                         <th style="text-align: center;">调整前</th>
                                         <th style="text-align: center;">调整后</th>
-                                        <th style="text-align: center;">变化</th>
                                     </tr>
                                 </thead>
                                 <tbody id="newModalPayrollTableBody">
@@ -1443,19 +1446,19 @@
         // 不同状态的表头配置
         const tableHeaders = {
             '待发起': [
-                '流程编号', '所属部门', '调薪人数', '月薪变化', 
+                '流程编号', '调薪部门', '调薪人数', '月薪变化', 
                 '全年工资变化', '生效时间', '操作', '详情'
             ],
             '进行中': [
-                '流程编号', '所属部门', '调薪人数', '月薪变化', 
+                '流程编号', '调薪部门', '调薪人数', '月薪变化', 
                 '全年工资变化', '生效时间', '提交时间', '当前审批人', '详情'
             ],
             '已完成': [
-                '流程编号', '所属部门', '调薪人数', '月薪变化', 
+                '流程编号', '调薪部门', '调薪人数', '月薪变化', 
                 '全年工资变化', '生效时间', '提交时间', '详情'
             ],
             '全部': [
-                '流程编号', '所属部门', '调薪人数', '月薪变化', 
+                '流程编号', '调薪部门', '调薪人数', '月薪变化', 
                 '全年工资变化', '生效时间', '提交时间', '审批单状态', '详情'
             ]
         };
@@ -1660,11 +1663,12 @@
                     <td>${id}</td>
                     <td>${name}</td>
                     <td>${dept}</td>
-                    <td>${oldSalary}</td>
-                    <td>${newSalary}</td>
-                    <td class="negative">${salaryChange}</td>
-                    <td>${oldCR}</td>
-                    <td>${newCR}</td>
+                    <td style="text-align: right;">${parseInt(oldSalary).toLocaleString()}</td>
+                    <td style="text-align: right;">${parseInt(newSalary).toLocaleString()}</td>
+                    <td style="text-align: right;">${parseInt(salaryChange.replace(/[^\d-]/g, '')) > 1000 ? parseInt(salaryChange.replace(/[^\d-]/g, '')).toLocaleString() : salaryChange.replace(/[^\d-]/g, '')}</td>
+                    <td style="text-align: right;">${salaryChange.match(/\([^)]+\)/)?.[0] || ''}</td>
+                    <td style="text-align: right;">${parseFloat(oldCR).toFixed(2)}</td>
+                    <td style="text-align: right;">${parseFloat(newCR).toFixed(2)}</td>
                     <td class="negative">${crChange}</td>
                     <td>${joinDate}</td>
                     <td>${level}</td>
@@ -1729,12 +1733,16 @@
             // 填充数据到表格
             cells[2].textContent = mockData.name;
             cells[3].textContent = mockData.dept;
-            cells[4].textContent = mockData.currentSalary;
-            cells[5].textContent = mockData.newSalary;
-            cells[6].innerHTML = `<span class="negative">${mockData.salaryChange}</span>`;
-            cells[7].textContent = mockData.currentCR;
-            cells[8].textContent = mockData.newCR;
-            cells[9].innerHTML = `<span class="negative">${mockData.crChange}</span>`;
+            cells[4].innerHTML = `<span style="text-align: right; display: block;">${parseInt(mockData.currentSalary).toLocaleString()}</span>`;
+            cells[5].innerHTML = `<span style="text-align: right; display: block;">${parseInt(mockData.newSalary).toLocaleString()}</span>`;
+            const salaryChangeAmount = mockData.salaryChange.replace(/[^\d-]/g, '');
+            const salaryChangePercent = mockData.salaryChange.match(/\([^)]+\)/)?.[0] || '';
+            const formattedAmount = Math.abs(parseInt(salaryChangeAmount)).toLocaleString();
+            const color = parseInt(salaryChangeAmount) >= 0 ? 'green' : 'red';
+            cells[6].innerHTML = `<span style="color: ${color}; text-align: right; display: block;">${parseInt(salaryChangeAmount) >= 0 ? '+' : '-'}${formattedAmount}</span>`;
+            cells[7].innerHTML = `<span style="text-align: right; display: block;">${salaryChangePercent}</span>`;
+            cells[8].innerHTML = `<span style="text-align: right; display: block;">${parseFloat(mockData.currentCR).toFixed(2)}</span>`;
+            cells[9].innerHTML = `<span style="text-align: right; display: block;">${parseFloat(mockData.newCR).toFixed(2)}</span>`;
             cells[10].textContent = mockData.joinDate;
             cells[11].textContent = mockData.level;
             cells[12].innerHTML = mockData.performance;
@@ -1958,14 +1966,14 @@
             // 填充数据到表格
             cells[2].textContent = mockData.name;
             cells[3].textContent = mockData.dept;
-            cells[4].textContent = mockData.currentSalary;
+            cells[4].innerHTML = `<span style="text-align: right; display: block;">${parseInt(mockData.currentSalary).toLocaleString()}</span>`;
             // 调薪后月薪设为可编辑输入框
-            cells[5].innerHTML = '<input type="number" class="salary-input" placeholder="请输入调薪后月薪" onchange="calculateSalaryChange(this)" style="width: 80px; border: 1px solid #d9d9d9; padding: 2px 4px;">';
-            cells[6].innerHTML = '0 (0%)';
-            cells[7].textContent = mockData.currentCR;
+            cells[5].innerHTML = '<input type="number" class="salary-input" placeholder="请输入调薪后月薪" onchange="calculateSalaryChange(this)" style="width: 80px; border: 1px solid #d9d9d9; padding: 2px 4px; text-align: right;">';
+            cells[6].innerHTML = '<span style="text-align: right; display: block;">0</span>';
+            cells[7].innerHTML = '<span style="text-align: right; display: block;">0%</span>';
+            cells[8].innerHTML = `<span style="text-align: right; display: block;">${parseFloat(mockData.currentCR).toFixed(2)}</span>`;
             // CR调薪后自动计算，不需要用户输入
-            cells[8].innerHTML = '<span class="auto-calculated-cr">-</span>';
-            cells[9].innerHTML = '0';
+            cells[9].innerHTML = '<span class="auto-calculated-cr" style="text-align: right; display: block;">-</span>';
             cells[10].textContent = mockData.joinDate;
             cells[11].textContent = mockData.level;
             cells[12].innerHTML = mockData.performance;
@@ -2064,7 +2072,7 @@
             const row = input.closest('tr');
             const cells = row.querySelectorAll('td');
             
-            const currentSalary = parseFloat(cells[4].textContent) || 0;
+            const currentSalary = parseFloat(cells[4].textContent.replace(/,/g, '')) || 0;
             const newSalary = parseFloat(input.value) || 0;
             
             if (newSalary > 0) {
@@ -2073,23 +2081,24 @@
                 
                 // 根据变化值设置颜色：正数红色，负数绿色
                 const color = change > 0 ? 'red' : (change < 0 ? 'green' : 'black');
-                cells[6].innerHTML = `<span style="color: ${color}">${change >= 0 ? '+' : ''}${change} (${change >= 0 ? '+' : ''}${changePercent}%)</span>`;
+                
+                // 更新调整金额（添加千分位符号，右对齐）
+                const formattedAmount = Math.abs(change) > 1000 ? Math.abs(change).toLocaleString() : Math.abs(change).toString();
+                cells[6].innerHTML = `<span style="color: ${color}; text-align: right; display: block;">${change >= 0 ? '+' : '-'}${formattedAmount}</span>`;
+                
+                // 更新调整幅度（右对齐）
+                cells[7].innerHTML = `<span style="color: ${color}; text-align: right; display: block;">${change >= 0 ? '+' : ''}${changePercent}%</span>`;
                 
                 // 自动计算调薪后CR（按8000对应0.65的比例）
-                const currentCR = parseFloat(cells[7].textContent) || 0;
+                const currentCR = parseFloat(cells[8].textContent.replace(/,/g, '')) || 0;
                 const newCR = (newSalary * 0.65 / 8000).toFixed(2);
-                const crChange = (newCR - currentCR).toFixed(2);
                 
-                // 更新CR调薪后值
-                cells[8].innerHTML = `<span class="auto-calculated-cr">${newCR}</span>`;
-                
-                // 更新CR变化显示，正数红色，负数绿色
-                const crColor = crChange > 0 ? 'red' : (crChange < 0 ? 'green' : 'black');
-                cells[9].innerHTML = `<span style="color: ${crColor}">${crChange >= 0 ? '+' : ''}${crChange}</span>`;
+                // 更新CR调薪后值（右对齐）
+                cells[9].innerHTML = `<span class="auto-calculated-cr" style="text-align: right; display: block;">${newCR}</span>`;
             } else {
-                cells[6].innerHTML = '0 (0%)';
-                cells[8].innerHTML = '<span class="auto-calculated-cr">-</span>';
-                cells[9].innerHTML = '0';
+                cells[6].innerHTML = '<span style="text-align: right; display: block;">0</span>';
+                cells[7].innerHTML = '<span style="text-align: right; display: block;">0%</span>';
+                cells[9].innerHTML = '<span class="auto-calculated-cr" style="text-align: right; display: block;">-</span>';
             }
             
             // 更新统计数据
@@ -2212,20 +2221,25 @@
                 
                 // 计算新CR
                 const newCR = (employee.newSalary * 0.65 / 8000).toFixed(2);
-                const crChange = (newCR - employee.currentCR).toFixed(2);
-                const crColor = crChange > 0 ? 'red' : (crChange < 0 ? 'green' : 'black');
+                
+                // 格式化调整金额（添加千分位符号）
+                const formattedAmount = Math.abs(salaryChange) > 1000 ? Math.abs(salaryChange).toLocaleString() : Math.abs(salaryChange).toString();
+                
+                // 格式化调整前和调整后金额（添加千分位符号）
+                const formattedCurrentSalary = employee.currentSalary > 1000 ? employee.currentSalary.toLocaleString() : employee.currentSalary.toString();
+                const formattedCurrentCR = employee.currentCR.toFixed(2);
                 
                 newRow.innerHTML = `
                     <td><input type="checkbox" class="modal-row-checkbox" style="cursor: pointer;"></td>
                     <td>${employee.employeeId}</td>
                     <td>${employee.name}</td>
                     <td>${employee.dept}</td>
-                    <td>${employee.currentSalary}</td>
-                    <td><input type="number" class="salary-input" value="${employee.newSalary}" onchange="calculateSalaryChange(this)" style="width: 80px; border: 1px solid #d9d9d9; padding: 2px 4px;"></td>
-                    <td><span style="color: ${color}">${salaryChange >= 0 ? '+' : ''}${salaryChange} (${salaryChange >= 0 ? '+' : ''}${changePercent}%)</span></td>
-                    <td>${employee.currentCR}</td>
-                    <td><span class="auto-calculated-cr">${newCR}</span></td>
-                    <td><span style="color: ${crColor}">${crChange >= 0 ? '+' : ''}${crChange}</span></td>
+                    <td style="text-align: right;">${formattedCurrentSalary}</td>
+                    <td><input type="number" class="salary-input" value="${employee.newSalary}" onchange="calculateSalaryChange(this)" style="width: 80px; border: 1px solid #d9d9d9; padding: 2px 4px; text-align: right;"></td>
+                    <td><span style="color: ${color}; text-align: right; display: block;">${salaryChange >= 0 ? '+' : '-'}${formattedAmount}</span></td>
+                    <td><span style="color: ${color}; text-align: right; display: block;">${salaryChange >= 0 ? '+' : ''}${changePercent}%</span></td>
+                    <td style="text-align: right;">${formattedCurrentCR}</td>
+                    <td><span class="auto-calculated-cr" style="text-align: right; display: block;">${newCR}</span></td>
                     <td>${employee.joinDate}</td>
                     <td>${employee.level}</td>
                     <td>${employee.performance}</td>
